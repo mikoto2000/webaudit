@@ -3,7 +3,7 @@
   "bytes": 111013890,
   "cpus": 24,
   "duplicates": 0,
-  "elapsed_seconds": 27.9909077,
+  "elapsed_seconds": 25.7504596,
   "go": "go1.27.4",
   "heap_sys_bytes": 12255232,
   "incidents": 352,
@@ -11,10 +11,10 @@
   "os": "windows",
   "parsed": 1000000,
   "partial": false,
-  "peak_sampled_heap_bytes": 4908872,
-  "requests_per_second": 35725.88680287778,
+  "peak_sampled_heap_bytes": 5048088,
+  "requests_per_second": 38834.25832135439,
   "synthetic": true,
-  "total_alloc_bytes": 8218889632,
+  "total_alloc_bytes": 8229465696,
   "unparsed": 0,
   "warnings": [
     "Request bodies and response contents are unavailable; authentication results and compromise cannot be verified",
@@ -22,5 +22,5 @@
     "Too few IP peers for request/error-rate statistical inference",
     "Missing referer in 1000000 parsed requests reduces related detection coverage"
   ],
-  "peak_process_working_set_bytes": 18276352
+  "peak_process_working_set_bytes": 17813504
 }

@@ -1,0 +1,1 @@
+Synthetic demonstration only. The 2xx sensitive-resource sequence suggests exposure but does not confirm it; the SQLi 500 remains unknown. HTML/JSON file references are made portable for this repository. All source records are in sample.log.

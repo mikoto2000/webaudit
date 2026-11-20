@@ -230,10 +230,10 @@ func infer(f *Incident) Outcome {
 			return o
 		}
 	}
-	if f.blocked >= 3 && f.good == 0 {
+	if f.blocked >= 3 && f.blocked == f.Count {
 		o.Verdict = "likely_failed"
 		o.Confidence = 0.5
-		o.Reasons = append(o.Reasons, "At least three blocked/not-found observations and no observed 2xx within this activity; status mapping and unobserved attempts prevent confirmation")
+		o.Reasons = append(o.Reasons, "All observed responses in this activity were blocked/not-found, with at least three observations; status mapping and unobserved attempts prevent confirmation")
 	}
 	return o
 }

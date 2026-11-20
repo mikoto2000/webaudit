@@ -1,0 +1,2 @@
+ok  	webaudit/audit	1.843s	coverage: 90.0% of statements
+ok  	webaudit/cmd/webaudit	0.761s	coverage: 70.3% of statements
