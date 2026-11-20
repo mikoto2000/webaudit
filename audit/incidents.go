@@ -48,6 +48,7 @@ type Correlator struct {
 	o        Options
 	items    map[string]*Incident
 	warnings []string
+ evidenceBytes int
 }
 
 func NewCorrelator(o Options) *Correlator {
@@ -104,7 +105,7 @@ func (c *Correlator) Add(e Event, hits []Rule, n Normalized) {
 		for _, r := range rules {
 			addRule(f, r)
 		}
-		addEvidence(f, e, n)
+		c.addEvidence(f, e, n)
 		status := val(e.Status)
 		if status == 403 || status == 404 {
 			f.blocked++
@@ -154,7 +155,7 @@ func (c *Correlator) AddSignal(s Signal) {
 	}
 	uniqueAppend(&f.Reasons, s.Reason)
 	if len(f.Evidence) == 0 {
-		addEvidence(f, s.Event, Normalize(s.Event.Target))
+		c.addEvidence(f, s.Event, Normalize(s.Event.Target))
 	}
 }
 func uniqueAppend(dst *[]string, s string) {
@@ -194,8 +195,9 @@ func addRule(f *Incident, r Rule) {
 	}
 	uniqueAppend(&f.Reasons, r.Description)
 }
-func addEvidence(f *Incident, e Event, n Normalized) {
+func (c *Correlator)addEvidence(f *Incident, e Event, n Normalized) {
 	v := Evidence{compactEvent(e), compactNormalized(n)}
+ delta:=evidenceSize(v);if len(f.Evidence)>=8{delta-=evidenceSize(f.Evidence[7])};if c.evidenceBytes+delta>c.o.MaxEvidenceBytes{uniqueAppend(&c.warnings,"Evidence-byte limit reached; samples are incomplete, use file/line references and original input logs");return};c.evidenceBytes+=delta
 	if len(f.Evidence) < 8 {
 		f.Evidence = append(f.Evidence, v)
 	} else {

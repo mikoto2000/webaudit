@@ -18,3 +18,4 @@ func compactEvent(e Event)Event{
 func compactNormalized(n Normalized)Normalized{
  n.Original,_=clipped(n.Original,4096);v:=make([]string,len(n.Variants));for i,s:=range n.Variants{v[i],_=clipped(s,1024)};n.Variants=v;return n
 }
+func evidenceSize(v Evidence)int{e:=v.Event;n:=v.Normalization;size:=len(e.Raw)+len(e.Target)+len(e.Path)+len(val(e.Query))+len(val(e.UA))+len(val(e.Host))+len(val(e.Referer))+len(n.Original);for _,s:=range n.Variants{size+=len(s)};return size}

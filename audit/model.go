@@ -25,6 +25,8 @@ type Event struct {
 	Raw      string    `json:"raw"`
 }
 type Options struct {
+ Now func()time.Time
+ MaxEvidenceBytes int
 	MaxLineBytes int
 	MaxFileBytes int64
 	MaxKeys      int
@@ -45,6 +47,7 @@ func (o Options) defaults() Options {
 	if o.MaxFindings <= 0 {
 		o.MaxFindings = 2000
 	}
+	if o.Now==nil{o.Now=time.Now};if o.MaxEvidenceBytes<=0{o.MaxEvidenceBytes=32<<20}
 	return o
 }
 

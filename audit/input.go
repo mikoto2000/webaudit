@@ -11,14 +11,13 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-	"time"
 )
 
 var logName = regexp.MustCompile(`(?i)(\.log(?:\.[0-9]+)?(?:\.gz)?$|\.gz$|^access(?:\.[0-9]+)?$)`)
 
 func Stream(paths []string, options Options, consume func(Event)) Report {
 	o := options.defaults()
-	r := Report{Schema: "webaudit/1", Version: Version, RulesVersion: RulesVersion, AnalyzedAt: time.Now().UTC(), Missing: map[string]int64{}}
+	r := Report{Schema: "webaudit/1", Version: Version, RulesVersion: RulesVersion, AnalyzedAt: o.Now().UTC(), Missing: map[string]int64{}}
 	files := map[string]bool{}
 	for _, p := range paths {
 		abs, err := filepath.Abs(p)

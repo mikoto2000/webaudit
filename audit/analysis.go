@@ -48,7 +48,7 @@ type window struct {
 	burst                             bool
 }
 type peer struct {
-	n, errors int64
+	n, errors, statusN, bytesN int64
 	bytes     float64
 	sample    Event
 }
@@ -167,6 +167,7 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 	}
 	if p != nil {
 		p.n++
+		if e.Status!=nil{p.statusN++};if e.Bytes!=nil{p.bytesN++}
 		if val(e.Status) >= 400 {
 			p.errors++
 		}
@@ -280,9 +281,9 @@ func (a *Analysis) Finish() []Signal {
 	var counts, rates, bytes []float64
 	for _, p := range a.ips {
 		counts = append(counts, float64(p.n))
-		bytes = append(bytes, p.bytes)
-		if p.n >= 20 {
-			rates = append(rates, float64(p.errors)/float64(p.n))
+		if p.bytesN==p.n {bytes = append(bytes, p.bytes)}
+		if p.statusN >= 20 {
+			rates = append(rates, float64(p.errors)/float64(p.statusN))
 		}
 	}
 	keys = keys[:0]
@@ -292,10 +293,10 @@ func (a *Analysis) Finish() []Signal {
 	sort.Strings(keys)
 	for _, k := range keys {
 		p := a.ips[k]
-		if isOutlier(float64(p.n), counts, 100, 5) || isOutlier(p.bytes, bytes, 1<<20, 10) {
+		if isOutlier(float64(p.n), counts, 100, 5) || (p.bytesN==p.n&&isOutlier(p.bytes, bytes, 1<<20, 10)) {
 			a.emit("WS-ip", "IP request/byte volume peer outlier", p.sample, p.n, "At least 20 peer groups; robust median/MAD and minimum effect size; not proof of exfiltration", p.sample.Time, p.sample.Time)
 		}
-		if p.n >= 20 && isOutlier(float64(p.errors)/float64(p.n), rates, 0.5, 3) {
+		if p.statusN >= 20 && isOutlier(float64(p.errors)/float64(p.statusN), rates, 0.5, 3) {
 			a.emit("WS-errors", "IP HTTP-error-rate peer outlier", p.sample, p.n, "At least 20 requests per peer and 20 peers; >0.5 rate difference plus robust threshold", p.sample.Time, p.sample.Time)
 		}
 	}
