@@ -85,3 +85,5 @@ func TestLookupStates(t *testing.T) {
 		t.Fatal(x)
 	}
 }
+
+func TestExplicitWrongRoleAndExcludedStates(t *testing.T){if g,e:=OpenGeoIP("testdata/geoip/asn.mmdb","","",4);e==nil{g.Close();t.Fatal("wrong-role explicit database accepted")};g:=testGeo(t,4);x:=g.Lookup("10.0.0.1");if x.CountryStatus!="not_queried"||x.ASNStatus!="not_queried"{t.Fatal(x)}}
