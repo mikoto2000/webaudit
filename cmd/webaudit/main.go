@@ -23,6 +23,7 @@ func run(args []string, out, errout io.Writer) int {
 	fs.SetOutput(errout)
 	output := fs.String("o", "", "Write a new report file (default HTML; never overwrite)")
 	format := fs.String("format", "", "html, json or csv (default console summary)")
+	language := fs.String("lang", "ja", "HTML report language: ja or en (default ja; other formats unchanged)")
 	verbose := fs.Bool("verbose", false, "Show file-level diagnostics on stderr")
 	version := fs.Bool("version", false, "Show version")
 	help := fs.Bool("help", false, "Show help")
@@ -38,7 +39,7 @@ func run(args []string, out, errout io.Writer) int {
 	fs.IntVar(&o.MaxEvidenceBytes, "max-evidence-bytes", 32<<20, "Maximum retained incident evidence bytes")
 	fs.IntVar(&o.MaxFindings, "max-findings", 2000, "Maximum incidents, signals and source alerts per collection")
 	fs.Usage = func() {
-		fmt.Fprintln(errout, "Usage: webaudit INPUT... [-o REPORT] [--format html|json|csv] [--verbose]\nInputs: files, gzip files, or directories. No output file without -o.\nGeoIP management: webaudit geoip download|update|status|rollback")
+		fmt.Fprintln(errout, "Usage: webaudit INPUT... [-o REPORT] [--format html|json|csv] [--lang ja|en] [--verbose]\nInputs: files, gzip files, or directories. No output file without -o.\nGeoIP management: webaudit geoip download|update|status|rollback")
 		fs.PrintDefaults()
 	}
 	ordered, err := interspersed(args, fs)
@@ -59,6 +60,10 @@ func run(args []string, out, errout io.Writer) int {
 	if *help {
 		fs.Usage()
 		return 0
+	}
+	if *language != "ja" && *language != "en" {
+		fmt.Fprintln(errout, "--lang must be ja or en")
+		return 2
 	}
 	if fs.NArg() == 0 {
 		fs.Usage()
@@ -138,7 +143,7 @@ func run(args []string, out, errout io.Writer) int {
 			fmt.Fprintln(errout, er)
 			return 2
 		}
-		if er = writeAndCloseReport(f, func(w io.Writer) error { return audit.WriteReport(w, r, mode) }); er != nil {
+		if er = writeAndCloseReport(f, func(w io.Writer) error { return audit.WriteReportWithLanguage(w, r, mode, *language) }); er != nil {
 			fmt.Fprintln(errout, "Report write failed:", er)
 			return 1
 		}
@@ -147,7 +152,7 @@ func run(args []string, out, errout io.Writer) int {
 			return 1
 		}
 		fmt.Fprintf(out, "\nReport: %s\n", audit.TerminalSafe(*output))
-	} else if er := audit.WriteReport(out, r, mode); er != nil {
+	} else if er := audit.WriteReportWithLanguage(out, r, mode, *language); er != nil {
 		fmt.Fprintln(errout, er)
 		return 1
 	}
