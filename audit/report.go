@@ -71,10 +71,16 @@ func writeSummary(w io.Writer, r Report) error {
 			desc = f.Rules[0].Description
 		}
 		fmt.Fprintf(w, "  %-8s %s | %s | %s | %d observations\n", strings.ToUpper(f.Severity), TerminalSafe(desc), TerminalSafe(f.IP), f.Outcome.Verdict, f.Count)
+		for _, g := range f.Outcome.Investigation {
+			fmt.Fprintf(w, "    成否の確認 [%s]\n      不明な理由: %s\n      確認する場所: %s\n      何が見つかれば判断できるか:\n        成功を裏付ける証拠: %s\n        失敗を裏付ける証拠: %s\n", TerminalSafe(g.Category), TerminalSafe(g.WhyUnknown), TerminalSafe(strings.Join(g.WhereToCheck, "; ")), TerminalSafe(g.SuccessEvidence), TerminalSafe(g.FailureEvidence))
+		}
 		if f.GeoIP != nil {
 			ck, cn, ak, an := geoKeys(*f.GeoIP)
 			fmt.Fprintf(w, "    GeoIP %s | %s %s | ASN %s %s\n", f.GeoIP.Status, TerminalSafe(ck), TerminalSafe(cn), TerminalSafe(ak), TerminalSafe(an))
 		}
+	}
+	if len(r.Findings) > 0 {
+		fmt.Fprintln(w, "\n成否の確認は時刻・タイムゾーン・対象ホスト・URL、可能ならリクエストIDで照合してください。IPだけで同じ要求とは断定できません。証拠がないだけでは失敗と判断できず、記録がなければ成否不明が続きます。失敗の証拠は確認した要求の範囲に限られます。現在の再現結果だけでは当時の成否を確定できません。追加証拠による自動再判定は行いません。")
 	}
 	fmt.Fprintf(w, "\nUpstream detections:\n  Hub alerts: %d\n  Aura signature groups: %d\n  Aura analysis findings: %d\n", len(r.UpstreamAlerts), len(r.AuraMatches), len(r.AuraAnalysis))
 	for i, a := range r.UpstreamAlerts {
