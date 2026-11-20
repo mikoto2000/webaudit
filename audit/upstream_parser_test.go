@@ -30,6 +30,9 @@ func TestUpstreamOpaqueRequest(t *testing.T) {
 		t.Fatal(e)
 	}
 }
+func TestApacheOptionalRequestProtocol(t *testing.T) {
+ e,err:=Parse(strings.Replace(common," HTTP/1.1","",1),"apache.log",1,"");if err!=nil||e.RequestMalformed||val(e.Method)!="GET"||e.Target!="/index?q=1"||e.Protocol!=nil {t.Fatal("Apache's request protocol is optional",err)}
+}
 func TestUpstreamNginxError(t *testing.T) {
 	s := `2021/09/30 09:23:53 [error] 1925800#1925800: *17 user "foo" was not found in "/tmp/a.htpasswd", client: 127.0.0.1, server: _, request: "GET / HTTP/1.1", host: "localhost"`
 	e, err := Parse(s, "error.log", 1, "")
