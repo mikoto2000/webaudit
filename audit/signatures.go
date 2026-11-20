@@ -47,6 +47,8 @@ func Detect(e Event) ([]Rule, Normalized) {
 			if e.Method != nil {
 				values = []string{*e.Method}
 			}
+		case "protocol":
+			if e.Protocol!=nil {values=[]string{*e.Protocol}}
 		default:
 			values = n.Variants
 			if r.Field == "url_headers" {

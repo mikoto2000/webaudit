@@ -9,7 +9,8 @@
     "target": "WA-sqli",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -21,7 +22,8 @@
     "target": "WA-nosqli",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -33,7 +35,8 @@
     "target": "WA-command_injection",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -45,7 +48,8 @@
     "target": "WA-shellshock",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -57,7 +61,8 @@
     "target": "WA-ssti",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -69,7 +74,8 @@
     "target": "WA-ldap_injection",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -81,7 +87,8 @@
     "target": "WA-xpath_injection",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -93,7 +100,8 @@
     "target": "WA-xss",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -105,7 +113,8 @@
     "target": "WA-lfi_traversal",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -117,7 +126,8 @@
     "target": "WA-rfi",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -129,7 +139,8 @@
     "target": "WA-ssrf",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -141,7 +152,8 @@
     "target": "WA-xxe",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -153,7 +165,8 @@
     "target": "WA-deserialization",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -165,7 +178,8 @@
     "target": "WA-webshell",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -177,7 +191,8 @@
     "target": "WA-log4shell",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -189,7 +204,8 @@
     "target": "WA-spring4shell",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -201,7 +217,8 @@
     "target": "WA-struts_ognl",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -213,7 +230,8 @@
     "target": "WA-crlf_injection",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -225,7 +243,8 @@
     "target": "WA-open_redirect",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -237,7 +256,8 @@
     "target": "WA-access_bypass",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -249,7 +269,8 @@
     "target": "WA-sensitive_file",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -261,7 +282,8 @@
     "target": "WA-null_byte",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -273,7 +295,8 @@
     "target": "WA-cve_probe",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -285,7 +308,8 @@
     "target": "WA-iis_aspnet",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -297,7 +321,8 @@
     "target": "WA-recon_probe",
     "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -309,7 +334,8 @@
     "target": "WA-scanner",
     "reason": "Exclude generic API clients and legitimate PUT/PATCH/DELETE for false-positive control",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -321,7 +347,8 @@
     "target": "WA-method",
     "reason": "Exclude generic API clients and legitimate PUT/PATCH/DELETE for false-positive control",
     "license": "MIT",
-    "test": "TestSignatures"
+    "test": "TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -333,7 +360,8 @@
     "target": "WB-auth",
     "reason": "Adapted bounded event-time analysis",
     "license": "MIT",
-    "test": "TestBehavior/TestStatistics"
+    "test": "TestBehavior/TestStatistics",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -345,7 +373,8 @@
     "target": "WB-404",
     "reason": "Adapted bounded event-time analysis",
     "license": "MIT",
-    "test": "TestBehavior/TestStatistics"
+    "test": "TestBehavior/TestStatistics",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -357,7 +386,8 @@
     "target": "WS-ip",
     "reason": "Adapted bounded event-time analysis",
     "license": "MIT",
-    "test": "TestBehavior/TestStatistics"
+    "test": "TestBehavior/TestStatistics",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -369,7 +399,8 @@
     "target": "",
     "reason": "Rare UA alone has insufficient specificity",
     "license": "MIT",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "AuraDFIR",
@@ -381,7 +412,8 @@
     "target": "WS-hour",
     "reason": "Adapted bounded event-time analysis",
     "license": "MIT",
-    "test": "TestBehavior/TestStatistics"
+    "test": "TestBehavior/TestStatistics",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -393,7 +425,8 @@
     "target": "WA-log4shell",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -402,10 +435,11 @@
     "category": "HTTP scenario",
     "condition": "|\n    evt.Meta.log_type == 'http_access-log' &&\n    Lower(evt.Meta.http_path) endsWith 'util/php/eval-stdin.php'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
-    "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "target": "WA-cve_probe",
+    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "TestHubAdaptationCoverage/TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -415,9 +449,10 @@
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Upper(QueryUnescape(evt.Meta.http_path)) startsWith Upper('/Telerik.Web.UI.WebResource.axd?type=rau'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -426,10 +461,11 @@
     "category": "HTTP scenario",
     "condition": "\"Upper(PathUnescape(evt.Meta.http_path)) contains Upper('@java.lang.Runtime@getRuntime().exec(')\"; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
-    "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "target": "WA-struts_ognl",
+    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "TestHubAdaptationCoverage/TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -439,9 +475,10 @@
     "condition": "\"Upper(evt.Meta.http_path) contains Upper('/vendor/htmlawed/htmlawed/htmLawedTest.php')\"; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -451,9 +488,10 @@
     "condition": "|\n  (\n  Upper(evt.Meta.http_path) contains Upper('/service/extension/backup/mboximport?account-name=admin&ow=2&no-switch=1&append=1') ||\n  Upper(evt.Meta.http_path) contains Upper('/service/extension/backup/mboximport?account-name=admin&account-status=1&ow=cmd') \n  )\n  and evt.Meta.http_status startsWith ('40') and\n  Upper(evt.Meta.http_verb) == 'POST'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -463,9 +501,10 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n  Upper(evt.Meta.http_path) startsWith Upper('/api/v2/cmdb/system/admin/') and Lower(evt.Parsed.http_user_agent) == 'report runner'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -475,9 +514,10 @@
     "condition": "|\n  Upper(evt.Meta.http_path) contains Upper('/autodiscover/autodiscover.json') &&\n  Upper(evt.Parsed.http_args) contains Upper('powershell'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -487,9 +527,10 @@
     "condition": "|\n  Upper(evt.Meta.http_path) contains Upper('/ghost/api/admin/session') &&\n  Upper(evt.Parsed.verb) == 'POST' &&\n  evt.Meta.http_status == '404'; \"10s\"; 5; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -498,10 +539,11 @@
     "category": "HTTP scenario",
     "condition": "|\n  Upper(PathUnescape(evt.Meta.http_path)) contains Upper('${script:javascript:java.lang.Runtime.getRuntime().exec(')\n  or\n  Upper(PathUnescape(evt.Meta.http_path)) contains Upper('${script:js:java.lang.Runtime.getRuntime().exec(')\n  or\n  Upper(PathUnescape(evt.Meta.http_path)) contains Upper('${url:UTF-8:') \n  or\n  Upper(PathUnescape(evt.Meta.http_path)) contains Upper('${dns:address|'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
-    "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "target": "WA-deserialization",
+    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "TestHubAdaptationCoverage/TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -511,9 +553,10 @@
     "condition": "|\n  Lower(evt.Meta.http_path) contains '/index.php' &&\n  Upper(evt.Parsed.verb) == 'POST' &&\n  evt.Meta.http_status == '302' &&\n  Lower(evt.Parsed.http_args) matches 'login=.*(\\\\$|%24)(\\\\(|%28).*(\\\\)|%29)'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -523,9 +566,10 @@
     "condition": "|\n  Upper(evt.Meta.http_path) contains Upper('/remote_agent.php') &&\n  Upper(evt.Parsed.verb) == 'GET' &&\n  Lower(evt.Parsed.http_args) contains 'host_id' &&\n  Lower(evt.Parsed.http_args) contains 'local_data_ids'; \"10s\"; 5; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -535,9 +579,10 @@
     "condition": "|\n  Upper(evt.Meta.http_path) contains Upper('/remote_agent.php') &&\n  Upper(evt.Parsed.verb) == 'GET' &&\n  Lower(evt.Parsed.http_args) contains 'action=polldata' &&\n  Lower(evt.Parsed.http_args) matches 'poller_id=.*(;|%3b)'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -547,9 +592,10 @@
     "condition": "|\n  Lower(evt.Parsed.file_ext) == '.action' &&\n  (Lower(evt.Parsed.file_dir) contains '/setup' || Lower(evt.Parsed.file_frag) == 'server-info') &&\n  evt.Parsed.file_frag != nil; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -559,9 +605,10 @@
     "condition": "|\n  Upper(evt.Meta.http_path) contains Upper('/json/setup-restore.action') &&\n  Upper(evt.Parsed.verb) == 'POST'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -571,9 +618,10 @@
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Lower(evt.Meta.http_path) contains '/owncloud/apps/graphapi/vendor/microsoft/microsoft-graph/tests/getphpinfo.php'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -583,9 +631,10 @@
     "condition": "|\n  let request = Lower(evt.Parsed.request);\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && \n  evt.Meta.http_status in ['404', '403'] &&\n  (request matches '/php/.*/\\\\.js\\\\.map' || request matches '/index.php/.*\\\\.js\\\\.map'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -595,9 +644,10 @@
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && \n  evt.Meta.http_status in ['404', '403'] &&\n  Lower(evt.Parsed.request) endsWith '%3f'; \"evt.Meta.source_ip\"; \"evt.Parsed.request\"; 3; 10s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -607,9 +657,10 @@
     "condition": "|\n  let request = Lower(evt.Parsed.request);\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && \n  evt.Meta.http_status in ['404', '403'] &&\n  evt.Meta.http_verb == 'POST' &&\n  request contains '/php/utils/createremoteappwebsession.php/watchtowr.js.map'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -618,10 +669,11 @@
     "category": "HTTP scenario",
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n    (\n    Upper(evt.Meta.http_path) matches '/TMUI/LOGIN.JSP/..;/TMUI/[^.]+.JSP\\\\?(FILENAME|COMMAND|DIRECTORYPATH|TABID)='\n    or\n    Upper(evt.Meta.http_path) matches '/TMUI/LOGIN.JSP/%2E%2E;/TMUI/[^.]+.JSP\\\\?(FILENAME|COMMAND|DIRECTORYPATH|TABID)='\n    ); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
-    "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "target": "WA-access_bypass",
+    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "TestHubAdaptationCoverage/TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -630,10 +682,11 @@
     "category": "HTTP scenario",
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n    Upper(evt.Meta.http_path) contains Upper('/remote/fgt_lang?lang=/../../../..//////////dev/cmdb/sslvpn_websession'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
-    "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "target": "WA-lfi_traversal",
+    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "TestHubAdaptationCoverage/TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -642,10 +695,11 @@
     "category": "HTTP scenario",
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n    (Upper(evt.Meta.http_path) matches '/PUBLIC/PLUGINS/[^/]+/../[./]+/'\n    or\n    Upper(evt.Meta.http_path) matches '/PUBLIC/PLUGINS/[^/]+/%2E%2E/[%2E/]+/'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
-    "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "target": "WA-lfi_traversal",
+    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "TestHubAdaptationCoverage/TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -657,7 +711,8 @@
     "target": "WB-paths",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -667,9 +722,10 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Meta.http_path startsWith '/apps/login' && evt.Parsed.verb == 'POST' && evt.Meta.http_status == '200'\"; evt.Meta.source_ip; 5; 10s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -681,7 +737,8 @@
     "target": "WA-webshell",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -693,7 +750,8 @@
     "target": "WA-scanner",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -705,7 +763,8 @@
     "target": "WB-login",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -715,9 +774,10 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.file_name == 'xmlrpc.php' && evt.Parsed.verb == 'POST'\"; evt.Meta.source_ip; 5; 2m",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -729,7 +789,8 @@
     "target": "WB-paths",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -741,7 +802,8 @@
     "target": "WA-lfi_traversal",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -753,7 +815,8 @@
     "target": "WA-lfi_traversal",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -765,7 +828,8 @@
     "target": "WA-cve_probe",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -775,9 +839,10 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Meta.http_args_len != '' && int(evt.Meta.http_args_len) >= 7 && int(evt.Meta.http_args_len) <= 12 && evt.Parsed.http_args matches '^[0-9]+$' && evt.Parsed.static_ressource == 'false'\"; \"evt.Parsed.http_args\"; 1s; 30; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -786,10 +851,11 @@
     "category": "HTTP scenario",
     "condition": "'evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] && evt.Parsed.http_version != \"\" && evt.Parsed.http_version not in [\"0.9\", \"1.0\", \"1.1\", \"2.0\", \"3.0\"]' ; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
-    "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "target": "WA-protocol",
+    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "TestHubAdaptationCoverage/TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -799,9 +865,10 @@
     "condition": "|\n  evt.Meta.log_type == \"http_access-log\" &&\n  evt.Meta.http_verb == 'GET' &&\n  evt.Parsed.static_ressource == 'false' &&\n  Upper(evt.Parsed.file_frag) == evt.Parsed.file_frag &&\n  len(evt.Parsed.file_frag) == 6 &&\n  int(evt.Meta.http_args_len) == 0; 30; 1s; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -813,7 +880,8 @@
     "target": "WB-ua",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -825,7 +893,8 @@
     "target": "WB-auth",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -837,7 +906,8 @@
     "target": "WB-auth",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -849,7 +919,8 @@
     "target": "WB-auth",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -859,9 +930,10 @@
     "condition": "evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and\n  evt.Meta.http_path == \"/crowdsec-test-NtktlJHV4TfBSK3wvlhiOBnl\"; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Upstream installation test endpoint; no security signal for offline investigations",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -871,9 +943,10 @@
     "condition": "\"evt.Meta.log_type == 'ADMIN_LOGIN_FAILED'\"; evt.Meta.source_ip; 5; 10s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Requires Magento application audit events absent from access logs",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -883,9 +956,10 @@
     "condition": "\"evt.Meta.log_type == 'PAYMENT_FAILED' and evt.Meta.ASNNumber != '' \"; evt.Meta.ASNNumber; evt.Meta.source_ip; 10; 30s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Requires Magento application audit events absent from access logs",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -895,9 +969,10 @@
     "condition": "\"evt.Meta.log_type == 'PAYMENT_FAILED' and evt.Meta.IsoCode != '' \"; evt.Meta.IsoCode; evt.Meta.source_ip; 10; 30s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Requires Magento application audit events absent from access logs",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -907,9 +982,10 @@
     "condition": "\"evt.Meta.log_type == 'PAYMENT_FAILED'\"; evt.Meta.source_ip; 3; 30s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Requires Magento application audit events absent from access logs",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -918,10 +994,11 @@
     "category": "HTTP scenario",
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Meta.http_status in ['400','405'] && (evt.Parsed.verb == 'CONNECT' || evt.Parsed.request matches '^http[s]?://')\"; evt.Meta.source_ip",
     "required": "HTTP metadata; see filter expression",
-    "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "target": "WA-method",
+    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "TestHubAdaptationCoverage/TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -933,7 +1010,8 @@
     "target": "WA-lfi_traversal",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -945,7 +1023,8 @@
     "target": "WB-404",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -955,9 +1034,10 @@
     "condition": "|\n  evt.Meta.service == 'http' and \n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] and \n  evt.Meta.http_status in ['404', '403'] and (\n    let uri = Lower(evt.Meta.http_path);\n    uri contains \"/sap/bc/gui/sap/its/webgui\"\n    or uri contains \"/irj/portal\"\n    or uri contains \"/sap/bc/\"\n    or uri contains \"/sap/bc/ui2/flp\"\n    or uri contains \"/sap/bc/ui5_ui5/\"\n    or uri contains \"/sap/opu/odata/\"\n    or uri contains \"/sap/bc/webdynpro/\"\n    or uri contains \"/sap/public/bc/\"\n    or uri contains \"/sap/public/info\"\n    or uri contains \"/sap/public/icf_info\"\n    or uri contains \"/sap/admin/publicicp/\"\n    or uri contains \"/sap/admin/public/\"\n    or uri == \"/nwa\"\n    or uri contains \"/webdynpro/dispatcher/sap.com/tc~sec~ume~wd~umeadmin/umeadminapp\"\n    or uri contains \"/sap/hana/xs/admin\"\n    or uri contains \"/sap/hana/xs/formlogin\"\n    or uri contains \"/irj/go/km/navigation\"\n  ); evt.Meta.source_ip; \"10s\"; 1; evt.Meta.http_path",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -969,7 +1049,8 @@
     "target": "WA-sensitive_file/WB-sensitive",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -981,7 +1062,8 @@
     "target": "WA-sqli",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -991,9 +1073,10 @@
     "condition": "|\n  if (evt.Meta.service == 'http' and\n      evt.Meta.log_type in ['http_access-log', 'http_error-log'] and\n      evt.Meta.http_status in ['404', '403'])\n    {\n      let target_technology = LookupFile(evt.Meta.http_path, \"technology_probing.json\");\n      target_technology != \"\" ? evt.SetMeta(\"target_technology\", target_technology)  : false\n    } else { false }; evt.Meta.source_ip",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Requires external data list not audited/downloaded; deferred, no exact coverage claimed",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1003,9 +1086,10 @@
     "condition": "|\n  evt.Meta.service == 'http' and\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] and\n  evt.Meta.http_status in ['404', '403'] and\n  Lower(evt.Parsed.request) matches \"(?i)(/wp-.*\\\\.php|/wp-content/plugins/.*\\\\.(txt|md))$\"; evt.Meta.source_ip; evt.Parsed.request; 3; \"10s\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1015,9 +1099,10 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && Upper(evt.Parsed.http_args) contains 'AUTHOR='\"; evt.Meta.source_ip; evt.Parsed.http_args; 5; \"10s\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1026,10 +1111,11 @@
     "category": "HTTP scenario",
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.file_name contains 'wp-config.php'\"; evt.Meta.source_ip; evt.Parsed.file_name; 5; \"10s\"",
     "required": "HTTP metadata; see filter expression",
-    "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "target": "WA-sensitive_file",
+    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "TestHubAdaptationCoverage/TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1041,7 +1127,8 @@
     "target": "WA-xss",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1051,9 +1138,10 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and any(File(\"jira_cve_2021-26086.txt\"), {Upper(evt.Meta.http_path) contains Upper(#)}); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Requires external data list not audited/downloaded; deferred, no exact coverage claimed",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1062,10 +1150,11 @@
     "category": "HTTP scenario",
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Lower(QueryUnescape(evt.Meta.http_path)) startsWith Lower('/setup.cgi?next_file=netgear.cfg&todo=syscmd&cmd='); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
-    "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "target": "WA-webshell",
+    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "TestHubAdaptationCoverage/TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1074,10 +1163,11 @@
     "category": "HTTP scenario",
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n    (Upper(evt.Meta.http_path) matches '/DANA-NA/../DANA/HTML5ACC/GUACAMOLE/../../../../../../../[^?]+\\\\?/DANA/HTML5ACC/GUACAMOLE/'\n    or\n    Upper(evt.Meta.http_path) matches '/DANA-NA/%2E%2E/DANA/HTML5ACC/GUACAMOLE/%2E%2E/%2E%2E/%2E%2E/%2E%2E/%2E%2E/%2E%2E/%2E%2E/[^?]+\\\\?/DANA/HTML5ACC/GUACAMOLE/'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
-    "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "target": "WA-lfi_traversal",
+    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "TestHubAdaptationCoverage/TestSignatures",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1089,7 +1179,8 @@
     "target": "WA-spring4shell",
     "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)"
+    "test": "TestBehavior/TestSignatures (adapted semantics)",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1099,9 +1190,10 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and RegexpInFile(Lower(evt.Meta.http_path), \"thinkphp_cve_2018-20062.txt\"); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Requires external data list not audited/downloaded; deferred, no exact coverage claimed",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1111,9 +1203,10 @@
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Upper(QueryUnescape(evt.Meta.http_path)) startsWith Upper('/catalog-portal/ui/oauth/verify?error=&deviceUdid=${\"freemarker.template.utility.Execute\"?new()('); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1123,9 +1216,10 @@
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && evt.Meta.http_path matches '/ui/vcav-bootstrap/rest/vcav-providers/provider-logo\\\\?url=(file|http)'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   },
   {
     "repo": "hub",
@@ -1135,8 +1229,9 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' and (\n  evt.Parsed.file_name contains 'w00tw00t.at.ISC.SANS.DFind' or\n  Lower(evt.Meta.http_path) == '/core/skin/login.aspx'\n  )\"; evt.Meta.source_ip",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Deferred: application-specific semantics, external datasets/enrichment, or unsupported parser metadata; no exact rule coverage claimed",
+    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
     "license": "MIT; no file override found",
-    "test": "not ported"
+    "test": "not ported",
+    "file_notices": []
   }
 ]

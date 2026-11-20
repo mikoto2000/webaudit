@@ -322,5 +322,17 @@
       "method"
     ],
     "source": "docs/rule-inventory.md"
+  },
+  {
+    "id": "WA-protocol",
+    "category": "unusual_protocol",
+    "severity": "low",
+    "pattern": "^HTTP/(?:0\\.[^9]|1\\.[^01]|[4-9][0-9]*\\.[0-9]+|2\\.[1-9]|3\\.[1-9])$",
+    "description": "Unusual HTTP protocol version; inspect malformed/probing traffic",
+    "field": "protocol",
+    "required": [
+      "protocol"
+    ],
+    "source": "hub/scenarios/crowdsecurity/http-dos-invalid-http-versions.yaml"
   }
 ]

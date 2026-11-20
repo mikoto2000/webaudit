@@ -74,7 +74,7 @@ func TestRulesUnique(t *testing.T) {
 		}
 		seen[r.ID] = true
 	}
-	if len(seen) != 27 {
+	if len(seen) != 28 {
 		t.Fatal(len(seen))
 	}
 }
