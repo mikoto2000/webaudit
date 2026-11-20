@@ -7,6 +7,7 @@ const Version = "0.1.0"
 const RulesVersion = "2026.11.20.1"
 
 type Event struct {
+ EvidenceTruncated bool `json:"evidence_truncated,omitempty"`
 	Time     time.Time `json:"time"`
 	IP       string    `json:"ip"`
 	Host     *string   `json:"host"`

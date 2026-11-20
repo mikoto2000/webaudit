@@ -41,7 +41,7 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 					return nil
 				}
 				if !d.IsDir() && d.Type().IsRegular() && logName.MatchString(d.Name()) {
-					files[path] = true
+					if len(files)<o.MaxKeys{files[path] = true}else{r.warn("Input-file limit reached; directory coverage incomplete");r.Partial=true}
 				}
 				return nil
 			})
@@ -108,6 +108,7 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 		r.Files = append(r.Files, in)
 	}
 	if r.Unparsed > 0 {
+		r.Partial=true
 		r.warn("Unparsed lines reduce detection coverage; inspect file/line diagnostics and --log-regex")
 	}
 	r.warn("Request bodies and response contents are unavailable; authentication results and compromise cannot be verified")

@@ -1,0 +1,26 @@
+{
+  "arch": "amd64",
+  "bytes": 11001390,
+  "cpus": 24,
+  "duplicates": 0,
+  "elapsed_seconds": 2.6162582,
+  "go": "go1.27.4",
+  "heap_sys_bytes": 12255232,
+  "incidents": 32,
+  "lines": 100000,
+  "os": "windows",
+  "parsed": 100000,
+  "partial": false,
+  "peak_sampled_heap_bytes": 3978624,
+  "requests_per_second": 38222.527119074104,
+  "synthetic": true,
+  "total_alloc_bytes": 818661552,
+  "unparsed": 0,
+  "warnings": [
+    "Request bodies and response contents are unavailable; authentication results and compromise cannot be verified",
+    "Client address is the recorded peer; forwarded headers are untrusted and proxy topology is unknown",
+    "Too few IP peers for request/error-rate statistical inference",
+    "Missing referer in 100000 parsed requests reduces related detection coverage"
+  ],
+  "peak_process_working_set_bytes": 53694464
+}

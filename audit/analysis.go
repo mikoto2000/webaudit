@@ -89,10 +89,11 @@ func (a *Analysis) allow(n int) bool {
 	return true
 }
 func (a *Analysis) distinct(m map[string]bool, k string) {
+	k = digest(k)
 	if m[k] {
 		return
 	}
-	if len(m) >= 128 {
+	if len(m) >= 64 {
 		a.warn("Distinct-value limit reached; diversity counts are lower bounds")
 		return
 	}
@@ -106,7 +107,7 @@ func (a *Analysis) emit(id, desc string, e Event, n int64, reason string, start,
 		a.warn("Signal limit reached; findings are incomplete")
 		return
 	}
-	a.signals = append(a.signals, Signal{Rule: behaviorRule(id, desc), Event: e, Count: n, Reason: reason, Start: start, End: end})
+	a.signals = append(a.signals, Signal{Rule: behaviorRule(id, desc), Event: compactEvent(e), Count: n, Reason: reason, Start: start, End: end})
 }
 func (a *Analysis) Observe(e Event, hits []Rule) {
 	if !a.last.IsZero() && e.Time.Before(a.last) {
@@ -114,7 +115,7 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 	}
 	a.last = e.Time
 	host := val(e.Host)
-	key := e.IP + "\x00" + host
+	key := digest(e.IP + "\x00" + host)
 	// Two overlapping 5-minute partitions reduce boundary misses, while remaining
 	// deterministic for shuffled files. This is not an exact rolling window.
 	for _, shift := range []int64{0, 150} {
@@ -125,7 +126,7 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 			if !a.allow(len(a.windows)) {
 				continue
 			}
-			w = &window{paths: map[string]bool{}, uas: map[string]bool{}, categories: map[string]bool{}, sensitive: map[string]bool{}, sample: e, first: e.Time, last: e.Time, leak: Leaky{Capacity: 300, LeakEvery: time.Second}}
+			w = &window{paths: map[string]bool{}, uas: map[string]bool{}, categories: map[string]bool{}, sensitive: map[string]bool{}, sample: compactEvent(e), first: e.Time, last: e.Time, leak: Leaky{Capacity: 300, LeakEvery: time.Second}}
 			a.windows[wk] = w
 		}
 		w.n++
@@ -161,7 +162,7 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 	}
 	p := a.ips[key]
 	if p == nil && a.allow(len(a.ips)) {
-		p = &peer{sample: e}
+		p = &peer{sample: compactEvent(e)}
 		a.ips[key] = p
 	}
 	if p != nil {
@@ -174,7 +175,7 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 	hour := e.Time.Unix() / 3600
 	hp := a.hours[hour]
 	if hp == nil && a.allow(len(a.hours)) {
-		hp = &peer{sample: e}
+		hp = &peer{sample: compactEvent(e)}
 		a.hours[hour] = hp
 	}
 	if hp != nil {
@@ -183,9 +184,10 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 	if e.Bytes != nil && e.Status != nil {
 		value := float64(*e.Bytes)
 		uk := host + "\x00" + val(e.Method) + "\x00" + e.Path + "\x00" + strconv.Itoa(*e.Status)
+		uk = digest(uk)
 		b := a.urls[uk]
 		if b == nil && a.allow(len(a.urls)) {
-			b = &baseline{sample: e}
+			b = &baseline{sample: compactEvent(e)}
 			a.urls[uk] = b
 		}
 		if b != nil {
@@ -245,7 +247,7 @@ func (a *Analysis) Finish() []Signal {
 	for _, k := range keys {
 		w := a.windows[k]
 		emit := func(id, desc string, n int64) {
-			a.emit(id, desc, w.sample, n, fmt.Sprintf("%d observations in overlapping five-minute event-time window; diversity bounded at 128", n), w.first, w.last)
+			a.emit(id, desc, w.sample, n, fmt.Sprintf("%d observations in overlapping five-minute event-time window; diversity bounded at 64", n), w.first, w.last)
 		}
 		if w.n404 >= 20 {
 			emit("WB-404", "Concentrated HTTP 404 responses", w.n404)

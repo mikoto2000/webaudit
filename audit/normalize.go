@@ -27,6 +27,11 @@ func Normalize(s string) Normalized {
 		}
 	}
 	cur := s
+	if strings.Contains(cur, `\x`) {
+	 var b strings.Builder
+	 for i:=0;i<len(cur);i++{if i+3<len(cur)&&cur[i]=='\\'&&cur[i+1]=='x'{v,bad:=percentDecode("%"+cur[i+2:i+4]);if !bad{b.WriteString(v);i+=3;continue}};b.WriteByte(cur[i])}
+	 if b.String()!=cur {cur=b.String();add(cur);n.Steps=append(n.Steps,"log hexadecimal escape detection variant")}
+	}
 	for depth := 0; depth < 2; depth++ {
 		next, bad := percentDecode(cur)
 		if bad {

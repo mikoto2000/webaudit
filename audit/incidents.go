@@ -69,6 +69,7 @@ func family(r Rule) string {
 }
 func (c *Correlator) get(e Event, group string) *Incident {
 	key := e.IP + "\x00" + val(e.Host) + "\x00" + val(e.UA) + "\x00" + group + "\x00" + strconv.FormatInt(e.Time.Unix()/300, 10)
+	key=digest(key)
 	if f := c.items[key]; f != nil {
 		return f
 	}
@@ -79,7 +80,7 @@ func (c *Correlator) get(e Event, group string) *Incident {
 		return nil
 	}
 	hash := sha256.Sum256([]byte(key))
-	f := &Incident{ID: fmt.Sprintf("WA-%x", hash[:8]), IP: e.IP, Host: e.Host, UA: e.UA, First: e.Time, Last: e.Time, Severity: "low", Phase: group, resources: map[string]*resource{}, Correlation: []string{"Same recorded peer IP, target host (when available), User-Agent, technique family and five-minute event-time partition; this is a hypothesis, not verified identity"}}
+	f := &Incident{ID: fmt.Sprintf("WA-%x", hash[:8]), IP: strings.Clone(e.IP), Host: compactEvent(e).Host, UA: compactEvent(e).UA, First: e.Time, Last: e.Time, Severity: "low", Phase: group, resources: map[string]*resource{}, Correlation: []string{"Same recorded peer IP, target host (when available), User-Agent, technique family and five-minute event-time partition; this is a hypothesis, not verified identity"}}
 	c.items[key] = f
 	return f
 }
@@ -118,10 +119,10 @@ func (c *Correlator) Add(e Event, hits []Rule, n Normalized) {
 			}
 		}
 		if sensitive {
-			res := f.resources[e.Path]
+			res := f.resources[digest(e.Path)]
 			if res == nil && len(f.resources) < 128 {
 				res = &resource{}
-				f.resources[e.Path] = res
+				f.resources[digest(e.Path)] = res
 			}
 			if res != nil {
 				if status == 403 || status == 404 {
@@ -194,7 +195,7 @@ func addRule(f *Incident, r Rule) {
 	uniqueAppend(&f.Reasons, r.Description)
 }
 func addEvidence(f *Incident, e Event, n Normalized) {
-	v := Evidence{e, n}
+	v := Evidence{compactEvent(e), compactNormalized(n)}
 	if len(f.Evidence) < 8 {
 		f.Evidence = append(f.Evidence, v)
 	} else {
