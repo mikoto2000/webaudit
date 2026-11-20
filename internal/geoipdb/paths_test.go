@@ -19,8 +19,8 @@ func TestResolveDir(t *testing.T) {
 		{"windows", "relative", "", `C:\local`, `C:\local\webaudit\geoip`, false},
 		{"windows", "", "", "", "", true},
 		{"windows", `C:relative`, "", "", "", true},
-        {"windows", `\\server\share`, "", "", `\\server\share\webaudit\geoip`, false},
-        {"windows", `//server/share`, "", "", `//server/share\webaudit\geoip`, false},
+		{"windows", `\\server\share`, "", "", `\\server\share\webaudit\geoip`, false},
+		{"windows", `//server/share`, "", "", `//server/share\webaudit\geoip`, false},
 	} {
 		t.Run(tc.os+tc.xdg+tc.home, func(t *testing.T) {
 			env := map[string]string{"XDG_DATA_HOME": tc.xdg, "HOME": tc.home, "LOCALAPPDATA": tc.local}
