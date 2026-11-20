@@ -167,9 +167,11 @@ webaudit ./logs/ --verbose
 webaudit access.log --geoip-country ./country.mmdb --geoip-asn ./asn.mmdb
 ```
 
-国・ASNの情報が必要な場合は、DB-IP LiteのCountry / ASN MMDBを別途準備してください。DBは取得・展開して配置し、実行ファイルには同梱しません。解析中のダウンロード・外部API・DNS検索はありません。Countryだけ、ASNだけでも動作します。
+初回は`webaudit geoip download`だけでDB-IP LiteのCountry / ASNを取得できます。更新は`webaudit geoip update`、確認は`webaudit geoip status`です。updateは未導入なら初回取得します。管理者権限は不要です。DBは実行ファイルに同梱せず、解析中のダウンロード・外部API・DNS検索はありません。
 
-明示指定を優先し、未指定の役割は実行ファイルと同じ場所の`geoip/country.mmdb`・`geoip/asn.mmdb`を探します。固定名がなければ`geoip/dbip-country-lite-YYYY-MM.mmdb`・`geoip/dbip-asn-lite-YYYY-MM.mmdb`の辞書順で最後を選びます。カレントディレクトリは探索しません。DBがなければ従来どおり動作し、GeoIP出力項目も追加しません。明示DBの不存在・破損は解析開始前に終了コード2、破損した自動検出DBは警告して継続します。
+保存先は有効な絶対`XDG_DATA_HOME/webaudit/geoip/`、未設定・空・相対パスの場合はLinux/macOSで`~/.local/share/webaudit/geoip/`、Windowsで`%LOCALAPPDATA%\webaudit\geoip\`です。WindowsのLOCALAPPDATAフォールバックはWebAudit独自規約です。内部の世代やファイル名を利用者が管理する必要はありません。
+
+保存したDBは通常の`webaudit access.log`で自動利用します。明示指定を最優先し、残りの役割は管理DBを使います。管理DBが未導入の場合だけ、従来どおり実行ファイルと同じ場所の`geoip/country.mmdb`・`geoip/asn.mmdb`を探します。固定名がなければ`geoip/dbip-country-lite-YYYY-MM.mmdb`・`geoip/dbip-asn-lite-YYYY-MM.mmdb`の辞書順で最後を選びます。カレントディレクトリは探索しません。DBがなければ従来どおり動作し、GeoIP出力項目も追加しません。明示DBの不存在・破損は解析開始前に終了コード2、破損した管理DBは警告し、自動GeoIPを無効にして解析を継続します。必要に応じて`webaudit geoip rollback`で保持した前世代を復元できます。
 
 国コード・英語の国名・ASN番号・組織名、DB提供元・使用パス・種類・MMDBのbuild_epochによるUTC更新日を出力します。不明はJSONの`null`、画面では`unknown`です。IPv4/IPv6に対応し、IPv4 mapped IPv6は正規化します。private / loopback / link_local / shared / multicast / unspecified / reserved / invalidを区別し、公開IPだけをMMDB検索します。特殊用途範囲は保守的に除外します。
 
@@ -179,7 +181,7 @@ JSONは任意の`geoip`ブロックと各事案の`geoip`を追加します。CS
 
 LRUはヒット・未収録結果ともIP単位で最大`--max-keys`件。リクエスト集計のIP保持も同じ上限で、超過時は部分解析と件数の下限を明示します。群ごとのIP・技法サンプルは64件までです。MMDBはメモリマップするため、キャッシュ以外にDBサイズに応じたアドレス空間・ページキャッシュを使用します。解析中はDBファイルを変更・切り詰めず、更新版は次回解析から使ってください。
 
-調査・設計・検証の詳細は[GeoIP設計と検証](docs/geoip.md)、ライセンス全文は[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)を参照してください。
+調査・設計は[GeoIP設計](docs/geoip-design.md)、取得・更新と復旧は[DB管理](docs/geoip-database-management.md)、ライセンス全文は[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)を参照してください。
 
 ## オプションと資源上限
 

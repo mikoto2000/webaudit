@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 	"webaudit/audit"
+	"webaudit/internal/geoipdb"
 )
 
 func main() { os.Exit(run(os.Args[1:], os.Stdout, os.Stderr)) }
@@ -100,7 +101,13 @@ func run(args []string, out, errout io.Writer) int {
 		fmt.Fprintln(errout, er)
 		return 2
 	}
-	geo, er := audit.OpenGeoIP(*country, *asn, filepath.Join(filepath.Dir(executable), "geoip"), o.MaxKeys)
+	geoDir, pathErr := geoipdb.DefaultDir()
+	var geoWarnings []string
+	if pathErr != nil && (*country == "" || *asn == "") {
+		geoWarnings = append(geoWarnings, pathErr.Error())
+	}
+	geo, warnings, er := audit.OpenManagedGeoIP(*country, *asn, geoDir, filepath.Join(filepath.Dir(executable), "geoip"), o.MaxKeys)
+	geoWarnings = append(geoWarnings, warnings...)
 	if er != nil {
 		fmt.Fprintln(errout, er)
 		return 2
@@ -108,6 +115,10 @@ func run(args []string, out, errout io.Writer) int {
 	defer geo.Close()
 	o.GeoIP = geo
 	r := audit.Analyze(fs.Args(), o)
+	for _, w := range geoWarnings {
+		r.Warnings = append(r.Warnings, w)
+		fmt.Fprintln(errout, audit.TerminalSafe(w))
+	}
 	if *verbose {
 		for _, f := range r.Files {
 			fmt.Fprintf(errout, "%s: %d parsed, %d unparsed %s\n", audit.TerminalSafe(f.Path), f.Parsed, f.Unparsed, audit.TerminalSafe(f.Error))
