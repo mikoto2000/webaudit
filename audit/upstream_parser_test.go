@@ -44,6 +44,13 @@ func TestUpstreamNginxError(t *testing.T) {
 		t.Fatal(string(b))
 	}
 }
+func TestUpstreamAdditionalErrorAndAccessShapes(t *testing.T) {
+ for _,line:=range []string{
+  `192.0.2.1 - [01/Nov/2026:00:00:00 +0000] "GET / HTTP/1.1" 200 1 "-" "Browser"`,
+  `2026/11/01 00:00:00 [error] 12#12: user "a": password mismatch, client: 2001:db8::1, server: _, request: "GET /", host: "example.org"`,
+  `[Sun Nov 01 00:00:00.000000 2026] [auth_basic:error] [pid 12] [client 192.0.2.1:123] AH01617: user a: authentication failure for "/private": Password Mismatch`,
+ } {e,err:=Parse(line,"error.log",1,"");if err!=nil {t.Fatal(err)};if strings.Contains(line,"password mismatch")||strings.Contains(line,"Password Mismatch") {if !e.AuthFailure||e.Method!=nil&&val(e.Method)!="GET"||e.Protocol!=nil {t.Fatal(e)}}}
+}
 func TestUpstreamNPMplus(t *testing.T) {
 	e, err := Parse(`[10/Feb/2024:21:23:32 +0100] mx.example.org 192.168.1.100 0.227 "REPORT /calendar HTTP/2.0" 207 125 440 - Mozilla/5.0 Thunderbird`, "a", 1, "")
 	if err != nil || e.IP != "192.168.1.100" || val(e.Bytes) != 125 || val(e.UA) != "Mozilla/5.0 Thunderbird" {
