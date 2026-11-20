@@ -1,0 +1,121 @@
+package audit
+
+import (
+	_ "embed"
+	"encoding/csv"
+	"encoding/json"
+	"fmt"
+	"html/template"
+	"io"
+	"strconv"
+	"strings"
+	"unicode"
+)
+
+//go:embed report.html
+var htmlSource string
+var htmlReport = template.Must(template.New("report").Parse(htmlSource))
+
+func WriteReport(w io.Writer, r Report, format string) error {
+	switch format {
+	case "json":
+		enc := json.NewEncoder(w)
+		enc.SetIndent("", "  ")
+		return enc.Encode(r)
+	case "html":
+		return htmlReport.Execute(w, r)
+	case "csv":
+		return writeCSV(w, r)
+	case "summary":
+		return writeSummary(w, r)
+	default:
+		return fmt.Errorf("unsupported report format %q", format)
+	}
+}
+func TerminalSafe(s string) string {
+	return strings.Map(func(r rune) rune {
+		if unicode.IsControl(r) || r == 0x202e || r == 0x202d || r >= 0x2066 && r <= 0x2069 {
+			return '�'
+		}
+		return r
+	}, s)
+}
+func writeSummary(w io.Writer, r Report) error {
+	state := "completed"
+	if r.Partial {
+		state = "partial (coverage limits or input errors)"
+	}
+	fmt.Fprintf(w, "WebAudit %s - Analysis %s\n\nAnalyzed:\n  Files: %d\n  Requests: %d\n  Unparsed: %d\n  Duplicate observations excluded: %d\n", r.Version, state, len(r.Files), r.Parsed, r.Unparsed, r.Duplicates)
+	if r.First != nil && r.Last != nil {
+		fmt.Fprintf(w, "  Period: %s .. %s\n", r.First.Format("2006-01-02T15:04:05Z07:00"), r.Last.Format("2006-01-02T15:04:05Z07:00"))
+	}
+	fmt.Fprintf(w, "\nFindings: %d\n", len(r.Findings))
+	for _, s := range []string{"confirmed_success", "possible_success", "unknown", "likely_failed", "confirmed_failure"} {
+		fmt.Fprintf(w, "  %-20s %d\n", s, r.Outcomes[s])
+	}
+	fmt.Fprintln(w, "\nTop findings:")
+	if len(r.Findings) == 0 {
+		fmt.Fprintln(w, "  No suspicious activity detected within available log coverage.")
+	}
+	for i, f := range r.Findings {
+		if i == 5 {
+			break
+		}
+		desc := "Review candidate"
+		if len(f.Rules) > 0 {
+			desc = f.Rules[0].Description
+		}
+		fmt.Fprintf(w, "  %-8s %s | %s | %s | %d observations\n", strings.ToUpper(f.Severity), TerminalSafe(desc), TerminalSafe(f.IP), f.Outcome.Verdict, f.Count)
+	}
+	fmt.Fprintln(w, "\nWarnings:")
+	for _, s := range r.Warnings {
+		fmt.Fprintln(w, "  "+TerminalSafe(s))
+	}
+	return nil
+}
+func csvSafe(s string) string {
+	trim := strings.TrimLeftFunc(s, unicode.IsSpace)
+	if trim != "" && strings.ContainsRune("=+-@", rune(trim[0])) {
+		return "'" + s
+	}
+	if len(s) > 0 && strings.ContainsRune("\t\r\n", rune(s[0])) {
+		return "'" + s
+	}
+	return s
+}
+func writeCSV(w io.Writer, r Report) error {
+	c := csv.NewWriter(w)
+	write := func(row []string) error {
+		for i := range row {
+			row[i] = csvSafe(row[i])
+		}
+		return c.Write(row)
+	}
+	if err := write([]string{"record_type", "id", "severity", "verdict", "ip", "observations", "reasons", "evidence_json", "details_json"}); err != nil {
+		return err
+	}
+	meta := r
+	meta.Findings = nil
+	b, err := json.Marshal(meta)
+	if err != nil {
+		return err
+	}
+	if err = write([]string{"metadata", "", "", "", "", "", "", "", string(b)}); err != nil {
+		return err
+	}
+	for _, f := range r.Findings {
+		e, err := json.Marshal(f.Evidence)
+		if err != nil {
+			return err
+		}
+		details, err := json.Marshal(f)
+		if err != nil {
+			return err
+		}
+		if err = write([]string{"incident", f.ID, f.Severity, f.Outcome.Verdict, f.IP, strconv.FormatInt(f.Count, 10), strings.Join(f.Outcome.Reasons, "; "), string(e), string(details)}); err != nil {
+			return err
+		}
+	}
+	c.Flush()
+	return c.Error()
+}
