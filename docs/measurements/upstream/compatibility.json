@@ -1,0 +1,38 @@
+{
+  "sources": {
+    "hub": "626d9a38c208ab594ac0078437598257042a59be",
+    "crowdsec": "8f653d0c23ece719cce9ca7a4a942fe06fad6842",
+    "AuraDFIR": "23d4ec28381b77a6080d3d883adfc43d6decdc5e",
+    "sec-lists": "81734435645b603991fb31f6dbedc9b6b6f5f50c"
+  },
+  "native_scenario_cases": 60,
+  "native_expected_alerts": 100,
+  "native_exact_count_assertion_cases": 58,
+  "native_fixture_rule_ids": 55,
+  "skipped_other_product_cases": 11,
+  "golden_test_output": "upstream_test.go:271: Native scenario cases: 60; configured source alerts: 100; original asserted alerts: 100; original metadata checks: 2052",
+  "aura_url_tag_sets_matched": 31,
+  "aura_ua_cases_matched": 3,
+  "aura_parser_acceptance_agreement": {
+    "matched": 7,
+    "total": 7,
+    "accepted": 6
+  },
+  "crowdsec_literal_shapes": {
+    "valid_http_accepted": 5,
+    "malformed_http_rejected": 1,
+    "non_http_syslog_rejected": 2
+  },
+  "tests": {
+    "passed_including_subtests": 176,
+    "top_level_tests": 55,
+    "failed": 0
+  },
+  "coverage": "ok  \twebaudit/audit\t2.510s\tcoverage: 89.1% of statements\nok  \twebaudit/cmd/webaudit\t0.893s\tcoverage: 69.2% of statements",
+  "limitations": [
+    "Elasticsearch/Lucene/distributed aggregation engine not started or certified",
+    "four Magento application/enrichment rules unavailable",
+    "other product parsers/mail/stream/body/whitelists not ported",
+    "stateful parity assumes ordered input within resource bounds"
+  ]
+}
