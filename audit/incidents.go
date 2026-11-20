@@ -11,11 +11,12 @@ import (
 )
 
 type Outcome struct {
-	Verdict    string   `json:"verdict"`
-	Confidence float64  `json:"confidence"`
-	Reasons    []string `json:"reasons"`
-	Missing    []string `json:"missing"`
-	Next       []string `json:"next"`
+	Verdict       string          `json:"verdict"`
+	Confidence    float64         `json:"confidence"`
+	Reasons       []string        `json:"reasons"`
+	Missing       []string        `json:"missing"`
+	Next          []string        `json:"next"`
+	Investigation []Investigation `json:"investigation"`
 }
 type Evidence struct {
 	Event         Event      `json:"event"`
@@ -219,6 +220,7 @@ func (c *Correlator) addEvidence(f *Incident, e Event, n Normalized) {
 }
 func infer(f *Incident) Outcome {
 	o := Outcome{Verdict: "unknown", Confidence: 0.2, Reasons: []string{"Access logs show requests and response metadata, not server-side execution or returned content"}, Missing: []string{"Response content and expected resource semantics", "Request body, application/authentication audit trail", "Backend/proxy status mapping and filesystem/process/network evidence"}, Next: []string{"Inspect the referenced original logs and confirm request routing and proxy configuration", "Correlate application/authentication and error logs for the same time and resource", "For payload probes inspect server files, processes and outbound connections"}}
+	o.Investigation = investigationFor(f.Categories)
 	if f.TimezoneUnknown {
 		o.Missing = append(o.Missing, "Verified timezone and cross-log time alignment")
 		return o
