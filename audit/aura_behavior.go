@@ -33,49 +33,59 @@ type auraAnalysis struct {
 func newAuraAnalysis(o Options) *auraAnalysis {
 	return &auraAnalysis{o: o.defaults(), peers: map[string]*auraPeer{}, windows: map[string]int64{}, uas: map[string]*auraUA{}, hours: map[int64]int64{}}
 }
+
+// All four tables share a budget; only new entries need admission.
+func (a *auraAnalysis) allowKey() bool {
+	if len(a.peers)+len(a.windows)+len(a.uas)+len(a.hours) >= a.o.MaxKeys {
+		uniqueAppend(&a.warnings, "Aura aggregation limit reached; source aggregations are incomplete")
+		return false
+	}
+	return true
+}
 func (a *auraAnalysis) Observe(e Event) {
 	if e.TimezoneUnknown || e.LogType != "http_access-log" {
 		return
 	}
-	if len(a.peers)+len(a.windows)+len(a.uas)+len(a.hours) >= a.o.MaxKeys {
-		uniqueAppend(&a.warnings, "Aura aggregation limit reached; source aggregations are incomplete")
-		return
-	}
 	p := a.peers[e.IP]
-	if p == nil {
+	if p == nil && a.allowKey() {
 		p = &auraPeer{First: e.Time, Last: e.Time}
 		a.peers[strings.Clone(e.IP)] = p
 	}
-	p.Count++
-	p.Bytes += float64(val(e.Bytes))
-	if e.Time.Before(p.First) {
-		p.First = e.Time
-	}
-	if e.Time.After(p.Last) {
-		p.Last = e.Time
-	}
-	if val(e.Status) == 404 {
-		if p.NotFound == 0 || e.Time.Before(p.NotFoundFirst) {
-			p.NotFoundFirst = e.Time
+	if p != nil {
+		p.Count++
+		p.Bytes += float64(val(e.Bytes))
+		if e.Time.Before(p.First) {
+			p.First = e.Time
 		}
-		if p.NotFound == 0 || e.Time.After(p.NotFoundLast) {
-			p.NotFoundLast = e.Time
+		if e.Time.After(p.Last) {
+			p.Last = e.Time
 		}
-		p.NotFound++
-	}
-	if val(e.Status) == 401 || val(e.Status) == 403 {
-		p.Auth++
-		key := e.IP + "/" + strconv.FormatInt(e.Time.Truncate(5*time.Minute).Unix(), 10)
-		a.windows[key]++
-		if a.windows[key] > p.Worst {
-			p.Worst = a.windows[key]
+		if val(e.Status) == 404 {
+			if p.NotFound == 0 || e.Time.Before(p.NotFoundFirst) {
+				p.NotFoundFirst = e.Time
+			}
+			if p.NotFound == 0 || e.Time.After(p.NotFoundLast) {
+				p.NotFoundLast = e.Time
+			}
+			p.NotFound++
+		}
+		if val(e.Status) == 401 || val(e.Status) == 403 {
+			p.Auth++
+			key := e.IP + "/" + strconv.FormatInt(e.Time.Truncate(5*time.Minute).Unix(), 10)
+			count, exists := a.windows[key]
+			if exists || a.allowKey() {
+				a.windows[key] = count + 1
+				if a.windows[key] > p.Worst {
+					p.Worst = a.windows[key]
+				}
+			}
 		}
 	}
 	{
 		ua := sourceUA(e)
 		key := digest(ua)
 		v := a.uas[key]
-		if v == nil {
+		if v == nil && a.allowKey() {
 			value, cut := clipped(ua, 512)
 			if cut {
 				uniqueAppend(&a.warnings, "Aura User-Agent samples truncated; source references remain authoritative")
@@ -83,9 +93,14 @@ func (a *auraAnalysis) Observe(e Event) {
 			v = &auraUA{Value: value}
 			a.uas[key] = v
 		}
-		v.Count++
+		if v != nil {
+			v.Count++
+		}
 	}
-	a.hours[e.Time.Truncate(time.Hour).Unix()]++
+	hour := e.Time.Truncate(time.Hour).Unix()
+	if count, exists := a.hours[hour]; exists || a.allowKey() {
+		a.hours[hour] = count + 1
+	}
 }
 func (a *auraAnalysis) Finish() []SourceAlert {
 	var out []SourceAlert

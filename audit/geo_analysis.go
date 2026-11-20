@@ -149,6 +149,9 @@ func (a *geoAnalysis) finish(r *Report) {
 	}
 	for _, w := range a.g.warnings {
 		r.warn(w)
+	}
+	for _, w := range a.g.lookupWarnings {
+		r.warn(w)
 		r.Partial = true
 	}
 }

@@ -107,6 +107,9 @@ type Report struct {
 	Missing         map[string]int64  `json:"missing_fields"`
 }
 
+// AddWarning retains at most 50 distinct warnings without changing Partial.
+func (r *Report) AddWarning(s string) { r.warn(s) }
+
 func (r *Report) warn(s string) {
 	for _, x := range r.Warnings {
 		if x == s {

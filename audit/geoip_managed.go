@@ -11,8 +11,7 @@ import (
 // only when no managed manifest exists. Explicit files always take precedence.
 func OpenManagedGeoIP(country, asn, dir, legacyDir string, capacity int) (*GeoIP, []string, error) {
 	if dir == "" || (country != "" && asn != "") {
-		g, e := OpenGeoIP(country, asn, legacyDir, capacity)
-		return g, nil, e
+		return openDiscoveredGeoIP(country, asn, legacyDir, capacity)
 	}
 	var g *GeoIP
 	err := geoipdb.WithCurrent(dir, func(meta *geoipdb.Metadata) error {
@@ -34,14 +33,7 @@ func OpenManagedGeoIP(country, asn, dir, legacyDir string, capacity int) (*GeoIP
 		return nil
 	})
 	if errors.Is(err, geoipdb.ErrNotInstalled) {
-		var e error
-		g, e = OpenGeoIP(country, asn, legacyDir, capacity)
-		if g != nil && g.country == nil && g.asn == nil {
-			warnings := append([]string(nil), g.warnings...)
-			g.Close()
-			return nil, warnings, e
-		}
-		return g, nil, e
+		return openDiscoveredGeoIP(country, asn, legacyDir, capacity)
 	}
 	if err != nil {
 		if g != nil {
@@ -51,6 +43,22 @@ func OpenManagedGeoIP(country, asn, dir, legacyDir string, capacity int) (*GeoIP
 		return explicit, []string{fmt.Sprintf("Managed GeoIP unavailable; analysis continues without automatic GeoIP: %v", err)}, e
 	}
 	return g, nil, nil
+}
+
+// Discovery failures disable only the unavailable optional databases. Return
+// startup diagnostics separately even when another database remains usable.
+func openDiscoveredGeoIP(country, asn, dir string, capacity int) (*GeoIP, []string, error) {
+	g, err := OpenGeoIP(country, asn, dir, capacity)
+	if g == nil {
+		return nil, nil, err
+	}
+	warnings := g.warnings
+	g.warnings = nil
+	if g.country == nil && g.asn == nil {
+		g.Close()
+		g = nil
+	}
+	return g, warnings, err
 }
 
 func (g *GeoIP) applyManagedMetadata(meta *geoipdb.Metadata, country, asn string) {
