@@ -204,3 +204,30 @@ func InspectFile(path, role string) (Database, error) {
 	}
 	return d, nil
 }
+
+// WithCurrent pins manifest validation and reader opening against writer cleanup.
+// The callback must open its MMDB handles before returning. Those immutable file
+// handles remain usable after the lock is released and later generations publish.
+func WithCurrent(dir string, consume func(*Metadata) error) error {
+	if _, e := os.Stat(filepath.Join(dir, "metadata.json")); os.IsNotExist(e) {
+		return ErrNotInstalled
+	} else if e != nil {
+		return e
+	}
+	if e := safeManagedPaths(dir); e != nil {
+		return e
+	}
+	unlock, e := lock(dir)
+	if e != nil {
+		return e
+	}
+	defer unlock()
+	m, e := ReadMetadata(dir)
+	if e != nil {
+		return e
+	}
+	if e = ValidateCurrent(dir, m); e != nil {
+		return e
+	}
+	return consume(m)
+}
