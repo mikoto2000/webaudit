@@ -1,0 +1,3 @@
+# Provenance and licensing
+
+See rule-inventory.json/md for source-to-destination mappings and THIRD_PARTY_NOTICES.md for pinned commits and license texts. WebAudit is MIT; standard library only, no third-party Go modules. All executable code and compact RE2 conditions are independent implementations informed by listed sources. No remotely maintained Hub list is redistributed. File-level headers were inspected in the selected source files; no overriding rule license was present. Future imports must repeat license and embedded-data review. No unsupported source entry is counted as an exact port.
