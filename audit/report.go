@@ -39,7 +39,7 @@ func WriteReport(w io.Writer, r Report, format string) error {
 }
 func TerminalSafe(s string) string {
 	return strings.Map(func(r rune) rune {
-		if unicode.IsControl(r) || r == 0x202e || r == 0x202d || r >= 0x2066 && r <= 0x2069 {
+		if unicode.IsControl(r) || unicode.Is(unicode.Bidi_Control, r) {
 			return '�'
 		}
 		return r

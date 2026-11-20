@@ -50,6 +50,7 @@ type GeoIP struct {
 	country, asn                   *maxminddb.Reader
 	metadata                       []GeoDatabase
 	warnings                       []string
+	lookupWarnings                 []string
 	capacity                       int
 	cache                          *list.List
 	entries                        map[netip.Addr]*list.Element
@@ -140,6 +141,9 @@ func (g *GeoIP) Close() {
 }
 func (g *GeoIP) Metadata() []GeoDatabase { return append([]GeoDatabase(nil), g.metadata...) }
 
+var sharedNetwork = netip.MustParsePrefix("100.64.0.0/10")
+var publicIPv6Network = netip.MustParsePrefix("2000::/3")
+
 var reservedNetworks = func() []netip.Prefix {
 	var out []netip.Prefix
 	// Conservative special-purpose exclusions (including documentation, benchmark,
@@ -169,7 +173,7 @@ func classifyIP(ip netip.Addr) string {
 	if ip.IsMulticast() {
 		return "multicast"
 	}
-	if netip.MustParsePrefix("100.64.0.0/10").Contains(ip) {
+	if sharedNetwork.Contains(ip) {
 		return "shared"
 	}
 	for _, p := range reservedNetworks {
@@ -177,7 +181,7 @@ func classifyIP(ip netip.Addr) string {
 			return "reserved"
 		}
 	}
-	if !ip.IsGlobalUnicast() || (ip.Is6() && !netip.MustParsePrefix("2000::/3").Contains(ip)) {
+	if !ip.IsGlobalUnicast() || (ip.Is6() && !publicIPv6Network.Contains(ip)) {
 		return "reserved"
 	}
 	return "public"
@@ -269,8 +273,8 @@ func nonempty(p *string) *string {
 }
 func (g *GeoIP) lookupError(role string, err error) {
 	// Bound error retention independently from IP cardinality.
-	if len(g.warnings) < 10 {
-		uniqueAppend(&g.warnings, fmt.Sprintf("GeoIP %s lookup failed: %v", role, err))
+	if len(g.lookupWarnings) < 10 {
+		uniqueAppend(&g.lookupWarnings, fmt.Sprintf("GeoIP %s lookup failed: %v", role, err))
 	}
 }
 

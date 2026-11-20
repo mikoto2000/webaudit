@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -116,7 +117,7 @@ func run(args []string, out, errout io.Writer) int {
 	o.GeoIP = geo
 	r := audit.Analyze(fs.Args(), o)
 	for _, w := range geoWarnings {
-		r.Warnings = append(r.Warnings, w)
+		r.AddWarning(w)
 		fmt.Fprintln(errout, audit.TerminalSafe(w))
 	}
 	if *verbose {
@@ -137,10 +138,8 @@ func run(args []string, out, errout io.Writer) int {
 			fmt.Fprintln(errout, er)
 			return 2
 		}
-		er = audit.WriteReport(f, r, mode)
-		closeErr := f.Close()
-		if er != nil || closeErr != nil {
-			fmt.Fprintln(errout, "Report write failed:", er, closeErr)
+		if er = writeAndCloseReport(f, func(w io.Writer) error { return audit.WriteReport(w, r, mode) }); er != nil {
+			fmt.Fprintln(errout, "Report write failed:", er)
 			return 1
 		}
 		if er = audit.WriteReport(out, r, "summary"); er != nil {
@@ -156,6 +155,20 @@ func run(args []string, out, errout io.Writer) int {
 		return 1
 	}
 	return 0
+}
+
+// f must be a newly created, exclusive output file. A summary failure after this
+// succeeds must not delete the completed report.
+func writeAndCloseReport(f *os.File, write func(io.Writer) error) error {
+	writeErr := write(f)
+	closeErr := f.Close()
+	if err := errors.Join(writeErr, closeErr); err != nil {
+		if removeErr := os.Remove(f.Name()); removeErr != nil {
+			return errors.Join(err, fmt.Errorf("remove incomplete report: %w", removeErr))
+		}
+		return err
+	}
+	return nil
 }
 func interspersed(args []string, fs *flag.FlagSet) ([]string, error) {
 	var flags, paths []string

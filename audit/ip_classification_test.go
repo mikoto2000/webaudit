@@ -13,3 +13,26 @@ func TestIPClassificationWithoutDatabase(t *testing.T) {
 		}
 	}
 }
+
+func TestIPClassificationPrefixBoundaries(t *testing.T) {
+	for ip, want := range map[string]string{
+		"100.63.255.255": "public", "100.64.0.0": "shared", "100.127.255.255": "shared", "100.128.0.0": "public",
+		"1fff:ffff:ffff:ffff:ffff:ffff:ffff:ffff": "reserved", "2000::": "public", "3ffe:ffff:ffff:ffff:ffff:ffff:ffff:ffff": "public", "4000::": "reserved",
+	} {
+		if got := classifyIP(netip.MustParseAddr(ip)); got != want {
+			t.Errorf("%s: %s != %s", ip, got, want)
+		}
+	}
+}
+
+func BenchmarkClassifyIP(b *testing.B) {
+	for _, address := range []string{"8.8.8.8", "2606:4700::1111", "100.64.1.1"} {
+		b.Run(address, func(b *testing.B) {
+			ip := netip.MustParseAddr(address)
+			b.ReportAllocs()
+			for b.Loop() {
+				classifyIP(ip)
+			}
+		})
+	}
+}

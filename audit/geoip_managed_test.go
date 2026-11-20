@@ -3,8 +3,10 @@ package audit
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 	"webaudit/internal/geoipdb"
@@ -84,6 +86,69 @@ func TestLookupStates(t *testing.T) {
 	g.country.Close()
 	if x := g.Lookup("8.8.8.10"); x.Status != "read_error" || x.CountryStatus != "read_error" {
 		t.Fatal(x)
+	}
+}
+
+func TestAutomaticGeoIPStartupWarningsDoNotMakeAnalysisPartial(t *testing.T) {
+	for _, keepASN := range []bool{false, true} {
+		for _, managed := range []bool{false, true} {
+			t.Run(fmt.Sprintf("asn=%v/managed=%v", keepASN, managed), func(t *testing.T) {
+				legacy, dir := t.TempDir(), t.TempDir()
+				if err := os.WriteFile(filepath.Join(legacy, "country.mmdb"), []byte("broken"), 0600); err != nil {
+					t.Fatal(err)
+				}
+				if keepASN {
+					data, err := os.ReadFile("testdata/geoip/asn.mmdb")
+					if err != nil {
+						t.Fatal(err)
+					}
+					if err = os.WriteFile(filepath.Join(legacy, "asn.mmdb"), data, 0600); err != nil {
+						t.Fatal(err)
+					}
+				}
+				if managed {
+					if err := os.WriteFile(filepath.Join(dir, "metadata.json"), []byte("broken"), 0600); err != nil {
+						t.Fatal(err)
+					}
+				}
+				g, w, err := OpenManagedGeoIP("", "", dir, legacy, 4)
+				if err != nil || len(w) != 1 {
+					t.Fatal(w, err)
+				}
+				defer g.Close()
+				if (g != nil) != (keepASN && !managed) {
+					t.Fatal("unexpected automatic DB availability")
+				}
+				path := filepath.Join(t.TempDir(), "access.log")
+				if err := os.WriteFile(path, []byte(common+"\n"), 0600); err != nil {
+					t.Fatal(err)
+				}
+				r := Analyze([]string{path}, Options{GeoIP: g})
+				for _, s := range w {
+					r.AddWarning(s)
+				}
+				if r.Partial {
+					t.Fatal("startup warning must not make analysis partial", r.Warnings)
+				}
+				if g != nil && g.Lookup("8.8.8.8").ASN == nil {
+					t.Fatal("healthy ASN was discarded")
+				}
+			})
+		}
+	}
+}
+
+func TestGeoIPRuntimeLookupFailureRemainsPartial(t *testing.T) {
+	g := testGeo(t, 4)
+	if err := g.country.Close(); err != nil {
+		t.Fatal(err)
+	}
+	a := &geoAnalysis{g: g, max: 4, peers: map[string]*GeoPeer{}}
+	a.observe("8.8.8.8")
+	r := Report{}
+	a.finish(&r)
+	if !r.Partial || !strings.Contains(strings.Join(r.Warnings, "\n"), "lookup failed") {
+		t.Fatal(r.Partial, r.Warnings)
 	}
 }
 
