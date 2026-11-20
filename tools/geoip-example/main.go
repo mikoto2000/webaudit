@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"sort"
 	"time"
 	"webaudit/audit"
 )
@@ -28,6 +29,7 @@ func main() {
 			}
 		}
 	}
+	sort.Strings(r.Warnings)
 	f, e := os.Create("examples/geoip-sample-report.html")
 	if e != nil {
 		panic(e)

@@ -30,21 +30,7 @@ func OpenManagedGeoIP(country, asn, dir, legacyDir string, capacity int) (*GeoIP
 		if e != nil {
 			return e
 		}
-		for i := range g.metadata {
-			m := &g.metadata[i]
-			if (m.Role == "country" && country != "") || (m.Role == "asn" && asn != "") {
-				continue
-			}
-			for _, d := range meta.Current.Databases {
-				if d.Role == m.Role {
-					m.Version = ptr(d.Version)
-					m.DownloadedAt = ptr(d.DownloadedAt)
-					m.SourceURL = ptr(d.URL)
-					m.Generation = ptr(meta.Current.ID)
-					m.LastCheckedAt = ptr(meta.CheckedAt)
-				}
-			}
-		}
+		g.applyManagedMetadata(meta, country, asn)
 		return nil
 	})
 	if errors.Is(err, geoipdb.ErrNotInstalled) {
@@ -65,4 +51,22 @@ func OpenManagedGeoIP(country, asn, dir, legacyDir string, capacity int) (*GeoIP
 		return explicit, []string{fmt.Sprintf("Managed GeoIP unavailable; analysis continues without automatic GeoIP: %v", err)}, e
 	}
 	return g, nil, nil
+}
+
+func (g *GeoIP) applyManagedMetadata(meta *geoipdb.Metadata, country, asn string) {
+	for i := range g.metadata {
+		m := &g.metadata[i]
+		if (m.Role == "country" && country != "") || (m.Role == "asn" && asn != "") {
+			continue
+		}
+		for _, d := range meta.Current.Databases {
+			if d.Role == m.Role {
+				m.Version = ptr(d.Version)
+				m.DownloadedAt = ptr(d.DownloadedAt)
+				m.SourceURL = ptr(d.URL)
+				m.Generation = ptr(meta.Current.ID)
+				m.LastCheckedAt = ptr(meta.CheckedAt)
+			}
+		}
+	}
 }
