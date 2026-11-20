@@ -71,6 +71,10 @@ func writeSummary(w io.Writer, r Report) error {
 			desc = f.Rules[0].Description
 		}
 		fmt.Fprintf(w, "  %-8s %s | %s | %s | %d observations\n", strings.ToUpper(f.Severity), TerminalSafe(desc), TerminalSafe(f.IP), f.Outcome.Verdict, f.Count)
+		if f.GeoIP != nil {
+			ck, cn, ak, an := geoKeys(*f.GeoIP)
+			fmt.Fprintf(w, "    GeoIP %s | %s %s | ASN %s %s\n", f.GeoIP.Status, TerminalSafe(ck), TerminalSafe(cn), TerminalSafe(ak), TerminalSafe(an))
+		}
 	}
 	fmt.Fprintf(w, "\nUpstream detections:\n  Hub alerts: %d\n  Aura signature groups: %d\n  Aura analysis findings: %d\n", len(r.UpstreamAlerts), len(r.AuraMatches), len(r.AuraAnalysis))
 	for i, a := range r.UpstreamAlerts {
@@ -157,6 +161,17 @@ func writeGeoSummary(w io.Writer, g *GeoIPReport) {
 			date = *d.UpdatedAt
 		}
 		fmt.Fprintf(w, "  %s | %s | %s | updated %s | %s\n", TerminalSafe(d.Provider), TerminalSafe(d.File), TerminalSafe(d.Type), date, TerminalSafe(d.License))
+		version, retrieved, build := "unknown", "unknown", "unknown"
+		if d.Version != nil {
+			version = *d.Version
+		}
+		if d.DownloadedAt != nil {
+			retrieved = d.DownloadedAt.Format("2006-01-02T15:04:05Z07:00")
+		}
+		if d.BuildTime != nil {
+			build = d.BuildTime.Format("2006-01-02T15:04:05Z07:00")
+		}
+		fmt.Fprintf(w, "    Version: %s | Retrieved: %s | Build: %s\n", TerminalSafe(version), retrieved, build)
 	}
 	fmt.Fprintln(w, "  "+g.Context)
 	for _, set := range []struct {
@@ -168,13 +183,20 @@ func writeGeoSummary(w io.Writer, g *GeoIPReport) {
 				break
 			}
 			fmt.Fprintf(w, "  %s %s (%s): %d requests, %d incidents, multiple suspicious IPs: %t; %s\n", set.name, TerminalSafe(x.Key), TerminalSafe(x.Name), x.Requests, x.Incidents, x.MultiIP, TerminalSafe(strings.Join(x.IPs, ", ")))
+			fmt.Fprintf(w, "    Distinct IPs: %d | Suspicious IPs: %d\n", x.IPCount, x.SuspiciousIPCount)
 		}
+	}
+	for i, c := range g.Correlations {
+		if i == 5 {
+			break
+		}
+		fmt.Fprintf(w, "  ASN similarity %s | %s | %s | %s .. %s | %d IPs\n", TerminalSafe(c.ASN), TerminalSafe(c.Path), TerminalSafe(c.Category), c.WindowStart.Format("2006-01-02T15:04:05Z"), c.WindowEnd.Format("2006-01-02T15:04:05Z"), c.IPCount)
 	}
 	for i, p := range g.Peers {
 		if i == 5 {
 			break
 		}
 		ck, cn, ak, an := geoKeys(p.Info)
-		fmt.Fprintf(w, "  Peer %s: %s | %s %s | ASN %s %s\n", TerminalSafe(p.IP), p.Info.Classification, TerminalSafe(ck), TerminalSafe(cn), TerminalSafe(ak), TerminalSafe(an))
+		fmt.Fprintf(w, "  Peer %s: %s | %s %s | ASN %s %s\n", TerminalSafe(p.IP), p.Info.Status+" / "+p.Info.Classification, TerminalSafe(ck), TerminalSafe(cn), TerminalSafe(ak), TerminalSafe(an))
 	}
 }
