@@ -1,0 +1,8 @@
+goos: windows
+goarch: amd64
+pkg: webaudit/audit
+cpu: 12th Gen Intel(R) Core(TM) i9-12900
+BenchmarkGeoIPLookupCached-24      	 5645384	       204.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkGeoIPLookupDistinct-24    	 1571522	       749.1 ns/op	     177 B/op	       5 allocs/op
+PASS
+ok  	webaudit/audit	5.066s

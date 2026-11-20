@@ -30,3 +30,5 @@ jobs:
       - run: go run ./cmd/webaudit examples/sample.log --format json
       - if: runner.os == 'Linux'
         run: go test ./audit -run='^$' -fuzz='^FuzzParse$' -fuzztime=5s -parallel=2
+      - if: runner.os == 'Linux'
+        run: python3 tools/verify-offline.py

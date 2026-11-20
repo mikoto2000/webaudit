@@ -12,3 +12,7 @@
 *.txt text eol=lf
 audit/upstream/** text eol=lf
 audit/testdata/upstream/** text eol=lf
+
+*.mmdb binary
+vendor/** text eol=lf
+vendor/** whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab

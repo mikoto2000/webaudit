@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
@@ -21,6 +22,8 @@ func run(args []string, out, errout io.Writer) int {
 	version := fs.Bool("version", false, "Show version")
 	help := fs.Bool("help", false, "Show help")
 	var o audit.Options
+	country := fs.String("geoip-country", "", "Local Country MMDB (overrides executable geoip/ discovery)")
+	asn := fs.String("geoip-asn", "", "Local ASN MMDB (overrides executable geoip/ discovery)")
 	fs.StringVar(&o.ErrorTimezone, "error-timezone", "", "Explicit IANA timezone for timezone-free error logs (for example Asia/Tokyo)")
 	fs.BoolVar(&o.DeduplicateFiles, "dedup-files", false, "Opt-in: exclude byte-identical complete input files; retain repeated requests")
 	fs.StringVar(&o.LogRegex, "log-regex", "", "Explicit custom format with named groups ip,time,target,...")
@@ -89,6 +92,18 @@ func run(args []string, out, errout io.Writer) int {
 			return 2
 		}
 	}
+	executable, er := os.Executable()
+	if er != nil {
+		fmt.Fprintln(errout, er)
+		return 2
+	}
+	geo, er := audit.OpenGeoIP(*country, *asn, filepath.Join(filepath.Dir(executable), "geoip"), o.MaxKeys)
+	if er != nil {
+		fmt.Fprintln(errout, er)
+		return 2
+	}
+	defer geo.Close()
+	o.GeoIP = geo
 	r := audit.Analyze(fs.Args(), o)
 	if *verbose {
 		for _, f := range r.Files {

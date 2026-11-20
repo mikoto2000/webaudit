@@ -53,3 +53,27 @@ func TestCLI(t *testing.T) {
 		t.Fatal("missing input successful")
 	}
 }
+
+func TestGeoIPCLI(t *testing.T) {
+	p := filepath.Join(t.TempDir(), "access.log")
+	os.WriteFile(p, []byte(strings.Replace(logLine, "192.0.2.1", "8.8.8.8", 1)+"\n"), 0600)
+	for _, format := range []string{"json", "csv", "html", "summary"} {
+		args := []string{p, "--geoip-country", "../../audit/testdata/geoip/country.mmdb", "--geoip-asn", "../../audit/testdata/geoip/asn.mmdb"}
+		if format != "summary" {
+			args = append(args, "--format", format)
+		}
+		var out, err bytes.Buffer
+		if code := run(args, &out, &err); code != 0 {
+			t.Fatalf("%s: %d %s", format, code, err.String())
+		}
+		if !strings.Contains(out.String(), "64500") {
+			t.Fatal("missing ASN", format)
+		}
+	}
+	for _, path := range []string{filepath.Join(t.TempDir(), "missing.mmdb"), p} {
+		var out, err bytes.Buffer
+		if run([]string{p, "--geoip-country", path}, &out, &err) != 2 || !strings.Contains(err.String(), "GeoIP country database") || out.Len() != 0 {
+			t.Fatalf("explicit invalid DB: %s %s", out.String(), err.String())
+		}
+	}
+}

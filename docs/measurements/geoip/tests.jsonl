@@ -1,0 +1,814 @@
+{"Time":"2026-11-20T18:09:04.64317+09:00","Action":"start","Package":"webaudit/audit"}
+{"Time":"2026-11-20T18:09:04.6437857+09:00","Action":"start","Package":"webaudit/cmd/webaudit"}
+{"Time":"2026-11-20T18:09:04.6437857+09:00","Action":"start","Package":"webaudit/tools/benchmark"}
+{"Time":"2026-11-20T18:09:04.6437857+09:00","Action":"output","Package":"webaudit/tools/benchmark","Output":"?   \twebaudit/tools/benchmark\t[no test files]\n"}
+{"Time":"2026-11-20T18:09:04.6437857+09:00","Action":"start","Package":"webaudit/tools/evaluate"}
+{"Time":"2026-11-20T18:09:04.6437857+09:00","Action":"output","Package":"webaudit/tools/evaluate","Output":"?   \twebaudit/tools/evaluate\t[no test files]\n"}
+{"Time":"2026-11-20T18:09:04.6437857+09:00","Action":"skip","Package":"webaudit/tools/evaluate","Elapsed":0}
+{"Time":"2026-11-20T18:09:04.6437857+09:00","Action":"skip","Package":"webaudit/tools/benchmark","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.0197327+09:00","Action":"run","Package":"webaudit/cmd/webaudit","Test":"TestCLI"}
+{"Time":"2026-11-20T18:09:06.0197327+09:00","Action":"output","Package":"webaudit/cmd/webaudit","Test":"TestCLI","Output":"=== RUN   TestCLI\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.352615+09:00","Action":"output","Package":"webaudit/cmd/webaudit","Test":"TestCLI","Output":"--- PASS: TestCLI (0.33s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.352615+09:00","Action":"pass","Package":"webaudit/cmd/webaudit","Test":"TestCLI","Elapsed":0.33}
+{"Time":"2026-11-20T18:09:06.352615+09:00","Action":"run","Package":"webaudit/cmd/webaudit","Test":"TestGeoIPCLI"}
+{"Time":"2026-11-20T18:09:06.352615+09:00","Action":"output","Package":"webaudit/cmd/webaudit","Test":"TestGeoIPCLI","Output":"=== RUN   TestGeoIPCLI\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.3690301+09:00","Action":"output","Package":"webaudit/cmd/webaudit","Test":"TestGeoIPCLI","Output":"--- PASS: TestGeoIPCLI (0.02s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.3690301+09:00","Action":"pass","Package":"webaudit/cmd/webaudit","Test":"TestGeoIPCLI","Elapsed":0.02}
+{"Time":"2026-11-20T18:09:06.3690301+09:00","Action":"output","Package":"webaudit/cmd/webaudit","Output":"PASS\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.3812481+09:00","Action":"output","Package":"webaudit/cmd/webaudit","Output":"ok  \twebaudit/cmd/webaudit\t1.737s\n"}
+{"Time":"2026-11-20T18:09:06.3812481+09:00","Action":"pass","Package":"webaudit/cmd/webaudit","Elapsed":1.737}
+{"Time":"2026-11-20T18:09:06.6958283+09:00","Action":"run","Package":"webaudit/audit","Test":"TestAuraSourceBehaviorThresholds"}
+{"Time":"2026-11-20T18:09:06.6964066+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAuraSourceBehaviorThresholds","Output":"=== RUN   TestAuraSourceBehaviorThresholds\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.6964066+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAuraSourceBehaviorThresholds","Output":"--- PASS: TestAuraSourceBehaviorThresholds (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.6964066+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestAuraSourceBehaviorThresholds","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.6964066+09:00","Action":"run","Package":"webaudit/audit","Test":"TestAuraSourceStatisticalAggregates"}
+{"Time":"2026-11-20T18:09:06.6964066+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAuraSourceStatisticalAggregates","Output":"=== RUN   TestAuraSourceStatisticalAggregates\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.6964066+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAuraSourceStatisticalAggregates","Output":"--- PASS: TestAuraSourceStatisticalAggregates (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.6964066+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestAuraSourceStatisticalAggregates","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.6964066+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior"}
+{"Time":"2026-11-20T18:09:06.6964066+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior","Output":"=== RUN   TestBehavior\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.6964066+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/404"}
+{"Time":"2026-11-20T18:09:06.6964066+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/404","Output":"=== RUN   TestBehavior/404\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.6969364+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/404","Output":"--- PASS: TestBehavior/404 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.6969364+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/404","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.6969364+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/authorization"}
+{"Time":"2026-11-20T18:09:06.6969364+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/authorization","Output":"=== RUN   TestBehavior/authorization\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.6974919+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/authorization","Output":"--- PASS: TestBehavior/authorization (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.6974919+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/authorization","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.6974919+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/login"}
+{"Time":"2026-11-20T18:09:06.6974919+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/login","Output":"=== RUN   TestBehavior/login\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.6974919+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/login","Output":"--- PASS: TestBehavior/login (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.6974919+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/login","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.6974919+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/rate"}
+{"Time":"2026-11-20T18:09:06.6974919+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/rate","Output":"=== RUN   TestBehavior/rate\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7082655+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/rate","Output":"--- PASS: TestBehavior/rate (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7082655+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/rate","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:06.7082655+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/paths"}
+{"Time":"2026-11-20T18:09:06.7082655+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/paths","Output":"=== RUN   TestBehavior/paths\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7093325+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/paths","Output":"--- PASS: TestBehavior/paths (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7093325+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/paths","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.7093325+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/sensitive"}
+{"Time":"2026-11-20T18:09:06.7093325+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/sensitive","Output":"=== RUN   TestBehavior/sensitive\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7093325+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/sensitive","Output":"--- PASS: TestBehavior/sensitive (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7093325+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/sensitive","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.7093325+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/ua"}
+{"Time":"2026-11-20T18:09:06.7098844+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/ua","Output":"=== RUN   TestBehavior/ua\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7098844+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/ua","Output":"--- PASS: TestBehavior/ua (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7098844+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/ua","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.7098844+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/categories"}
+{"Time":"2026-11-20T18:09:06.7098844+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/categories","Output":"=== RUN   TestBehavior/categories\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7104197+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/categories","Output":"--- PASS: TestBehavior/categories (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7104197+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/categories","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.710951+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior","Output":"--- PASS: TestBehavior (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.710951+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:06.710951+09:00","Action":"run","Package":"webaudit/audit","Test":"TestLeaky"}
+{"Time":"2026-11-20T18:09:06.710951+09:00","Action":"output","Package":"webaudit/audit","Test":"TestLeaky","Output":"=== RUN   TestLeaky\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.710951+09:00","Action":"output","Package":"webaudit/audit","Test":"TestLeaky","Output":"--- PASS: TestLeaky (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.710951+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestLeaky","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.710951+09:00","Action":"run","Package":"webaudit/audit","Test":"TestStatistics"}
+{"Time":"2026-11-20T18:09:06.710951+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStatistics","Output":"=== RUN   TestStatistics\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7163133+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStatistics","Output":"--- PASS: TestStatistics (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7163133+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestStatistics","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:06.7163133+09:00","Action":"run","Package":"webaudit/audit","Test":"TestAnalysisBoundsAndReorder"}
+{"Time":"2026-11-20T18:09:06.7163133+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAnalysisBoundsAndReorder","Output":"=== RUN   TestAnalysisBoundsAndReorder\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7168332+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAnalysisBoundsAndReorder","Output":"--- PASS: TestAnalysisBoundsAndReorder (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7168332+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestAnalysisBoundsAndReorder","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.7168332+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubAdaptationCoverage"}
+{"Time":"2026-11-20T18:09:06.7168332+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubAdaptationCoverage","Output":"=== RUN   TestHubAdaptationCoverage\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7173542+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubAdaptationCoverage","Output":"--- PASS: TestHubAdaptationCoverage (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7173542+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubAdaptationCoverage","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.7173542+09:00","Action":"run","Package":"webaudit/audit","Test":"TestDuplicateJSONFieldsRejected"}
+{"Time":"2026-11-20T18:09:06.7173542+09:00","Action":"output","Package":"webaudit/audit","Test":"TestDuplicateJSONFieldsRejected","Output":"=== RUN   TestDuplicateJSONFieldsRejected\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7173542+09:00","Action":"output","Package":"webaudit/audit","Test":"TestDuplicateJSONFieldsRejected","Output":"--- PASS: TestDuplicateJSONFieldsRejected (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7173542+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestDuplicateJSONFieldsRejected","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.7173542+09:00","Action":"run","Package":"webaudit/audit","Test":"TestGeoIPLookup"}
+{"Time":"2026-11-20T18:09:06.7173542+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPLookup","Output":"=== RUN   TestGeoIPLookup\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7184283+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPLookup","Output":"--- PASS: TestGeoIPLookup (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7184283+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestGeoIPLookup","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.7184283+09:00","Action":"run","Package":"webaudit/audit","Test":"TestGeoIPBoundedCache"}
+{"Time":"2026-11-20T18:09:06.7184283+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPBoundedCache","Output":"=== RUN   TestGeoIPBoundedCache\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7189686+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPBoundedCache","Output":"--- PASS: TestGeoIPBoundedCache (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:06.7189686+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestGeoIPBoundedCache","Elapsed":0}
+{"Time":"2026-11-20T18:09:06.7189686+09:00","Action":"run","Package":"webaudit/audit","Test":"TestGeoIPDiscoveryErrors"}
+{"Time":"2026-11-20T18:09:06.7189686+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPDiscoveryErrors","Output":"=== RUN   TestGeoIPDiscoveryErrors\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.4384016+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPDiscoveryErrors","Output":"--- PASS: TestGeoIPDiscoveryErrors (0.72s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.4384016+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestGeoIPDiscoveryErrors","Elapsed":0.72}
+{"Time":"2026-11-20T18:09:07.4384016+09:00","Action":"run","Package":"webaudit/audit","Test":"TestGeoIPIntegrationAndNoRiskIncrease"}
+{"Time":"2026-11-20T18:09:07.4384016+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPIntegrationAndNoRiskIncrease","Output":"=== RUN   TestGeoIPIntegrationAndNoRiskIncrease\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6652866+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPIntegrationAndNoRiskIncrease","Output":"--- PASS: TestGeoIPIntegrationAndNoRiskIncrease (0.23s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6658187+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestGeoIPIntegrationAndNoRiskIncrease","Elapsed":0.23}
+{"Time":"2026-11-20T18:09:07.6658187+09:00","Action":"run","Package":"webaudit/audit","Test":"TestGeoIPCountryOnlyAndASNOnly"}
+{"Time":"2026-11-20T18:09:07.6658187+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPCountryOnlyAndASNOnly","Output":"=== RUN   TestGeoIPCountryOnlyAndASNOnly\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.666868+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPCountryOnlyAndASNOnly","Output":"--- PASS: TestGeoIPCountryOnlyAndASNOnly (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.666868+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestGeoIPCountryOnlyAndASNOnly","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.666868+09:00","Action":"run","Package":"webaudit/audit","Test":"TestGeoIPTruncationAndBenignConcentration"}
+{"Time":"2026-11-20T18:09:07.666868+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPTruncationAndBenignConcentration","Output":"=== RUN   TestGeoIPTruncationAndBenignConcentration\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6674062+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPTruncationAndBenignConcentration","Output":"--- PASS: TestGeoIPTruncationAndBenignConcentration (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6674062+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestGeoIPTruncationAndBenignConcentration","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.6674062+09:00","Action":"run","Package":"webaudit/audit","Test":"TestGeoIPAutodetectionPrecedence"}
+{"Time":"2026-11-20T18:09:07.6674062+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPAutodetectionPrecedence","Output":"=== RUN   TestGeoIPAutodetectionPrecedence\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6796041+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPAutodetectionPrecedence","Output":"--- PASS: TestGeoIPAutodetectionPrecedence (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6796041+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestGeoIPAutodetectionPrecedence","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:07.6796041+09:00","Action":"run","Package":"webaudit/audit","Test":"TestGeoIPCorruptTreeAndAutomaticDatabase"}
+{"Time":"2026-11-20T18:09:07.6796041+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPCorruptTreeAndAutomaticDatabase","Output":"=== RUN   TestGeoIPCorruptTreeAndAutomaticDatabase\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6910553+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPCorruptTreeAndAutomaticDatabase","Output":"--- PASS: TestGeoIPCorruptTreeAndAutomaticDatabase (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6910553+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestGeoIPCorruptTreeAndAutomaticDatabase","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:07.6915732+09:00","Action":"run","Package":"webaudit/audit","Test":"TestGeoIPHTMLUntrustedValues"}
+{"Time":"2026-11-20T18:09:07.6915732+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPHTMLUntrustedValues","Output":"=== RUN   TestGeoIPHTMLUntrustedValues\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6926185+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGeoIPHTMLUntrustedValues","Output":"--- PASS: TestGeoIPHTMLUntrustedValues (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6926185+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestGeoIPHTMLUntrustedValues","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.6926185+09:00","Action":"run","Package":"webaudit/audit","Test":"TestCorrelation"}
+{"Time":"2026-11-20T18:09:07.6926185+09:00","Action":"output","Package":"webaudit/audit","Test":"TestCorrelation","Output":"=== RUN   TestCorrelation\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6926185+09:00","Action":"output","Package":"webaudit/audit","Test":"TestCorrelation","Output":"--- PASS: TestCorrelation (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6926185+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestCorrelation","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.6926185+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome"}
+{"Time":"2026-11-20T18:09:07.6926185+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome","Output":"=== RUN   TestOutcome\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.6926185+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/200_alone"}
+{"Time":"2026-11-20T18:09:07.6926185+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/200_alone","Output":"=== RUN   TestOutcome/200_alone\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/200_alone","Output":"--- PASS: TestOutcome/200_alone (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/200_alone","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/500"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/500","Output":"=== RUN   TestOutcome/500\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/500","Output":"--- PASS: TestOutcome/500 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/500","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/302"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/302","Output":"=== RUN   TestOutcome/302\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/302","Output":"--- PASS: TestOutcome/302 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/302","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/404_alone"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/404_alone","Output":"=== RUN   TestOutcome/404_alone\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/404_alone","Output":"--- PASS: TestOutcome/404_alone (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/404_alone","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/blocked"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/blocked","Output":"=== RUN   TestOutcome/blocked\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/blocked","Output":"--- PASS: TestOutcome/blocked (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/blocked","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.693137+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/possible_exposure"}
+{"Time":"2026-11-20T18:09:07.7185947+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/possible_exposure","Output":"=== RUN   TestOutcome/possible_exposure\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/possible_exposure","Output":"--- PASS: TestOutcome/possible_exposure (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/possible_exposure","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/mixed_server_error"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/mixed_server_error","Output":"=== RUN   TestOutcome/mixed_server_error\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/mixed_server_error","Output":"--- PASS: TestOutcome/mixed_server_error (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/mixed_server_error","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome","Output":"--- PASS: TestOutcome (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"run","Package":"webaudit/audit","Test":"TestEvidenceBounds"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestEvidenceBounds","Output":"=== RUN   TestEvidenceBounds\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestEvidenceBounds","Output":"--- PASS: TestEvidenceBounds (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestEvidenceBounds","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"run","Package":"webaudit/audit","Test":"TestAnalyzeDedup"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAnalyzeDedup","Output":"=== RUN   TestAnalyzeDedup\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAnalyzeDedup","Output":"--- PASS: TestAnalyzeDedup (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestAnalyzeDedup","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse","Output":"=== RUN   TestParse\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/common"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/common","Output":"=== RUN   TestParse/common\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/common","Output":"--- PASS: TestParse/common (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/common","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/combined"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/combined","Output":"=== RUN   TestParse/combined\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/combined","Output":"--- PASS: TestParse/combined (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/combined","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/vhost"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/vhost","Output":"=== RUN   TestParse/vhost\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7195584+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/vhost","Output":"--- PASS: TestParse/vhost (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/vhost","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/ipv6"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/ipv6","Output":"=== RUN   TestParse/ipv6\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/ipv6","Output":"--- PASS: TestParse/ipv6 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/ipv6","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/unknown_suffix"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/unknown_suffix","Output":"=== RUN   TestParse/unknown_suffix\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/unknown_suffix","Output":"--- PASS: TestParse/unknown_suffix (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/unknown_suffix","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/invalid_IP"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/invalid_IP","Output":"=== RUN   TestParse/invalid_IP\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/invalid_IP","Output":"--- PASS: TestParse/invalid_IP (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/invalid_IP","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/invalid_status"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/invalid_status","Output":"=== RUN   TestParse/invalid_status\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/invalid_status","Output":"--- PASS: TestParse/invalid_status (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/invalid_status","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/malformed"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/malformed","Output":"=== RUN   TestParse/malformed\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/malformed","Output":"--- PASS: TestParse/malformed (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/malformed","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/json"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/json","Output":"=== RUN   TestParse/json\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/json","Output":"--- PASS: TestParse/json (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/json","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse","Output":"--- PASS: TestParse (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"run","Package":"webaudit/audit","Test":"TestCustomParser"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestCustomParser","Output":"=== RUN   TestCustomParser\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestCustomParser","Output":"--- PASS: TestCustomParser (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestCustomParser","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"run","Package":"webaudit/audit","Test":"TestStream"}
+{"Time":"2026-11-20T18:09:07.7200639+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStream","Output":"=== RUN   TestStream\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.724278+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStream","Output":"--- PASS: TestStream (0.02s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.724278+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestStream","Elapsed":0.02}
+{"Time":"2026-11-20T18:09:07.724278+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBadUTF8AndRecovery"}
+{"Time":"2026-11-20T18:09:07.724278+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBadUTF8AndRecovery","Output":"=== RUN   TestBadUTF8AndRecovery\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBadUTF8AndRecovery","Output":"--- PASS: TestBadUTF8AndRecovery (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBadUTF8AndRecovery","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"run","Package":"webaudit/audit","Test":"TestProtocolAllowlist"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"output","Package":"webaudit/audit","Test":"TestProtocolAllowlist","Output":"=== RUN   TestProtocolAllowlist\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"output","Package":"webaudit/audit","Test":"TestProtocolAllowlist","Output":"--- PASS: TestProtocolAllowlist (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestProtocolAllowlist","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"run","Package":"webaudit/audit","Test":"TestClockInjection"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"output","Package":"webaudit/audit","Test":"TestClockInjection","Output":"=== RUN   TestClockInjection\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"output","Package":"webaudit/audit","Test":"TestClockInjection","Output":"--- PASS: TestClockInjection (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestClockInjection","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"run","Package":"webaudit/audit","Test":"TestEvidenceBudget"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"output","Package":"webaudit/audit","Test":"TestEvidenceBudget","Output":"=== RUN   TestEvidenceBudget\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"output","Package":"webaudit/audit","Test":"TestEvidenceBudget","Output":"--- PASS: TestEvidenceBudget (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestEvidenceBudget","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"run","Package":"webaudit/audit","Test":"TestMissingStatusIsNotZeroErrorBaseline"}
+{"Time":"2026-11-20T18:09:07.7306618+09:00","Action":"output","Package":"webaudit/audit","Test":"TestMissingStatusIsNotZeroErrorBaseline","Output":"=== RUN   TestMissingStatusIsNotZeroErrorBaseline\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7317117+09:00","Action":"output","Package":"webaudit/audit","Test":"TestMissingStatusIsNotZeroErrorBaseline","Output":"--- PASS: TestMissingStatusIsNotZeroErrorBaseline (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7317117+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestMissingStatusIsNotZeroErrorBaseline","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7317117+09:00","Action":"run","Package":"webaudit/audit","Test":"TestStatisticalPeriod"}
+{"Time":"2026-11-20T18:09:07.7317117+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStatisticalPeriod","Output":"=== RUN   TestStatisticalPeriod\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7327591+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStatisticalPeriod","Output":"--- PASS: TestStatisticalPeriod (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7327591+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestStatisticalPeriod","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7327591+09:00","Action":"run","Package":"webaudit/audit","Test":"TestReports"}
+{"Time":"2026-11-20T18:09:07.7327591+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports","Output":"=== RUN   TestReports\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7327591+09:00","Action":"run","Package":"webaudit/audit","Test":"TestReports/html"}
+{"Time":"2026-11-20T18:09:07.7327591+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/html","Output":"=== RUN   TestReports/html\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7332875+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/html","Output":"--- PASS: TestReports/html (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7332875+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestReports/html","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7332875+09:00","Action":"run","Package":"webaudit/audit","Test":"TestReports/json"}
+{"Time":"2026-11-20T18:09:07.7332875+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/json","Output":"=== RUN   TestReports/json\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7338203+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/json","Output":"--- PASS: TestReports/json (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7338203+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestReports/json","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7338203+09:00","Action":"run","Package":"webaudit/audit","Test":"TestReports/csv"}
+{"Time":"2026-11-20T18:09:07.7338203+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/csv","Output":"=== RUN   TestReports/csv\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7343386+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/csv","Output":"--- PASS: TestReports/csv (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7343386+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestReports/csv","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7343386+09:00","Action":"run","Package":"webaudit/audit","Test":"TestReports/summary"}
+{"Time":"2026-11-20T18:09:07.7343386+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/summary","Output":"=== RUN   TestReports/summary\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7343386+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/summary","Output":"--- PASS: TestReports/summary (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7343386+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestReports/summary","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7343386+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports","Output":"--- PASS: TestReports (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7343386+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestReports","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7343386+09:00","Action":"run","Package":"webaudit/audit","Test":"TestLogEscapeNormalization"}
+{"Time":"2026-11-20T18:09:07.7343386+09:00","Action":"output","Package":"webaudit/audit","Test":"TestLogEscapeNormalization","Output":"=== RUN   TestLogEscapeNormalization\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.734867+09:00","Action":"output","Package":"webaudit/audit","Test":"TestLogEscapeNormalization","Output":"--- PASS: TestLogEscapeNormalization (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.734867+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestLogEscapeNormalization","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.7353863+09:00","Action":"run","Package":"webaudit/audit","Test":"TestRetentionBounds"}
+{"Time":"2026-11-20T18:09:07.7353863+09:00","Action":"output","Package":"webaudit/audit","Test":"TestRetentionBounds","Output":"=== RUN   TestRetentionBounds\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7992924+09:00","Action":"output","Package":"webaudit/audit","Test":"TestRetentionBounds","Output":"--- PASS: TestRetentionBounds (0.06s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.7992924+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestRetentionBounds","Elapsed":0.06}
+{"Time":"2026-11-20T18:09:07.7992924+09:00","Action":"run","Package":"webaudit/audit","Test":"TestUnrecognizedInputIsPartial"}
+{"Time":"2026-11-20T18:09:07.7992924+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUnrecognizedInputIsPartial","Output":"=== RUN   TestUnrecognizedInputIsPartial\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8036396+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUnrecognizedInputIsPartial","Output":"--- PASS: TestUnrecognizedInputIsPartial (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8036396+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestUnrecognizedInputIsPartial","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8036396+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSummaryWriteErrors"}
+{"Time":"2026-11-20T18:09:07.8036396+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSummaryWriteErrors","Output":"=== RUN   TestSummaryWriteErrors\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8036396+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSummaryWriteErrors","Output":"--- PASS: TestSummaryWriteErrors (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8036396+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSummaryWriteErrors","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8036396+09:00","Action":"run","Package":"webaudit/audit","Test":"TestGzipCRCAndBombLimit"}
+{"Time":"2026-11-20T18:09:07.8036396+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGzipCRCAndBombLimit","Output":"=== RUN   TestGzipCRCAndBombLimit\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGzipCRCAndBombLimit","Output":"--- PASS: TestGzipCRCAndBombLimit (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestGzipCRCAndBombLimit","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"run","Package":"webaudit/audit","Test":"TestNormalize"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestNormalize","Output":"=== RUN   TestNormalize\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestNormalize","Output":"--- PASS: TestNormalize (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestNormalize","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures","Output":"=== RUN   TestSignatures\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/sqli"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sqli","Output":"=== RUN   TestSignatures/sqli\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sqli","Output":"--- PASS: TestSignatures/sqli (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/sqli","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/nosqli"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/nosqli","Output":"=== RUN   TestSignatures/nosqli\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/nosqli","Output":"--- PASS: TestSignatures/nosqli (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/nosqli","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/command_injection"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/command_injection","Output":"=== RUN   TestSignatures/command_injection\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/command_injection","Output":"--- PASS: TestSignatures/command_injection (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/command_injection","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/shellshock"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/shellshock","Output":"=== RUN   TestSignatures/shellshock\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/shellshock","Output":"--- PASS: TestSignatures/shellshock (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/shellshock","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/ssti"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ssti","Output":"=== RUN   TestSignatures/ssti\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ssti","Output":"--- PASS: TestSignatures/ssti (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/ssti","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/ldap_injection"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ldap_injection","Output":"=== RUN   TestSignatures/ldap_injection\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ldap_injection","Output":"--- PASS: TestSignatures/ldap_injection (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/ldap_injection","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/xpath_injection"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xpath_injection","Output":"=== RUN   TestSignatures/xpath_injection\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xpath_injection","Output":"--- PASS: TestSignatures/xpath_injection (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/xpath_injection","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/xss"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xss","Output":"=== RUN   TestSignatures/xss\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8106442+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xss","Output":"--- PASS: TestSignatures/xss (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/xss","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/lfi_traversal"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/lfi_traversal","Output":"=== RUN   TestSignatures/lfi_traversal\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/lfi_traversal","Output":"--- PASS: TestSignatures/lfi_traversal (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/lfi_traversal","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/rfi"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/rfi","Output":"=== RUN   TestSignatures/rfi\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/rfi","Output":"--- PASS: TestSignatures/rfi (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/rfi","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/ssrf"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ssrf","Output":"=== RUN   TestSignatures/ssrf\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ssrf","Output":"--- PASS: TestSignatures/ssrf (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/ssrf","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/xxe"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xxe","Output":"=== RUN   TestSignatures/xxe\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xxe","Output":"--- PASS: TestSignatures/xxe (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/xxe","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/deserialization"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/deserialization","Output":"=== RUN   TestSignatures/deserialization\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/deserialization","Output":"--- PASS: TestSignatures/deserialization (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/deserialization","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/webshell"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/webshell","Output":"=== RUN   TestSignatures/webshell\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/webshell","Output":"--- PASS: TestSignatures/webshell (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/webshell","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/log4shell"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/log4shell","Output":"=== RUN   TestSignatures/log4shell\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/log4shell","Output":"--- PASS: TestSignatures/log4shell (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/log4shell","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/spring4shell"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/spring4shell","Output":"=== RUN   TestSignatures/spring4shell\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/spring4shell","Output":"--- PASS: TestSignatures/spring4shell (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/spring4shell","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/struts_ognl"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/struts_ognl","Output":"=== RUN   TestSignatures/struts_ognl\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8111769+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/struts_ognl","Output":"--- PASS: TestSignatures/struts_ognl (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/struts_ognl","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/crlf_injection"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/crlf_injection","Output":"=== RUN   TestSignatures/crlf_injection\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/crlf_injection","Output":"--- PASS: TestSignatures/crlf_injection (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/crlf_injection","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/open_redirect"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/open_redirect","Output":"=== RUN   TestSignatures/open_redirect\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/open_redirect","Output":"--- PASS: TestSignatures/open_redirect (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/open_redirect","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/access_bypass"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/access_bypass","Output":"=== RUN   TestSignatures/access_bypass\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/access_bypass","Output":"--- PASS: TestSignatures/access_bypass (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/access_bypass","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file","Output":"=== RUN   TestSignatures/sensitive_file\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file","Output":"--- PASS: TestSignatures/sensitive_file (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file#01"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file#01","Output":"=== RUN   TestSignatures/sensitive_file#01\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file#01","Output":"--- PASS: TestSignatures/sensitive_file#01 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file#01","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/cve_probe"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/cve_probe","Output":"=== RUN   TestSignatures/cve_probe\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/cve_probe","Output":"--- PASS: TestSignatures/cve_probe (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/cve_probe","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/null_byte"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/null_byte","Output":"=== RUN   TestSignatures/null_byte\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/null_byte","Output":"--- PASS: TestSignatures/null_byte (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/null_byte","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/cve_probe#01"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/cve_probe#01","Output":"=== RUN   TestSignatures/cve_probe#01\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/cve_probe#01","Output":"--- PASS: TestSignatures/cve_probe#01 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/cve_probe#01","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/iis_aspnet"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/iis_aspnet","Output":"=== RUN   TestSignatures/iis_aspnet\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/iis_aspnet","Output":"--- PASS: TestSignatures/iis_aspnet (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/iis_aspnet","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/recon_probe"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/recon_probe","Output":"=== RUN   TestSignatures/recon_probe\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/recon_probe","Output":"--- PASS: TestSignatures/recon_probe (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8117238+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/recon_probe","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8122482+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures","Output":"--- PASS: TestSignatures (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8122482+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8122482+09:00","Action":"run","Package":"webaudit/audit","Test":"TestRulesUnique"}
+{"Time":"2026-11-20T18:09:07.8122482+09:00","Action":"output","Package":"webaudit/audit","Test":"TestRulesUnique","Output":"=== RUN   TestRulesUnique\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8122482+09:00","Action":"output","Package":"webaudit/audit","Test":"TestRulesUnique","Output":"--- PASS: TestRulesUnique (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8122482+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestRulesUnique","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8122482+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSourcePatternFilterPreservesRE2Results"}
+{"Time":"2026-11-20T18:09:07.8122482+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSourcePatternFilterPreservesRE2Results","Output":"=== RUN   TestSourcePatternFilterPreservesRE2Results\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8883247+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSourcePatternFilterPreservesRE2Results","Output":"--- PASS: TestSourcePatternFilterPreservesRE2Results (0.08s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSourcePatternFilterPreservesRE2Results","Elapsed":0.08}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"run","Package":"webaudit/audit","Test":"TestUpstreamSyslogAndExtraFields"}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamSyslogAndExtraFields","Output":"=== RUN   TestUpstreamSyslogAndExtraFields\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamSyslogAndExtraFields","Output":"--- PASS: TestUpstreamSyslogAndExtraFields (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestUpstreamSyslogAndExtraFields","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"run","Package":"webaudit/audit","Test":"TestUpstreamOpaqueRequest"}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamOpaqueRequest","Output":"=== RUN   TestUpstreamOpaqueRequest\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamOpaqueRequest","Output":"--- PASS: TestUpstreamOpaqueRequest (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestUpstreamOpaqueRequest","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"run","Package":"webaudit/audit","Test":"TestApacheOptionalRequestProtocol"}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"output","Package":"webaudit/audit","Test":"TestApacheOptionalRequestProtocol","Output":"=== RUN   TestApacheOptionalRequestProtocol\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"output","Package":"webaudit/audit","Test":"TestApacheOptionalRequestProtocol","Output":"--- PASS: TestApacheOptionalRequestProtocol (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestApacheOptionalRequestProtocol","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSourceDistinctPreservesDashAndAbsentUA"}
+{"Time":"2026-11-20T18:09:07.8891286+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSourceDistinctPreservesDashAndAbsentUA","Output":"=== RUN   TestSourceDistinctPreservesDashAndAbsentUA\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSourceDistinctPreservesDashAndAbsentUA","Output":"--- PASS: TestSourceDistinctPreservesDashAndAbsentUA (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSourceDistinctPreservesDashAndAbsentUA","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"run","Package":"webaudit/audit","Test":"TestUpstreamNginxError"}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamNginxError","Output":"=== RUN   TestUpstreamNginxError\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamNginxError","Output":"--- PASS: TestUpstreamNginxError (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestUpstreamNginxError","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"run","Package":"webaudit/audit","Test":"TestUpstreamAdditionalErrorAndAccessShapes"}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamAdditionalErrorAndAccessShapes","Output":"=== RUN   TestUpstreamAdditionalErrorAndAccessShapes\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamAdditionalErrorAndAccessShapes","Output":"--- PASS: TestUpstreamAdditionalErrorAndAccessShapes (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestUpstreamAdditionalErrorAndAccessShapes","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"run","Package":"webaudit/audit","Test":"TestUpstreamNPMplus"}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamNPMplus","Output":"=== RUN   TestUpstreamNPMplus\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.8907137+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamNPMplus","Output":"--- PASS: TestUpstreamNPMplus (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.891243+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestUpstreamNPMplus","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.891243+09:00","Action":"run","Package":"webaudit/audit","Test":"TestRepeatedRequestsAndDuplicateFiles"}
+{"Time":"2026-11-20T18:09:07.891243+09:00","Action":"output","Package":"webaudit/audit","Test":"TestRepeatedRequestsAndDuplicateFiles","Output":"=== RUN   TestRepeatedRequestsAndDuplicateFiles\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9074208+09:00","Action":"output","Package":"webaudit/audit","Test":"TestRepeatedRequestsAndDuplicateFiles","Output":"--- PASS: TestRepeatedRequestsAndDuplicateFiles (0.02s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9074208+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestRepeatedRequestsAndDuplicateFiles","Elapsed":0.02}
+{"Time":"2026-11-20T18:09:07.9074208+09:00","Action":"run","Package":"webaudit/audit","Test":"TestErrorTimezoneAndUnknownIncident"}
+{"Time":"2026-11-20T18:09:07.9074208+09:00","Action":"output","Package":"webaudit/audit","Test":"TestErrorTimezoneAndUnknownIncident","Output":"=== RUN   TestErrorTimezoneAndUnknownIncident\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9346547+09:00","Action":"output","Package":"webaudit/audit","Test":"TestErrorTimezoneAndUnknownIncident","Output":"--- PASS: TestErrorTimezoneAndUnknownIncident (0.03s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9346547+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestErrorTimezoneAndUnknownIncident","Elapsed":0.03}
+{"Time":"2026-11-20T18:09:07.9346547+09:00","Action":"run","Package":"webaudit/audit","Test":"TestErrorMessageIsNotAnAuthenticationResult"}
+{"Time":"2026-11-20T18:09:07.9346547+09:00","Action":"output","Package":"webaudit/audit","Test":"TestErrorMessageIsNotAnAuthenticationResult","Output":"=== RUN   TestErrorMessageIsNotAnAuthenticationResult\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9346547+09:00","Action":"output","Package":"webaudit/audit","Test":"TestErrorMessageIsNotAnAuthenticationResult","Output":"--- PASS: TestErrorMessageIsNotAnAuthenticationResult (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9346547+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestErrorMessageIsNotAnAuthenticationResult","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.9346547+09:00","Action":"run","Package":"webaudit/audit","Test":"TestAuraSourceGolden"}
+{"Time":"2026-11-20T18:09:07.9346547+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAuraSourceGolden","Output":"=== RUN   TestAuraSourceGolden\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9447862+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAuraSourceGolden","Output":"--- PASS: TestAuraSourceGolden (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9447862+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestAuraSourceGolden","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:07.9447862+09:00","Action":"run","Package":"webaudit/audit","Test":"TestAuraScannerSourceGolden"}
+{"Time":"2026-11-20T18:09:07.9447862+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAuraScannerSourceGolden","Output":"=== RUN   TestAuraScannerSourceGolden\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9463933+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAuraScannerSourceGolden","Output":"--- PASS: TestAuraScannerSourceGolden (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9463933+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestAuraScannerSourceGolden","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.9463933+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSourceLogLiteralShapes"}
+{"Time":"2026-11-20T18:09:07.9463933+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSourceLogLiteralShapes","Output":"=== RUN   TestSourceLogLiteralShapes\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9474451+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSourceLogLiteralShapes","Output":"--- PASS: TestSourceLogLiteralShapes (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9474451+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSourceLogLiteralShapes","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.9474451+09:00","Action":"run","Package":"webaudit/audit","Test":"TestAuraPythonCaseSemantics"}
+{"Time":"2026-11-20T18:09:07.9474451+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAuraPythonCaseSemantics","Output":"=== RUN   TestAuraPythonCaseSemantics\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9474451+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAuraPythonCaseSemantics","Output":"--- PASS: TestAuraPythonCaseSemantics (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9474451+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestAuraPythonCaseSemantics","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.9474451+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSourceCaseAndMalformedRequestBoundaries"}
+{"Time":"2026-11-20T18:09:07.9474451+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSourceCaseAndMalformedRequestBoundaries","Output":"=== RUN   TestSourceCaseAndMalformedRequestBoundaries\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9474451+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSourceCaseAndMalformedRequestBoundaries","Output":"--- PASS: TestSourceCaseAndMalformedRequestBoundaries (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9474451+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSourceCaseAndMalformedRequestBoundaries","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.9479785+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden"}
+{"Time":"2026-11-20T18:09:07.9479785+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden","Output":"=== RUN   TestHubSourceGolden\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9506497+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache-cve-2021-41773"}
+{"Time":"2026-11-20T18:09:07.9506497+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache-cve-2021-41773","Output":"=== RUN   TestHubSourceGolden/apache-cve-2021-41773\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9538035+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache-cve-2021-41773","Output":"--- PASS: TestHubSourceGolden/apache-cve-2021-41773 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:07.9543319+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache-cve-2021-41773","Elapsed":0}
+{"Time":"2026-11-20T18:09:07.9543319+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache-http-probing"}
+{"Time":"2026-11-20T18:09:07.9543319+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache-http-probing","Output":"=== RUN   TestHubSourceGolden/apache-http-probing\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0108635+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache-http-probing","Output":"--- PASS: TestHubSourceGolden/apache-http-probing (0.06s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0108635+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache-http-probing","Elapsed":0.06}
+{"Time":"2026-11-20T18:09:08.0108635+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache2-http-sensitive-files"}
+{"Time":"2026-11-20T18:09:08.0108635+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache2-http-sensitive-files","Output":"=== RUN   TestHubSourceGolden/apache2-http-sensitive-files\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0157088+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache2-http-sensitive-files","Output":"--- PASS: TestHubSourceGolden/apache2-http-sensitive-files (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0157088+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache2-http-sensitive-files","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0157088+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache2-malformed"}
+{"Time":"2026-11-20T18:09:08.0157088+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache2-malformed","Output":"=== RUN   TestHubSourceGolden/apache2-malformed\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.017413+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache2-malformed","Output":"--- PASS: TestHubSourceGolden/apache2-malformed (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.017413+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache2-malformed","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.017413+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache_log4j2_cve-2021-44228"}
+{"Time":"2026-11-20T18:09:08.017413+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache_log4j2_cve-2021-44228","Output":"=== RUN   TestHubSourceGolden/apache_log4j2_cve-2021-44228\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0184752+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache_log4j2_cve-2021-44228","Output":"--- PASS: TestHubSourceGolden/apache_log4j2_cve-2021-44228 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0184752+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/apache_log4j2_cve-2021-44228","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0184752+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/apiscp-bf"}
+{"Time":"2026-11-20T18:09:08.0184752+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apiscp-bf","Output":"=== RUN   TestHubSourceGolden/apiscp-bf\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0201109+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/apiscp-bf","Output":"--- PASS: TestHubSourceGolden/apiscp-bf (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0201109+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/apiscp-bf","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0201109+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/aws-alb-http-bad-user-agent"}
+{"Time":"2026-11-20T18:09:08.0201109+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/aws-alb-http-bad-user-agent","Output":"=== RUN   TestHubSourceGolden/aws-alb-http-bad-user-agent\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0201109+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/aws-alb-http-bad-user-agent","Output":"    upstream_test.go:171: Requires another product's acquisition/parser; retained for an explicit scope record\n"}
+{"Time":"2026-11-20T18:09:08.0201109+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/aws-alb-http-bad-user-agent","Output":"--- SKIP: TestHubSourceGolden/aws-alb-http-bad-user-agent (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0201109+09:00","Action":"skip","Package":"webaudit/audit","Test":"TestHubSourceGolden/aws-alb-http-bad-user-agent","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0201109+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/base-upsun-generic-test"}
+{"Time":"2026-11-20T18:09:08.0201109+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/base-upsun-generic-test","Output":"=== RUN   TestHubSourceGolden/base-upsun-generic-test\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/base-upsun-generic-test","Output":"--- PASS: TestHubSourceGolden/base-upsun-generic-test (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/base-upsun-generic-test","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-bad-user-agent"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-bad-user-agent","Output":"=== RUN   TestHubSourceGolden/bunkerweb-bad-user-agent\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-bad-user-agent","Output":"    upstream_test.go:171: Requires another product's acquisition/parser; retained for an explicit scope record\n"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-bad-user-agent","Output":"--- SKIP: TestHubSourceGolden/bunkerweb-bad-user-agent (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"skip","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-bad-user-agent","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-http-path-traversal"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-http-path-traversal","Output":"=== RUN   TestHubSourceGolden/bunkerweb-http-path-traversal\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-http-path-traversal","Output":"    upstream_test.go:171: Requires another product's acquisition/parser; retained for an explicit scope record\n"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-http-path-traversal","Output":"--- SKIP: TestHubSourceGolden/bunkerweb-http-path-traversal (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"skip","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-http-path-traversal","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-http-sensitive-files"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-http-sensitive-files","Output":"=== RUN   TestHubSourceGolden/bunkerweb-http-sensitive-files\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-http-sensitive-files","Output":"    upstream_test.go:171: Requires another product's acquisition/parser; retained for an explicit scope record\n"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-http-sensitive-files","Output":"--- SKIP: TestHubSourceGolden/bunkerweb-http-sensitive-files (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"skip","Package":"webaudit/audit","Test":"TestHubSourceGolden/bunkerweb-http-sensitive-files","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/caddy-basic-auth-bf"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/caddy-basic-auth-bf","Output":"=== RUN   TestHubSourceGolden/caddy-basic-auth-bf\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/caddy-basic-auth-bf","Output":"    upstream_test.go:171: Requires another product's acquisition/parser; retained for an explicit scope record\n"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/caddy-basic-auth-bf","Output":"--- SKIP: TestHubSourceGolden/caddy-basic-auth-bf (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"skip","Package":"webaudit/audit","Test":"TestHubSourceGolden/caddy-basic-auth-bf","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2017-9841"}
+{"Time":"2026-11-20T18:09:08.0212024+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2017-9841","Output":"=== RUN   TestHubSourceGolden/CVE-2017-9841\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0227801+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2017-9841","Output":"--- PASS: TestHubSourceGolden/CVE-2017-9841 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0227801+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2017-9841","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0227801+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2019-18935"}
+{"Time":"2026-11-20T18:09:08.0227801+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2019-18935","Output":"=== RUN   TestHubSourceGolden/CVE-2019-18935\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0238564+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2019-18935","Output":"--- PASS: TestHubSourceGolden/CVE-2019-18935 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0238564+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2019-18935","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0238564+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve-2021-42013"}
+{"Time":"2026-11-20T18:09:08.0238564+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve-2021-42013","Output":"=== RUN   TestHubSourceGolden/cve-2021-42013\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0254613+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve-2021-42013","Output":"--- PASS: TestHubSourceGolden/cve-2021-42013 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0254613+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve-2021-42013","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0254613+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-26134"}
+{"Time":"2026-11-20T18:09:08.0254613+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-26134","Output":"=== RUN   TestHubSourceGolden/CVE-2022-26134\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0301594+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-26134","Output":"--- PASS: TestHubSourceGolden/CVE-2022-26134 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0301594+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-26134","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0301594+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-35914"}
+{"Time":"2026-11-20T18:09:08.0301594+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-35914","Output":"=== RUN   TestHubSourceGolden/CVE-2022-35914\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0319491+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-35914","Output":"--- PASS: TestHubSourceGolden/CVE-2022-35914 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0319491+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-35914","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0319491+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-40684"}
+{"Time":"2026-11-20T18:09:08.0319491+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-40684","Output":"=== RUN   TestHubSourceGolden/CVE-2022-40684\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.032976+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-40684","Output":"--- PASS: TestHubSourceGolden/CVE-2022-40684 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.032976+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-40684","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.032976+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-41697"}
+{"Time":"2026-11-20T18:09:08.032976+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-41697","Output":"=== RUN   TestHubSourceGolden/CVE-2022-41697\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0364299+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-41697","Output":"--- PASS: TestHubSourceGolden/CVE-2022-41697 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0364299+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-41697","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0364299+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-42889"}
+{"Time":"2026-11-20T18:09:08.0364299+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-42889","Output":"=== RUN   TestHubSourceGolden/CVE-2022-42889\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0399625+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-42889","Output":"--- PASS: TestHubSourceGolden/CVE-2022-42889 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0399625+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-42889","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0399625+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-44877"}
+{"Time":"2026-11-20T18:09:08.0399625+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-44877","Output":"=== RUN   TestHubSourceGolden/CVE-2022-44877\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0438197+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-44877","Output":"--- PASS: TestHubSourceGolden/CVE-2022-44877 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0438197+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-44877","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0438197+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-46169"}
+{"Time":"2026-11-20T18:09:08.0438197+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-46169","Output":"=== RUN   TestHubSourceGolden/CVE-2022-46169\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0494795+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-46169","Output":"--- PASS: TestHubSourceGolden/CVE-2022-46169 (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0494795+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2022-46169","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:08.0494795+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2023-22515"}
+{"Time":"2026-11-20T18:09:08.0494795+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2023-22515","Output":"=== RUN   TestHubSourceGolden/CVE-2023-22515\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0511771+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2023-22515","Output":"--- PASS: TestHubSourceGolden/CVE-2023-22515 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0511771+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2023-22515","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0511771+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2023-22518"}
+{"Time":"2026-11-20T18:09:08.0511771+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2023-22518","Output":"=== RUN   TestHubSourceGolden/CVE-2023-22518\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.054195+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2023-22518","Output":"--- PASS: TestHubSourceGolden/CVE-2023-22518 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.054195+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2023-22518","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.054195+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve-2023-49103"}
+{"Time":"2026-11-20T18:09:08.054195+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve-2023-49103","Output":"=== RUN   TestHubSourceGolden/cve-2023-49103\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0558162+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve-2023-49103","Output":"--- PASS: TestHubSourceGolden/cve-2023-49103 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0558162+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve-2023-49103","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0558162+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-0012"}
+{"Time":"2026-11-20T18:09:08.0558162+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-0012","Output":"=== RUN   TestHubSourceGolden/CVE-2024-0012\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0574198+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-0012","Output":"--- PASS: TestHubSourceGolden/CVE-2024-0012 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0574198+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-0012","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0574198+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-38475"}
+{"Time":"2026-11-20T18:09:08.0574198+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-38475","Output":"=== RUN   TestHubSourceGolden/CVE-2024-38475\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0611683+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-38475","Output":"--- PASS: TestHubSourceGolden/CVE-2024-38475 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0611683+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-38475","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0611683+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-9474"}
+{"Time":"2026-11-20T18:09:08.0611683+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-9474","Output":"=== RUN   TestHubSourceGolden/CVE-2024-9474\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0621731+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-9474","Output":"--- PASS: TestHubSourceGolden/CVE-2024-9474 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0621731+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2024-9474","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0621731+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2025-0108"}
+{"Time":"2026-11-20T18:09:08.0621731+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2025-0108","Output":"=== RUN   TestHubSourceGolden/CVE-2025-0108\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0632009+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2025-0108","Output":"--- PASS: TestHubSourceGolden/CVE-2025-0108 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0632009+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/CVE-2025-0108","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0632009+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve_2022_37042"}
+{"Time":"2026-11-20T18:09:08.0632009+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve_2022_37042","Output":"=== RUN   TestHubSourceGolden/cve_2022_37042\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve_2022_37042","Output":"--- PASS: TestHubSourceGolden/cve_2022_37042 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/cve_2022_37042","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/envoy-http-bad-user-agent"}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/envoy-http-bad-user-agent","Output":"=== RUN   TestHubSourceGolden/envoy-http-bad-user-agent\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/envoy-http-bad-user-agent","Output":"    upstream_test.go:171: Requires another product's acquisition/parser; retained for an explicit scope record\n"}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/envoy-http-bad-user-agent","Output":"--- SKIP: TestHubSourceGolden/envoy-http-bad-user-agent (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"skip","Package":"webaudit/audit","Test":"TestHubSourceGolden/envoy-http-bad-user-agent","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/envoy-http-crawl-non_statics"}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/envoy-http-crawl-non_statics","Output":"=== RUN   TestHubSourceGolden/envoy-http-crawl-non_statics\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/envoy-http-crawl-non_statics","Output":"    upstream_test.go:171: Requires another product's acquisition/parser; retained for an explicit scope record\n"}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/envoy-http-crawl-non_statics","Output":"--- SKIP: TestHubSourceGolden/envoy-http-crawl-non_statics (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"skip","Package":"webaudit/audit","Test":"TestHubSourceGolden/envoy-http-crawl-non_statics","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/f5-big-ip-cve-2020-5902"}
+{"Time":"2026-11-20T18:09:08.065288+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/f5-big-ip-cve-2020-5902","Output":"=== RUN   TestHubSourceGolden/f5-big-ip-cve-2020-5902\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0679115+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/f5-big-ip-cve-2020-5902","Output":"--- PASS: TestHubSourceGolden/f5-big-ip-cve-2020-5902 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0679115+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/f5-big-ip-cve-2020-5902","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0679115+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/fortinet-cve-2018-13379"}
+{"Time":"2026-11-20T18:09:08.0679115+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/fortinet-cve-2018-13379","Output":"=== RUN   TestHubSourceGolden/fortinet-cve-2018-13379\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0684366+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/fortinet-cve-2018-13379","Output":"--- PASS: TestHubSourceGolden/fortinet-cve-2018-13379 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0684366+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/fortinet-cve-2018-13379","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0684366+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/grafana_cve-2021-43798"}
+{"Time":"2026-11-20T18:09:08.0684366+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/grafana_cve-2021-43798","Output":"=== RUN   TestHubSourceGolden/grafana_cve-2021-43798\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0700124+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/grafana_cve-2021-43798","Output":"--- PASS: TestHubSourceGolden/grafana_cve-2021-43798 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.07053+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/grafana_cve-2021-43798","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.07053+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-admin-interface-probing"}
+{"Time":"2026-11-20T18:09:08.07053+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-admin-interface-probing","Output":"=== RUN   TestHubSourceGolden/http-admin-interface-probing\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0715725+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-admin-interface-probing","Output":"--- PASS: TestHubSourceGolden/http-admin-interface-probing (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0720905+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-admin-interface-probing","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0720905+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-bf-wordpress-bf"}
+{"Time":"2026-11-20T18:09:08.0720905+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-bf-wordpress-bf","Output":"=== RUN   TestHubSourceGolden/http-bf-wordpress-bf\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.073801+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-bf-wordpress-bf","Output":"--- PASS: TestHubSourceGolden/http-bf-wordpress-bf (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0743276+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-bf-wordpress-bf","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0743276+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-cve-probing"}
+{"Time":"2026-11-20T18:09:08.0743276+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-cve-probing","Output":"=== RUN   TestHubSourceGolden/http-cve-probing\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0759273+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-cve-probing","Output":"--- PASS: TestHubSourceGolden/http-cve-probing (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.0759273+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-cve-probing","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.0759273+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-bypass-cache"}
+{"Time":"2026-11-20T18:09:08.0759273+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-bypass-cache","Output":"=== RUN   TestHubSourceGolden/http-dos-bypass-cache\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1257683+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-bypass-cache","Output":"--- PASS: TestHubSourceGolden/http-dos-bypass-cache (0.05s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1257683+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-bypass-cache","Elapsed":0.05}
+{"Time":"2026-11-20T18:09:08.1257683+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-invalid-http-versions"}
+{"Time":"2026-11-20T18:09:08.1257683+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-invalid-http-versions","Output":"=== RUN   TestHubSourceGolden/http-dos-invalid-http-versions\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1277167+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-invalid-http-versions","Output":"--- PASS: TestHubSourceGolden/http-dos-invalid-http-versions (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1277167+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-invalid-http-versions","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1277167+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-random-uri"}
+{"Time":"2026-11-20T18:09:08.1277167+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-random-uri","Output":"=== RUN   TestHubSourceGolden/http-dos-random-uri\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1390102+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-random-uri","Output":"--- PASS: TestHubSourceGolden/http-dos-random-uri (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1390102+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-random-uri","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:08.1390102+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-switching-ua"}
+{"Time":"2026-11-20T18:09:08.1390102+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-switching-ua","Output":"=== RUN   TestHubSourceGolden/http-dos-switching-ua\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1417076+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-switching-ua","Output":"--- PASS: TestHubSourceGolden/http-dos-switching-ua (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1417076+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-dos-switching-ua","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1417076+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-generic-test"}
+{"Time":"2026-11-20T18:09:08.1417076+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-generic-test","Output":"=== RUN   TestHubSourceGolden/http-generic-test\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1427693+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-generic-test","Output":"--- PASS: TestHubSourceGolden/http-generic-test (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1427693+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-generic-test","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1427693+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-technology-probing"}
+{"Time":"2026-11-20T18:09:08.1427693+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-technology-probing","Output":"=== RUN   TestHubSourceGolden/http-technology-probing\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1452182+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-technology-probing","Output":"--- PASS: TestHubSourceGolden/http-technology-probing (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1452182+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-technology-probing","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1452182+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress-scan"}
+{"Time":"2026-11-20T18:09:08.1452182+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress-scan","Output":"=== RUN   TestHubSourceGolden/http-wordpress-scan\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1489705+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress-scan","Output":"--- PASS: TestHubSourceGolden/http-wordpress-scan (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1489705+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress-scan","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1489705+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress_user-enum"}
+{"Time":"2026-11-20T18:09:08.1489705+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress_user-enum","Output":"=== RUN   TestHubSourceGolden/http-wordpress_user-enum\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1516462+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress_user-enum","Output":"--- PASS: TestHubSourceGolden/http-wordpress_user-enum (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1516462+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress_user-enum","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1516462+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress_wpconfig"}
+{"Time":"2026-11-20T18:09:08.1516462+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress_wpconfig","Output":"=== RUN   TestHubSourceGolden/http-wordpress_wpconfig\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1553996+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress_wpconfig","Output":"--- PASS: TestHubSourceGolden/http-wordpress_wpconfig (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1553996+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/http-wordpress_wpconfig","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1553996+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/ipv6-postoverflow"}
+{"Time":"2026-11-20T18:09:08.1553996+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/ipv6-postoverflow","Output":"=== RUN   TestHubSourceGolden/ipv6-postoverflow\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.156512+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/ipv6-postoverflow","Output":"--- PASS: TestHubSourceGolden/ipv6-postoverflow (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.156512+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/ipv6-postoverflow","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.156512+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/jira_cve-2021-26086"}
+{"Time":"2026-11-20T18:09:08.156512+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/jira_cve-2021-26086","Output":"=== RUN   TestHubSourceGolden/jira_cve-2021-26086\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1586983+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/jira_cve-2021-26086","Output":"--- PASS: TestHubSourceGolden/jira_cve-2021-26086 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1586983+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/jira_cve-2021-26086","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1592387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/litespeed-http-sensitive-files"}
+{"Time":"2026-11-20T18:09:08.1592387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/litespeed-http-sensitive-files","Output":"=== RUN   TestHubSourceGolden/litespeed-http-sensitive-files\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1592387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/litespeed-http-sensitive-files","Output":"    upstream_test.go:171: Requires another product's acquisition/parser; retained for an explicit scope record\n"}
+{"Time":"2026-11-20T18:09:08.1592387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/litespeed-http-sensitive-files","Output":"--- SKIP: TestHubSourceGolden/litespeed-http-sensitive-files (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1592387+09:00","Action":"skip","Package":"webaudit/audit","Test":"TestHubSourceGolden/litespeed-http-sensitive-files","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1592387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/netgear_rce"}
+{"Time":"2026-11-20T18:09:08.1592387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/netgear_rce","Output":"=== RUN   TestHubSourceGolden/netgear_rce\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1608383+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/netgear_rce","Output":"--- PASS: TestHubSourceGolden/netgear_rce (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1608383+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/netgear_rce","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1608383+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-bad-user-agent"}
+{"Time":"2026-11-20T18:09:08.1608383+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-bad-user-agent","Output":"=== RUN   TestHubSourceGolden/nginx-bad-user-agent\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1613661+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-bad-user-agent","Output":"--- PASS: TestHubSourceGolden/nginx-bad-user-agent (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1613661+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-bad-user-agent","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1613661+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-cve-2021-41773"}
+{"Time":"2026-11-20T18:09:08.1613661+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-cve-2021-41773","Output":"=== RUN   TestHubSourceGolden/nginx-cve-2021-41773\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1624157+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-cve-2021-41773","Output":"--- PASS: TestHubSourceGolden/nginx-cve-2021-41773 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1624157+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-cve-2021-41773","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1624157+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-backdoor"}
+{"Time":"2026-11-20T18:09:08.1624157+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-backdoor","Output":"=== RUN   TestHubSourceGolden/nginx-http-backdoor\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1629379+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-backdoor","Output":"--- PASS: TestHubSourceGolden/nginx-http-backdoor (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1629379+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-backdoor","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1629379+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-generic-bf"}
+{"Time":"2026-11-20T18:09:08.1629379+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-generic-bf","Output":"=== RUN   TestHubSourceGolden/nginx-http-generic-bf\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1671569+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-generic-bf","Output":"--- PASS: TestHubSourceGolden/nginx-http-generic-bf (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1671569+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-generic-bf","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1671569+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-malformed"}
+{"Time":"2026-11-20T18:09:08.1671569+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-malformed","Output":"=== RUN   TestHubSourceGolden/nginx-http-malformed\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1682358+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-malformed","Output":"--- PASS: TestHubSourceGolden/nginx-http-malformed (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1682358+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-malformed","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1682358+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-open-proxy"}
+{"Time":"2026-11-20T18:09:08.1682358+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-open-proxy","Output":"=== RUN   TestHubSourceGolden/nginx-http-open-proxy\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1693251+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-open-proxy","Output":"--- PASS: TestHubSourceGolden/nginx-http-open-proxy (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1693251+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-open-proxy","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1693251+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-path-traversal"}
+{"Time":"2026-11-20T18:09:08.1693251+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-path-traversal","Output":"=== RUN   TestHubSourceGolden/nginx-http-path-traversal\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1714062+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-path-traversal","Output":"--- PASS: TestHubSourceGolden/nginx-http-path-traversal (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1714062+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-path-traversal","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1714062+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-sensitive-files"}
+{"Time":"2026-11-20T18:09:08.1714062+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-sensitive-files","Output":"=== RUN   TestHubSourceGolden/nginx-http-sensitive-files\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1740576+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-sensitive-files","Output":"--- PASS: TestHubSourceGolden/nginx-http-sensitive-files (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1740576+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-sensitive-files","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1745954+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-sqli-probing"}
+{"Time":"2026-11-20T18:09:08.1745954+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-sqli-probing","Output":"=== RUN   TestHubSourceGolden/nginx-http-sqli-probing\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1783058+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-sqli-probing","Output":"--- PASS: TestHubSourceGolden/nginx-http-sqli-probing (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1783058+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-sqli-probing","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1783058+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-w00twoot"}
+{"Time":"2026-11-20T18:09:08.1783058+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-w00twoot","Output":"=== RUN   TestHubSourceGolden/nginx-http-w00twoot\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1793839+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-w00twoot","Output":"--- PASS: TestHubSourceGolden/nginx-http-w00twoot (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1799165+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-w00twoot","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1799165+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-xss-probing"}
+{"Time":"2026-11-20T18:09:08.1799165+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-xss-probing","Output":"=== RUN   TestHubSourceGolden/nginx-http-xss-probing\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1836203+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-xss-probing","Output":"--- PASS: TestHubSourceGolden/nginx-http-xss-probing (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1841587+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-http-xss-probing","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1841587+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-proxy-manager-malformed"}
+{"Time":"2026-11-20T18:09:08.1841587+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-proxy-manager-malformed","Output":"=== RUN   TestHubSourceGolden/nginx-proxy-manager-malformed\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1841587+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-proxy-manager-malformed","Output":"    upstream_test.go:171: Requires another product's acquisition/parser; retained for an explicit scope record\n"}
+{"Time":"2026-11-20T18:09:08.1841587+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-proxy-manager-malformed","Output":"--- SKIP: TestHubSourceGolden/nginx-proxy-manager-malformed (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1841587+09:00","Action":"skip","Package":"webaudit/audit","Test":"TestHubSourceGolden/nginx-proxy-manager-malformed","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1841587+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/pulse-secure-sslvpn-cve-2019-11510"}
+{"Time":"2026-11-20T18:09:08.1841587+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/pulse-secure-sslvpn-cve-2019-11510","Output":"=== RUN   TestHubSourceGolden/pulse-secure-sslvpn-cve-2019-11510\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.185782+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/pulse-secure-sslvpn-cve-2019-11510","Output":"--- PASS: TestHubSourceGolden/pulse-secure-sslvpn-cve-2019-11510 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.185782+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/pulse-secure-sslvpn-cve-2019-11510","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.185782+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/sap-probing"}
+{"Time":"2026-11-20T18:09:08.185782+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/sap-probing","Output":"=== RUN   TestHubSourceGolden/sap-probing\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1863593+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/sap-probing","Output":"--- PASS: TestHubSourceGolden/sap-probing (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1863593+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/sap-probing","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1863593+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/spring4shell_cve-2022-22965"}
+{"Time":"2026-11-20T18:09:08.1863593+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/spring4shell_cve-2022-22965","Output":"=== RUN   TestHubSourceGolden/spring4shell_cve-2022-22965\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1878738+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/spring4shell_cve-2022-22965","Output":"--- PASS: TestHubSourceGolden/spring4shell_cve-2022-22965 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1878738+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/spring4shell_cve-2022-22965","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1878738+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/thinkphp-cve-2018-20062"}
+{"Time":"2026-11-20T18:09:08.1878738+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/thinkphp-cve-2018-20062","Output":"=== RUN   TestHubSourceGolden/thinkphp-cve-2018-20062\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1925981+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/thinkphp-cve-2018-20062","Output":"--- PASS: TestHubSourceGolden/thinkphp-cve-2018-20062 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1925981+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/thinkphp-cve-2018-20062","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1925981+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/traefik_base-http-scenario"}
+{"Time":"2026-11-20T18:09:08.1925981+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/traefik_base-http-scenario","Output":"=== RUN   TestHubSourceGolden/traefik_base-http-scenario\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1925981+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/traefik_base-http-scenario","Output":"    upstream_test.go:171: Requires another product's acquisition/parser; retained for an explicit scope record\n"}
+{"Time":"2026-11-20T18:09:08.1925981+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/traefik_base-http-scenario","Output":"--- SKIP: TestHubSourceGolden/traefik_base-http-scenario (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1925981+09:00","Action":"skip","Package":"webaudit/audit","Test":"TestHubSourceGolden/traefik_base-http-scenario","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1925981+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/vmware-cve-2022-22954"}
+{"Time":"2026-11-20T18:09:08.1925981+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/vmware-cve-2022-22954","Output":"=== RUN   TestHubSourceGolden/vmware-cve-2022-22954\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1948329+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/vmware-cve-2022-22954","Output":"--- PASS: TestHubSourceGolden/vmware-cve-2022-22954 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1948329+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/vmware-cve-2022-22954","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1948329+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/vmware-vcenter-vmsa-2021-0027"}
+{"Time":"2026-11-20T18:09:08.1948329+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/vmware-vcenter-vmsa-2021-0027","Output":"=== RUN   TestHubSourceGolden/vmware-vcenter-vmsa-2021-0027\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/vmware-vcenter-vmsa-2021-0027","Output":"--- PASS: TestHubSourceGolden/vmware-vcenter-vmsa-2021-0027 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden/vmware-vcenter-vmsa-2021-0027","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubSourceGolden/zoraxy-http-bad-user-agent"}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/zoraxy-http-bad-user-agent","Output":"=== RUN   TestHubSourceGolden/zoraxy-http-bad-user-agent\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/zoraxy-http-bad-user-agent","Output":"    upstream_test.go:171: Requires another product's acquisition/parser; retained for an explicit scope record\n"}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden/zoraxy-http-bad-user-agent","Output":"--- SKIP: TestHubSourceGolden/zoraxy-http-bad-user-agent (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"skip","Package":"webaudit/audit","Test":"TestHubSourceGolden/zoraxy-http-bad-user-agent","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden","Output":"    upstream_test.go:271: Native scenario cases: 60; configured source alerts: 100; original asserted alerts: 100; original metadata checks: 2052\n"}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubSourceGolden","Output":"--- PASS: TestHubSourceGolden (0.25s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubSourceGolden","Elapsed":0.25}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"run","Package":"webaudit/audit","Test":"TestUpstreamMultiplicityAndGrouping"}
+{"Time":"2026-11-20T18:09:08.1964227+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamMultiplicityAndGrouping","Output":"=== RUN   TestUpstreamMultiplicityAndGrouping\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1974662+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamMultiplicityAndGrouping","Output":"--- PASS: TestUpstreamMultiplicityAndGrouping (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.1974662+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestUpstreamMultiplicityAndGrouping","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.1974662+09:00","Action":"run","Package":"webaudit/audit","Test":"TestUpstreamRulesWithoutNativeAlertFixture"}
+{"Time":"2026-11-20T18:09:08.1974662+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamRulesWithoutNativeAlertFixture","Output":"=== RUN   TestUpstreamRulesWithoutNativeAlertFixture\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2026548+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamRulesWithoutNativeAlertFixture","Output":"--- PASS: TestUpstreamRulesWithoutNativeAlertFixture (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2034805+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestUpstreamRulesWithoutNativeAlertFixture","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:08.2034805+09:00","Action":"run","Package":"webaudit/audit","Test":"TestUpstreamLeakDistinctAndBlackhole"}
+{"Time":"2026-11-20T18:09:08.2034805+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamLeakDistinctAndBlackhole","Output":"=== RUN   TestUpstreamLeakDistinctAndBlackhole\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.209268+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamLeakDistinctAndBlackhole","Output":"--- PASS: TestUpstreamLeakDistinctAndBlackhole (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.209268+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestUpstreamLeakDistinctAndBlackhole","Elapsed":0.01}
+{"Time":"2026-11-20T18:09:08.209268+09:00","Action":"run","Package":"webaudit/audit","Test":"TestUpstreamVendoredManifest"}
+{"Time":"2026-11-20T18:09:08.209268+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamVendoredManifest","Output":"=== RUN   TestUpstreamVendoredManifest\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2097942+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUpstreamVendoredManifest","Output":"--- PASS: TestUpstreamVendoredManifest (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2097942+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestUpstreamVendoredManifest","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.2097942+09:00","Action":"run","Package":"webaudit/audit","Test":"TestPinnedFixtureHashes"}
+{"Time":"2026-11-20T18:09:08.2097942+09:00","Action":"output","Package":"webaudit/audit","Test":"TestPinnedFixtureHashes","Output":"=== RUN   TestPinnedFixtureHashes\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2777576+09:00","Action":"output","Package":"webaudit/audit","Test":"TestPinnedFixtureHashes","Output":"--- PASS: TestPinnedFixtureHashes (0.07s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2777576+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestPinnedFixtureHashes","Elapsed":0.07}
+{"Time":"2026-11-20T18:09:08.2777576+09:00","Action":"run","Package":"webaudit/audit","Test":"FuzzParse"}
+{"Time":"2026-11-20T18:09:08.2777576+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse","Output":"=== RUN   FuzzParse\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2777576+09:00","Action":"run","Package":"webaudit/audit","Test":"FuzzParse/seed#0"}
+{"Time":"2026-11-20T18:09:08.2777576+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse/seed#0","Output":"=== RUN   FuzzParse/seed#0\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2777576+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse/seed#0","Output":"--- PASS: FuzzParse/seed#0 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2777576+09:00","Action":"pass","Package":"webaudit/audit","Test":"FuzzParse/seed#0","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.2777576+09:00","Action":"run","Package":"webaudit/audit","Test":"FuzzParse/seed#1"}
+{"Time":"2026-11-20T18:09:08.2777576+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse/seed#1","Output":"=== RUN   FuzzParse/seed#1\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2782977+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse/seed#1","Output":"--- PASS: FuzzParse/seed#1 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2782977+09:00","Action":"pass","Package":"webaudit/audit","Test":"FuzzParse/seed#1","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.2782977+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse","Output":"--- PASS: FuzzParse (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2782977+09:00","Action":"pass","Package":"webaudit/audit","Test":"FuzzParse","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.2782977+09:00","Action":"run","Package":"webaudit/audit","Test":"FuzzSourcePattern"}
+{"Time":"2026-11-20T18:09:08.2782977+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzSourcePattern","Output":"=== RUN   FuzzSourcePattern\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2782977+09:00","Action":"run","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#0"}
+{"Time":"2026-11-20T18:09:08.2782977+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#0","Output":"=== RUN   FuzzSourcePattern/seed#0\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2788222+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#0","Output":"--- PASS: FuzzSourcePattern/seed#0 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2788222+09:00","Action":"pass","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#0","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.2788222+09:00","Action":"run","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#1"}
+{"Time":"2026-11-20T18:09:08.2788222+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#1","Output":"=== RUN   FuzzSourcePattern/seed#1\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2788222+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#1","Output":"--- PASS: FuzzSourcePattern/seed#1 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2788222+09:00","Action":"pass","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#1","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.2788222+09:00","Action":"run","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#2"}
+{"Time":"2026-11-20T18:09:08.2788222+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#2","Output":"=== RUN   FuzzSourcePattern/seed#2\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2793743+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#2","Output":"--- PASS: FuzzSourcePattern/seed#2 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.2793743+09:00","Action":"pass","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#2","Elapsed":0}
+{"Time":"2026-11-20T18:09:08.2793743+09:00","Action":"run","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#3"}
+{"Time":"2026-11-20T18:09:08.2793743+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#3","Output":"=== RUN   FuzzSourcePattern/seed#3\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.3311376+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#3","Output":"--- PASS: FuzzSourcePattern/seed#3 (0.05s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.3311376+09:00","Action":"pass","Package":"webaudit/audit","Test":"FuzzSourcePattern/seed#3","Elapsed":0.05}
+{"Time":"2026-11-20T18:09:08.3311376+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzSourcePattern","Output":"--- PASS: FuzzSourcePattern (0.05s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.3311376+09:00","Action":"pass","Package":"webaudit/audit","Test":"FuzzSourcePattern","Elapsed":0.05}
+{"Time":"2026-11-20T18:09:08.3311376+09:00","Action":"output","Package":"webaudit/audit","Output":"PASS\n","OutputType":"frame"}
+{"Time":"2026-11-20T18:09:08.3457601+09:00","Action":"output","Package":"webaudit/audit","Output":"ok  \twebaudit/audit\t3.703s\n"}
+{"Time":"2026-11-20T18:09:08.3457601+09:00","Action":"pass","Package":"webaudit/audit","Elapsed":3.703}

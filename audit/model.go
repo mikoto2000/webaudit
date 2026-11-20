@@ -37,6 +37,8 @@ type Event struct {
 	Raw               string    `json:"raw"`
 }
 type Options struct {
+	GeoIP *GeoIP
+
 	ErrorTimezone    string
 	DeduplicateFiles bool
 	Now              func() time.Time
@@ -78,6 +80,8 @@ type Input struct {
 	Error       string `json:"error,omitempty"`
 }
 type Report struct {
+	GeoIP *GeoIPReport `json:"geoip,omitempty"`
+
 	UpstreamSources map[string]string `json:"upstream_sources"`
 	ErrorTimezone   string            `json:"error_timezone,omitempty"`
 	AuraAnalysis    []SourceAlert     `json:"aura_analysis"`
