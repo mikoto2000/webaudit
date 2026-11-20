@@ -23,7 +23,7 @@ func TestSignatures(t *testing.T){
   {"log4shell","/?x=${jndi:ldap://invalid/x}"},{"spring4shell","/?class.module.classLoader.x=1"},
   {"struts_ognl","/?x=_memberAccess"},{"crlf_injection","/?x=%0d%0aSet-Cookie:x"},
   {"open_redirect","/?redirect=//evil.example"},{"access_bypass","/..;/manager/html"},
-  {"sensitive_file","/.env"},{"null_byte","/?x=%00"},
+  {"sensitive_file","/.env"},{"sensitive_file","/id_rsa"},{"cve_probe","/wls-wsat/x"},{"null_byte","/?x=%00"},
   {"cve_probe","/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php"},
   {"iis_aspnet","/trace.axd"},{"recon_probe","/api/../private"},
  }
