@@ -54,6 +54,10 @@ type Input struct {
 	Error    string `json:"error,omitempty"`
 }
 type Report struct {
+	Findings     []Incident       `json:"findings"`
+	Categories   map[string]int   `json:"categories"`
+	Outcomes     map[string]int   `json:"outcomes"`
+	Severities   map[string]int   `json:"severities"`
 	Schema       string           `json:"schema"`
 	Version      string           `json:"version"`
 	RulesVersion string           `json:"rules_version"`
