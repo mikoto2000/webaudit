@@ -4,6 +4,8 @@ than returning an error that the application could silently ignore.
 """
 import ctypes
 import json
+import hashlib
+import resource
 import os
 from pathlib import Path
 import platform
@@ -18,6 +20,7 @@ class Program(ctypes.Structure):
     _fields_ = [("len", ctypes.c_ushort), ("filter", ctypes.POINTER(Filter))]
 
 def deny_network():
+    resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
     libc = ctypes.CDLL(None, use_errno=True)
     # Guard syscall ABI, then deny socket/connect/accept/send/recv/listen/bind/
     # socketpair, newer accept4 and message batching, and io_uring bypasses.
@@ -33,6 +36,7 @@ def deny_network():
 
 root = Path(__file__).resolve().parents[1]
 with tempfile.TemporaryDirectory() as tmp:
+    env = dict(os.environ, XDG_DATA_HOME=str(Path(tmp) / "data"))
     exe = Path(tmp) / "webaudit"
     subprocess.run(["go", "build", "-o", str(exe), "./cmd/webaudit"], cwd=root, check=True)
     # Verify the guard actually kills attempted networking before testing WebAudit.
@@ -42,12 +46,15 @@ with tempfile.TemporaryDirectory() as tmp:
     log = Path(tmp) / "access.log"
     log.write_text("".join(f'{ip} - - [01/Nov/2026:00:00:00 +0000] "GET /.env HTTP/1.1" 404 0\n'
                            for ip in ["8.8.8.8", "8.8.8.8", "2606:4700::1111", "1.1.1.1", "10.0.0.1", "::1"]))
+    missing = subprocess.run([str(exe), "geoip", "status"], env=env, preexec_fn=deny_network,
+                             capture_output=True, text=True, check=True)
+    assert "Not installed" in missing.stdout
     fixture = root / "audit/testdata/geoip"
     explicit = ["--geoip-country", str(fixture / "country.mmdb"), "--geoip-asn", str(fixture / "asn.mmdb")]
     for extra in [[], explicit]:
         for fmt in ["json", "csv", "html"]:
             run = subprocess.run([str(exe), str(log), "--format", fmt] + extra,
-                                 preexec_fn=deny_network, capture_output=True, text=True, check=True)
+                                 env=env, preexec_fn=deny_network, capture_output=True, text=True, check=True)
             if fmt == "json":
                 report = json.loads(run.stdout)
                 assert ("geoip" in report) == bool(extra)
@@ -57,6 +64,40 @@ with tempfile.TemporaryDirectory() as tmp:
     for role in ["country", "asn"]:
         shutil.copyfile(fixture / (role + ".mmdb"), geo / (role + ".mmdb"))
     run = subprocess.run([str(exe), str(log), "--format", "json"], cwd="/",
-                         preexec_fn=deny_network, capture_output=True, text=True, check=True)
+                         env=env, preexec_fn=deny_network, capture_output=True, text=True, check=True)
     assert json.loads(run.stdout)["geoip"]["databases"]
-print("PASS: seccomp guard self-test; disabled, explicit and executable-relative auto GeoIP; JSON/CSV/HTML; no network syscalls")
+    # Install a synthetic managed generation. These are test-supplied publication
+    # metadata, not inferred release metadata for arbitrary user files.
+    managed = Path(env["XDG_DATA_HOME"]) / "webaudit/geoip"
+    generation = managed / "versions/gen-offline"
+    generation.mkdir(parents=True)
+    databases = []
+    for role in ["country", "asn"]:
+        data = (fixture / (role + ".mmdb")).read_bytes()
+        (generation / (role + ".mmdb")).write_bytes(data)
+        databases.append(dict(role=role, provider="DB-IP Lite", type="DBIP-" + ("Country" if role == "country" else "ASN") + "-Lite",
+                              version="2026-11", url="https://download.db-ip.com/free/dbip-" + role + "-lite-2026-11.mmdb.gz",
+                              downloaded_at="2026-11-20T00:00:00Z", build_time="2026-11-01T00:00:00Z", size=len(data),
+                              sha256=hashlib.sha256(data).hexdigest(), source_sha1=hashlib.sha1(data).hexdigest(),
+                              file="versions/gen-offline/" + role + ".mmdb"))
+    (managed / "metadata.json").write_text(json.dumps(dict(format=1, current=dict(id="gen-offline", databases=databases),
+                                                        last_checked_at="2026-11-20T00:00:00Z")))
+    for operation in ["status", "download"]:  # Existing download must avoid HTTP, too.
+        run = subprocess.run([str(exe), "geoip", operation], env=env, preexec_fn=deny_network,
+                             capture_output=True, text=True, check=True)
+        assert "2026-11" in run.stdout
+    for fmt in ["json", "csv", "html"]:
+        run = subprocess.run([str(exe), str(log), "--format", fmt], env=env, preexec_fn=deny_network,
+                             capture_output=True, text=True, check=True)
+        assert "2026-11" in run.stdout
+        if fmt == "json":
+            report = json.loads(run.stdout)
+            assert report["geoip"]["enabled"] and report["geoip"]["databases"][0]["generation"] == "gen-offline"
+    (generation / "country.mmdb").write_bytes(b"corrupt")
+    run = subprocess.run([str(exe), "geoip", "status"], env=env, preexec_fn=deny_network,
+                         capture_output=True, text=True)
+    assert run.returncode == 1 and "FAILED" in run.stderr
+    run = subprocess.run([str(exe), str(log), "--format", "json"], env=env, preexec_fn=deny_network,
+                         capture_output=True, text=True, check=True)
+    assert "geoip" not in json.loads(run.stdout) and "Managed GeoIP unavailable" in run.stderr
+print("PASS: seccomp guard; disabled/explicit/legacy/managed analysis; status; existing download; corrupt DB fallback; JSON/CSV/HTML; no network syscalls")

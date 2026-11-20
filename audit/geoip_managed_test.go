@@ -1,6 +1,7 @@
 package audit
 
 import (
+	"bytes"
 	"encoding/json"
 	"os"
 	"path/filepath"
@@ -95,5 +96,50 @@ func TestExplicitWrongRoleAndExcludedStates(t *testing.T) {
 	x := g.Lookup("10.0.0.1")
 	if x.CountryStatus != "not_queried" || x.ASNStatus != "not_queried" {
 		t.Fatal(x)
+	}
+}
+
+func TestNewGenerationCannotReuseOldLookupCache(t *testing.T) {
+	dir := managedFixture(t)
+	old, _, e := OpenManagedGeoIP("", "", dir, "", 4)
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer old.Close()
+	before := old.Lookup("8.8.8.8")
+	meta, e := geoipdb.ReadMetadata(dir)
+	if e != nil {
+		t.Fatal(e)
+	}
+	meta.Current.ID = "gen-next"
+	os.MkdirAll(filepath.Join(dir, "versions", meta.Current.ID), 0700)
+	for i, d := range meta.Current.Databases {
+		data, e := os.ReadFile(filepath.Join(dir, filepath.FromSlash(d.File)))
+		if e != nil {
+			t.Fatal(e)
+		}
+		data = bytes.ReplaceAll(data, []byte("Example"), []byte("Changed"))
+		file := "versions/" + meta.Current.ID + "/" + d.Role + ".mmdb"
+		path := filepath.Join(dir, filepath.FromSlash(file))
+		os.WriteFile(path, data, 0600)
+		info, e := geoipdb.InspectFile(path, d.Role)
+		if e != nil {
+			t.Fatal(e)
+		}
+		d.File = file
+		d.SHA256 = info.SHA256
+		d.SourceSHA1 = info.SourceSHA1
+		meta.Current.Databases[i] = d
+	}
+	data, _ := json.Marshal(meta)
+	os.WriteFile(filepath.Join(dir, "metadata.json"), data, 0600)
+	fresh, _, e := OpenManagedGeoIP("", "", dir, "", 4)
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer fresh.Close()
+	after := fresh.Lookup("8.8.8.8")
+	if val(after.CountryName) != "Changed Country" || val(after.ASNOrganization) != "Changed Network" || val(before.CountryName) != "Example Country" || val(old.Lookup("8.8.8.8").CountryName) != "Example Country" {
+		t.Fatal("generation cache leaked", before, after)
 	}
 }

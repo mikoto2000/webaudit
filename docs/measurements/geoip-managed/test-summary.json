@@ -1,0 +1,30 @@
+{
+  "passed_including_subtests": 233,
+  "top_level_passed": 89,
+  "failed": 0,
+  "skipped": [
+    "TestHubSourceGolden/aws-alb-http-bad-user-agent",
+    "TestHubSourceGolden/bunkerweb-bad-user-agent",
+    "TestHubSourceGolden/bunkerweb-http-path-traversal",
+    "TestHubSourceGolden/bunkerweb-http-sensitive-files",
+    "TestHubSourceGolden/caddy-basic-auth-bf",
+    "TestHubSourceGolden/envoy-http-bad-user-agent",
+    "TestHubSourceGolden/envoy-http-crawl-non_statics",
+    "TestHubSourceGolden/litespeed-http-sensitive-files",
+    "TestHubSourceGolden/nginx-proxy-manager-malformed",
+    "TestHubSourceGolden/traefik_base-http-scenario",
+    "TestHubSourceGolden/zoraxy-http-bad-user-agent"
+  ],
+  "vet": "passed",
+  "environment": "Windows amd64, Go 1.27.4; GOPROXY=off GOSUMDB=off; vendored dependencies",
+  "cross_builds": [
+    "windows/amd64",
+    "windows/arm64",
+    "linux/amd64",
+    "linux/arm64",
+    "darwin/amd64",
+    "darwin/arm64"
+  ],
+  "accuracy_unchanged": true,
+  "parser_fuzz_executions": 98352
+}

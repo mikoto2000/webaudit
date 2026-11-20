@@ -164,6 +164,15 @@ webaudit ./logs/ --verbose
 通常の解析にGeoIP DBは不要です。送信元IPの国やASN（ネットワークの識別番号）を調査の補助情報として表示したい場合に設定します。
 
 ```sh
+webaudit geoip download
+webaudit access.log -o report.html
+webaudit geoip update
+webaudit geoip status
+```
+
+手持ちのDBを使う場合は個別に指定できます。
+
+```sh
 webaudit access.log --geoip-country ./country.mmdb --geoip-asn ./asn.mmdb
 ```
 
@@ -175,13 +184,15 @@ webaudit access.log --geoip-country ./country.mmdb --geoip-asn ./asn.mmdb
 
 国コード・英語の国名・ASN番号・組織名、DB提供元・使用パス・種類・MMDBのbuild_epochによるUTC更新日を出力します。不明はJSONの`null`、画面では`unknown`です。IPv4/IPv6に対応し、IPv4 mapped IPv6は正規化します。private / loopback / link_local / shared / multicast / unspecified / reserved / invalidを区別し、公開IPだけをMMDB検索します。特殊用途範囲は保守的に除外します。
 
-国別・ASN別の既存WebAudit事案数・技法、ASNに属する複数の不審IP、通常アクセスを含むASN別リクエスト集中を調査用に表示します。同じ国・ASNだけでは同一攻撃者と推定せず、危険度・事案の統合・成否・確信度は変更しません。上流検出は既存の別集計を維持します。
+国別・ASN別の既存WebAudit事案数・異なる発信元IP数・技法、ASNに属する複数の不審IP、通常アクセスを含むASN別リクエスト集中を調査用に表示します。同じ国・ASNだけでは同一攻撃者と推定せず、危険度・事案の統合・成否・確信度は変更しません。上流検出は既存の別集計を維持します。同じ既知ASNに加えて要求先パス・技法・5分区間が一致する複数IPの事案には、参照付きの類似性ヒントを表示します。対象hostが不明なら同一サーバーとは確認できません。
+
+検索状態は`found` / `not_found` / `non_public` / `invalid_ip` / `db_not_installed` / `read_error`を区別し、CountryとASNごとの状態も保持します。管理DBの実際の公開版・取得日時・ビルド日時を表示し、推測で補完しません。
 
 JSONは任意の`geoip`ブロックと各事案の`geoip`を追加します。CSVは既存列を維持し、metadata / incidentの`details_json`に格納します。CLIは上位5群・5 IP、HTMLは保持した全群・IPを表示します。DB-IPの出典・ライセンスリンクもHTMLに記録します。
 
 LRUはヒット・未収録結果ともIP単位で最大`--max-keys`件。リクエスト集計のIP保持も同じ上限で、超過時は部分解析と件数の下限を明示します。群ごとのIP・技法サンプルは64件までです。MMDBはメモリマップするため、キャッシュ以外にDBサイズに応じたアドレス空間・ページキャッシュを使用します。解析中はDBファイルを変更・切り詰めず、更新版は次回解析から使ってください。
 
-調査・設計は[GeoIP設計](docs/geoip-design.md)、取得・更新と復旧は[DB管理](docs/geoip-database-management.md)、ライセンス全文は[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)を参照してください。
+調査・設計は[GeoIP設計](docs/geoip-design.md)、取得・更新と復旧は[DB管理](docs/geoip-database-management.md)、再現テストと性能は[GeoIP検証](docs/geoip-testing.md)、ライセンス全文は[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)を参照してください。
 
 ## オプションと資源上限
 
