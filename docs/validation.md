@@ -6,7 +6,7 @@ Apache Common/Combined、Nginx Combined、vhost prefix、明示的JSONキー、�
 
 ## 未実装・制約
 
-任意のLogFormat自動推測、本文/WAF/アプリ監査ログ、実クライアントIPの信頼プロキシ解決、任意Unicode正規化、%u表現、厳密な全時点のrolling window、任意乱順の外部ソート、ディスクへの検知状態退避、全Hubルール/データ集合、裏付け証拠なしの成功/失敗確定。実ログ精度試験、GB級gzip性能、全OS/全CPUアーキテクチャの配布検証、公開Releaseと署名も未実施です。
+任意のLogFormat自動推測、本文/WAF/アプリ監査ログ、実クライアントIPの信頼プロキシ解決、任意Unicode正規化、%u表現、厳密な全時点のrolling window、任意乱順の外部ソート、ディスクへの検知状態退避、全Hubルール/データ集合、裏付け証拠なしの成功/失敗確定。実ログ精度試験、GB級gzip性能、Windows/Linux amd64以外の配布検証、公開Releaseと署名も未実施です。
 
 ## テスト
 
@@ -31,8 +31,10 @@ AuraDFIR 32項目を調査、31項目の条件を独立実装へ対応付け、1
 
 親ディレクトリは初期化せず、webaudit/.gitを開発対象のGit境界にしました。参照リポジトリは読み取りのみ。各Phaseを専用worktreeで進め、元のRED/GREEN履歴を保持しています。
 
-当初、sandbox内のDNS制限をGitHub CLI認証不良と判定し、Phase 0〜5をローカルmainに先行マージしました。ネットワーク境界外で認証を再確認後、同じコミットをworktreeで再検証し、PR #1〜#6として順にレビュー・マージしました。Phase 6はPR #7でCIを確認してからマージします。初期PhaseにはリモートCIが存在せず、成功したローカル検証と空のstatusを確認しています。最終PhaseにはWindows/LinuxのCIを追加しました。最終PR・main SHA・CI・後片付けの実結果は完了報告で示します。認証情報は成果物に保存していません。
+当初、sandbox内のDNS制限をGitHub CLI認証不良と判定し、Phase 0〜5をローカルmainに先行マージしました。ネットワーク境界外で認証を再確認後、同じコミットをworktreeで再検証し、PR #1〜#6として順にレビュー・マージしました。Phase 6はPR #7。最終実装head 89779435714cd97ffa5cb028e5305683d1f0b9cd のWindows/Linux CIが成功しました（[実行結果](https://github.com/mikoto2000/webaudit/actions/runs/44688028947)）。この後のレポート参照先修正と記録更新もPRで再確認してからマージします。初期PhaseにはリモートCIが存在せず、成功したローカル検証と空のstatusを確認しています。最終PhaseにはWindows/LinuxのCIを追加し、Linux上でもテスト・CLIのサンプル解析・fuzzを実行しました。最終PR・main SHA・CI・後片付けの実結果は完了報告で示します。認証情報は成果物に保存していません。
 
 ## 成果物
 
 Windows/Linux amd64の単体バイナリとSHA256SUMSはdist/（Git追跡外）、ハッシュは measurements/binaries.json。README、ルール台帳、競合調査、出典、設計、精度・性能レポート、examples/の合成ログとHTML/JSON/CSVサンプルを含みます。
+
+本体バイナリの依存パッケージも確認し、ネットワーク関連はアドレス/URLの純粋な解析を行うnet/netipとnet/urlだけでした。net/httpやnetの接続API、os/execは本体依存にありません。パケットキャプチャによる検証は行っていません。CLI OAuth credentialのworkflow scope不足は、接続済みGitHub appで同じcommitのbranchを作成する方法で解決しました。
