@@ -69,4 +69,12 @@ func TestGeoIPManagedMetadataInEveryReport(t *testing.T) {
 	}
 }
 
-func TestUnknownASNIsNotASharedNetwork(t *testing.T){g:=testGeo(t,8);path:=filepath.Join(t.TempDir(),"access.log");os.WriteFile(path,[]byte("1.1.1.1 - - [01/Nov/2026:00:00:00 +0000] \"GET /.env HTTP/1.1\" 404 0\n9.9.9.9 - - [01/Nov/2026:00:00:01 +0000] \"GET /.env HTTP/1.1\" 404 0\n"),0600);r:=Analyze([]string{path},Options{GeoIP:g});if len(r.GeoIP.ASNs)!=1||r.GeoIP.ASNs[0].IPCount!=2||r.GeoIP.ASNs[0].MultiIP||len(r.GeoIP.Correlations)!=0{t.Fatal(r.GeoIP)}}
+func TestUnknownASNIsNotASharedNetwork(t *testing.T) {
+	g := testGeo(t, 8)
+	path := filepath.Join(t.TempDir(), "access.log")
+	os.WriteFile(path, []byte("1.1.1.1 - - [01/Nov/2026:00:00:00 +0000] \"GET /.env HTTP/1.1\" 404 0\n9.9.9.9 - - [01/Nov/2026:00:00:01 +0000] \"GET /.env HTTP/1.1\" 404 0\n"), 0600)
+	r := Analyze([]string{path}, Options{GeoIP: g})
+	if len(r.GeoIP.ASNs) != 1 || r.GeoIP.ASNs[0].IPCount != 2 || r.GeoIP.ASNs[0].MultiIP || len(r.GeoIP.Correlations) != 0 {
+		t.Fatal(r.GeoIP)
+	}
+}

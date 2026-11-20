@@ -50,7 +50,7 @@ func populateGeoCounts(out *GeoIPReport, findings []Incident) {
 		g := &out.ASNs[i]
 		g.IPCount = len(all["asn/"+g.Key])
 		g.SuspiciousIPCount = len(susp["asn/"+g.Key])
-		g.MultiIP = g.SuspiciousIPCount >= 2
+		g.MultiIP = g.Key != "unknown" && g.SuspiciousIPCount >= 2
 	}
 }
 
