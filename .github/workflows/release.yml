@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      CGO_ENABLED: "0"
+      GOTOOLCHAIN: local
+      GOPROXY: "off"
+      GOSUMDB: "off"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version: "1.27.4"
+          cache: false
+      - name: Test
+        run: go test ./...
+      - name: Vet
+        run: go vet ./...
+      - name: Build release binaries
+        run: |
+          mkdir -p release
+          GOOS=windows GOARCH=amd64 go build -mod=vendor -trimpath -buildvcs=false -o release/webaudit-windows-amd64.exe ./cmd/webaudit
+          GOOS=linux GOARCH=amd64 go build -mod=vendor -trimpath -buildvcs=false -o release/webaudit-linux-amd64 ./cmd/webaudit
+      - name: Create GitHub Release and upload binaries
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            --verify-tag \
+            --generate-notes \
+            release/webaudit-windows-amd64.exe \
+            release/webaudit-linux-amd64

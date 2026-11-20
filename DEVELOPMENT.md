@@ -22,6 +22,20 @@ $env:CGO_ENABLED = "0"
 go build -trimpath -buildvcs=false -o dist/webaudit-linux-amd64 ./cmd/webaudit
 ```
 
+## リリース
+
+`v1.2.3` のように `v` で始まるタグをpushすると、[リリースワークフロー](.github/workflows/release.yml)が実行されます。タグが指すコミットでテストと静的解析を実行し、成功した場合にWindows / Linuxのamd64向けバイナリをビルドします。GitHub Releaseには自動生成したリリースノートと、以下のバイナリを添付します。
+
+- `webaudit-windows-amd64.exe`
+- `webaudit-linux-amd64`
+
+```sh
+git tag v1.2.3
+git push origin v1.2.3
+```
+
+認証にはGitHub Actionsの`GITHUB_TOKEN`を使用します。リリース作成ジョブに`contents: write`権限を設定しているため、追加のシークレットは不要です。
+
 ## 開発用評価
 
 ```sh

@@ -6,7 +6,7 @@ Apache HTTP Server / Nginx の既存アクセスログから、不審なアク�
 
 ## 配布
 
-対象はWindows / Linux、amd64です。`dist/webaudit-windows-amd64.exe` または `dist/webaudit-linux-amd64` を任意の場所に置いて実行します。Linuxでは必要に応じて `chmod +x webaudit-linux-amd64` を実行してください。公開Releaseの配布は行っていません。
+対象はWindows / Linux、amd64です。[GitHub Releases](https://github.com/mikoto2000/webaudit/releases)から `webaudit-windows-amd64.exe` または `webaudit-linux-amd64` を取得し、任意の場所に置いて実行します。Linuxでは必要に応じて `chmod +x webaudit-linux-amd64` を実行してください。
 
 開発環境、ビルド・テスト・評価の手順は[開発者向けガイド](DEVELOPMENT.md)を参照してください。
 
