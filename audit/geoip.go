@@ -47,13 +47,14 @@ type geoCacheEntry struct {
 // GeoIP is scoped to one analysis, used sequentially, and owns its DB handles.
 // The LRU caches both hits and misses, with at most capacity entries.
 type GeoIP struct {
-	country, asn *maxminddb.Reader
-	metadata     []GeoDatabase
-	warnings     []string
-	capacity     int
-	cache        *list.List
-	entries      map[netip.Addr]*list.Element
-	lookups      uint64
+	country, asn                   *maxminddb.Reader
+	metadata                       []GeoDatabase
+	warnings                       []string
+	capacity                       int
+	cache                          *list.List
+	entries                        map[netip.Addr]*list.Element
+	lookups                        uint64
+	calls, hits, peerHits, skipped uint64
 }
 
 // OpenGeoIP opens explicitly selected files first. dir is the executable's geoip
@@ -199,7 +200,9 @@ func (g *GeoIP) Lookup(address string) GeoIPInfo {
 	if x.Classification != "public" || g == nil {
 		return x
 	}
+	g.calls++
 	if e := g.entries[ip]; e != nil {
+		g.hits++
 		g.cache.MoveToFront(e)
 		return e.Value.(geoCacheEntry).info
 	}
@@ -269,4 +272,26 @@ func (g *GeoIP) lookupError(role string, err error) {
 	if len(g.warnings) < 10 {
 		uniqueAppend(&g.warnings, fmt.Sprintf("GeoIP %s lookup failed: %v", role, err))
 	}
+}
+
+type GeoMetrics struct {
+	PublicLookupCalls uint64  `json:"public_lookup_calls"`
+	LRUHits           uint64  `json:"lru_hits"`
+	PeerCacheHits     uint64  `json:"peer_cache_hits"`
+	ReaderLookups     uint64  `json:"reader_lookups"`
+	CachedIPs         int     `json:"cached_ips"`
+	UntrackedRequests uint64  `json:"untracked_requests"`
+	CacheHitRate      float64 `json:"cache_hit_rate"`
+}
+
+// Metrics counts real MMDB calls and both bounded cache layers; no clock or I/O.
+func (g *GeoIP) Metrics() GeoMetrics {
+	if g == nil {
+		return GeoMetrics{}
+	}
+	m := GeoMetrics{PublicLookupCalls: g.calls, LRUHits: g.hits, PeerCacheHits: g.peerHits, ReaderLookups: g.lookups, CachedIPs: len(g.entries), UntrackedRequests: g.skipped}
+	if n := g.calls + g.peerHits; n > 0 {
+		m.CacheHitRate = float64(g.hits+g.peerHits) / float64(n)
+	}
+	return m
 }
