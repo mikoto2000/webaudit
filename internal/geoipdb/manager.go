@@ -186,6 +186,8 @@ func (m *Manager) download(ctx context.Context, r Release, path string) (Databas
 	if e != nil {
 		return d, e
 	}
+	// Match DB-IP's published transfer checksum. Authenticity depends on HTTPS
+	// and the publisher; a checksum from the same source is not a signature.
 	h := sha1.New()
 	n, e := io.Copy(io.MultiWriter(f, h), io.LimitReader(z, m.maxDatabase+1))
 	if e == nil && n > m.maxDatabase {
