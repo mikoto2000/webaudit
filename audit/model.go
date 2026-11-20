@@ -3,10 +3,12 @@ package audit
 
 import "time"
 
-const Version = "0.1.0"
-const RulesVersion = "2026.11.20.1"
+const Version = "0.2.0"
+const RulesVersion = "2026.11.20.2"
 
 type Event struct {
+	SourceRequest     *string   `json:"source_request,omitempty"`
+	SubType           string    `json:"sub_type,omitempty"`
 	RawRequest        *string   `json:"raw_request"`
 	RequestMalformed  bool      `json:"request_malformed,omitempty"`
 	LogType           string    `json:"log_type"`
@@ -33,6 +35,7 @@ type Event struct {
 	Raw               string    `json:"raw"`
 }
 type Options struct {
+	ErrorTimezone    string
 	DeduplicateFiles bool
 	Now              func() time.Time
 	MaxEvidenceBytes int
@@ -73,23 +76,29 @@ type Input struct {
 	Error       string `json:"error,omitempty"`
 }
 type Report struct {
-	Findings     []Incident       `json:"findings"`
-	Categories   map[string]int   `json:"categories"`
-	Outcomes     map[string]int   `json:"outcomes"`
-	Severities   map[string]int   `json:"severities"`
-	Schema       string           `json:"schema"`
-	Version      string           `json:"version"`
-	RulesVersion string           `json:"rules_version"`
-	AnalyzedAt   time.Time        `json:"analyzed_at"`
-	Files        []Input          `json:"files"`
-	Parsed       int64            `json:"requests"`
-	Unparsed     int64            `json:"unparsed"`
-	Duplicates   int64            `json:"duplicates"`
-	First        *time.Time       `json:"first"`
-	Last         *time.Time       `json:"last"`
-	Warnings     []string         `json:"warnings"`
-	Partial      bool             `json:"partial"`
-	Missing      map[string]int64 `json:"missing_fields"`
+	UpstreamSources map[string]string `json:"upstream_sources"`
+	ErrorTimezone   string            `json:"error_timezone,omitempty"`
+	AuraAnalysis    []SourceAlert     `json:"aura_analysis"`
+	UpstreamAlerts  []SourceAlert     `json:"upstream_alerts"`
+	AuraMatches     []SourceAlert     `json:"aura_matches"`
+	UpstreamRules   []SourceRule      `json:"upstream_rules"`
+	Findings        []Incident        `json:"findings"`
+	Categories      map[string]int    `json:"categories"`
+	Outcomes        map[string]int    `json:"outcomes"`
+	Severities      map[string]int    `json:"severities"`
+	Schema          string            `json:"schema"`
+	Version         string            `json:"version"`
+	RulesVersion    string            `json:"rules_version"`
+	AnalyzedAt      time.Time         `json:"analyzed_at"`
+	Files           []Input           `json:"files"`
+	Parsed          int64             `json:"requests"`
+	Unparsed        int64             `json:"unparsed"`
+	Duplicates      int64             `json:"duplicates"`
+	First           *time.Time        `json:"first"`
+	Last            *time.Time        `json:"last"`
+	Warnings        []string          `json:"warnings"`
+	Partial         bool              `json:"partial"`
+	Missing         map[string]int64  `json:"missing_fields"`
 }
 
 func (r *Report) warn(s string) {

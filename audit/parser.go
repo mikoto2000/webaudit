@@ -12,7 +12,9 @@ import (
 	"unicode/utf8"
 )
 
-var standard = regexp.MustCompile(`^(?:(?P<host>[^\s]+) )?(?P<ip>[^\s]+) [^\s]+ [^\s]+ \[(?P<time>[^\]]+)\] "(?P<request>(?:[^"\\]|\\.)*)" (?P<status>[0-9]{3}|-) (?P<bytes>[0-9]+|-)(?: "(?P<referer>(?:[^"\\]|\\.)*)" "(?P<ua>(?:[^"\\]|\\.)*)")?$`)
+var requestMethod = regexp.MustCompile(`^[A-Za-z0-9_]+$`)
+var requestVersion = regexp.MustCompile(`^HTTP/[+-]?[0-9]+(?:\.[0-9]+)?$`)
+var standard = regexp.MustCompile(`^(?:(?P<host>[^\s]+) )?(?P<ip>[0-9a-fA-F:.]+) [^\s]+ (?:[^\s]+ )?\[(?P<time>[^\]]+)\] "(?P<request>(?:[^"\\]|\\.)*)" (?P<status>[0-9]{3}|-) (?P<bytes>[0-9]+|-)(?: "(?P<referer>(?:[^"\\]|\\.)*)" "(?P<ua>(?:[^"\\]|\\.)*)")?$`)
 
 func Parse(line, file string, n int64, custom string) (Event, error) {
 	if !utf8.ValidString(line) || strings.ContainsAny(line, "\x00\r\n") {
@@ -74,6 +76,9 @@ func Parse(line, file string, n int64, custom string) (Event, error) {
 			fields = fieldsFrom(npmPlus, line)
 		}
 		if fields == nil {
+			fields = fieldsFrom(npmLegacy, line)
+		}
+		if fields == nil {
 			return Event{}, fmt.Errorf("unrecognized layout; expected ip/time/request/status/bytes; use --log-regex with named groups for custom fields")
 		}
 
@@ -133,7 +138,7 @@ func eventFrom(f map[string]string, raw, file string, n int64) (Event, error) {
 	if req := f["request"]; req != "" {
 		p := strings.Split(req, " ")
 		e.RawRequest = ptr(req)
-		if len(p) != 3 || p[0] == "" || p[1] == "" || !strings.HasPrefix(p[2], "HTTP/") {
+		if len(p) != 3 || !requestMethod.MatchString(p[0]) || p[1] == "" || !requestVersion.MatchString(p[2]) {
 			e.RequestMalformed = true
 		} else {
 			f["method"], f["target"], f["protocol"] = p[0], p[1], p[2]

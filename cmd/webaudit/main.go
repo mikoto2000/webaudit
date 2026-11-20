@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 	"webaudit/audit"
 )
 
@@ -20,13 +21,14 @@ func run(args []string, out, errout io.Writer) int {
 	version := fs.Bool("version", false, "Show version")
 	help := fs.Bool("help", false, "Show help")
 	var o audit.Options
+	fs.StringVar(&o.ErrorTimezone, "error-timezone", "", "Explicit IANA timezone for timezone-free error logs (for example Asia/Tokyo)")
 	fs.BoolVar(&o.DeduplicateFiles, "dedup-files", false, "Opt-in: exclude byte-identical complete input files; retain repeated requests")
 	fs.StringVar(&o.LogRegex, "log-regex", "", "Explicit custom format with named groups ip,time,target,...")
 	fs.IntVar(&o.MaxLineBytes, "max-line-bytes", 64*1024, "Maximum line size; oversized lines are skipped")
 	fs.Int64Var(&o.MaxFileBytes, "max-file-bytes", 8<<30, "Maximum decompressed bytes per file")
-	fs.IntVar(&o.MaxKeys, "max-keys", 4096, "Maximum retained keys per analysis table / dedup horizon")
+	fs.IntVar(&o.MaxKeys, "max-keys", 4096, "Maximum retained keys per analysis table")
 	fs.IntVar(&o.MaxEvidenceBytes, "max-evidence-bytes", 32<<20, "Maximum retained incident evidence bytes")
-	fs.IntVar(&o.MaxFindings, "max-findings", 2000, "Maximum retained incidents/signals")
+	fs.IntVar(&o.MaxFindings, "max-findings", 2000, "Maximum incidents, signals and source alerts per collection")
 	fs.Usage = func() {
 		fmt.Fprintln(errout, "Usage: webaudit INPUT... [-o REPORT] [--format html|json|csv] [--verbose]\nInputs: files, gzip files, or directories. No output file without -o.")
 		fs.PrintDefaults()
@@ -73,6 +75,12 @@ func run(args []string, out, errout io.Writer) int {
 				fmt.Fprintln(errout, "--log-regex requires named group", name)
 				return 2
 			}
+		}
+	}
+	if o.ErrorTimezone != "" {
+		if _, err := time.LoadLocation(o.ErrorTimezone); err != nil {
+			fmt.Fprintln(errout, "Invalid --error-timezone:", err)
+			return 2
 		}
 	}
 	if *output != "" {

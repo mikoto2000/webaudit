@@ -7,10 +7,13 @@
     "condition": "(union[ +/*]*select|union[ +](all|distinct)[ +]select|information_schema|table_schema|column_name|group_concat|load_file[ (]|into[ +]outfile|into[ +]dumpfile|sleep[ (][ 0-9]|benchmark[ (]|pg_sleep[ (]|waitfor[ +]delay|extractvalue[ (]|updatexml[ (]|' or '|\\\" or \\\"|%27[ +]?or|%22[ +]?or|or[ +]1[ ]?=[ ]?1|and[ +]1[ ]?=[ ]?1|' and '|'--|'\\#|;--|/\\*!|xp_cmdshell|sp_executesql|utl_http|dbms_lock|convert[ (]int|cast[ (]|concat[ (]0x|char[ (][0-9]|0x[0-9a-f][0-9a-f][0-9a-f]|having[ +]1[ ]?=|%27%20or|%20or%201=1)",
     "required": "URL",
     "target": "WA-sqli",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-sqli",
+    "upstream_target": "sqli",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -20,10 +23,13 @@
     "condition": "(\\[\\$ne\\]|\\[\\$gt\\]|\\[\\$lt\\]|\\[\\$gte\\]|\\[\\$lte\\]|\\[\\$regex\\]|\\[\\$where\\]|\\[\\$exists\\]|\\[\\$in\\]|\\[\\$nin\\]|\\[\\$or\\]|\\$where[ ]?[=:]|%5b%24ne%5d|%24where|\\{\\$gt|\\{\\$ne|\\{\\$where|mapreduce\\{)",
     "required": "URL",
     "target": "WA-nosqli",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-nosqli",
+    "upstream_target": "nosqli",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -33,10 +39,13 @@
     "condition": "(;[ +]?(id|whoami|uname|cat|ls|dir|ping|curl|wget|nc|bash|sh|powershell|cmd)[ +;/]|\\|[ +]?(id|whoami|uname|cat|ls|nc|bash|sh|curl|wget)|\\$\\([ ]?(id|whoami|uname|cat|ls)|%24%28|%60|%0a(id|whoami|uname|cat|ls|ping)|/bin/(sh|bash|dash|zsh|busybox)|bash[ +]-i|nc[ +]-e|/dev/tcp/|chmod[ +]+[0-9x]|%3b(id|whoami|uname)|%7c(id|whoami)|\\$\\{ifs\\}|\\$ifs|/etc/cron)",
     "required": "URL",
     "target": "WA-command_injection",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-command_injection",
+    "upstream_target": "command_injection",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -46,10 +55,13 @@
     "condition": "(\\(\\)[ +]*\\{|%28%29[ +]*%7b|\\(\\)[ +]*\\{[ +:;]|%28%29%20%7b)",
     "required": "URL",
     "target": "WA-shellshock",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-shellshock",
+    "upstream_target": "shellshock",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -59,10 +71,13 @@
     "condition": "(\\{\\{[ ]?[0-9*]|\\{\\{[ ]?(config|self|request|session|settings|g\\.)|\\$\\{[ ]?[0-9*]|\\$\\{[ ]?(t|java|runtime|class)|\\#\\{[ ]?[0-9]|\\<%[ ]?=[ ]?[0-9]|%7b%7b[0-9]|freemarker|velocity\\.|\\{\\{7[ ]?\\*[ ]?7|\\$\\{7[ ]?\\*[ ]?7|\\{%[ ]?(if|for|import)|\\{\\{[ ]?['\\\"].*['\\\"]\\.)",
     "required": "URL",
     "target": "WA-ssti",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-ssti",
+    "upstream_target": "ssti",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -72,10 +87,13 @@
     "condition": "(\\)\\(uid=|\\)\\(cn=|\\)\\(userpassword=|\\*\\)\\(|admin\\*\\)|\\)\\(objectclass=\\*|%29%28uid=|%2a%29%28|\\)%00|\\*\\)%00)",
     "required": "URL",
     "target": "WA-ldap_injection",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-ldap_injection",
+    "upstream_target": "ldap_injection",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -85,10 +103,13 @@
     "condition": "(' or '1'='1|' or count\\(|/child::|::text\\(\\)|string-length\\(|' or name\\(|\\]\\[position\\(\\)|substring\\([ ]?/)",
     "required": "URL",
     "target": "WA-xpath_injection",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-xpath_injection",
+    "upstream_target": "xpath_injection",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -98,10 +119,13 @@
     "condition": "(\\<script|%3cscript|\\<img[ +/]|%3cimg|\\<svg[ +/]|\\<iframe|\\<body[ +/]|\\<object[ +/]|\\<embed[ +/]|\\<details[ +/]|javascript:|vbscript:|data:text/html|onerror[ ]?=|onload[ ]?=|onmouseover[ ]?=|onclick[ ]?=|onfocus[ ]?=|onanimationstart|onerror%3d|onload%3d|alert[ (]|prompt[ (]|confirm[ (]|document\\.cookie|document\\.domain|document\\.location|window\\.location|eval[ (]|string\\.fromcharcode|expression[ (]|%3cscript%3e|\\<svg/onload)",
     "required": "URL",
     "target": "WA-xss",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-xss",
+    "upstream_target": "xss",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -111,10 +135,13 @@
     "condition": "(\\.\\./|\\.\\.\\\\|\\.\\.%2f|\\.\\.%5c|%2e%2e%2f|%2e%2e/|%2e%2e%5c|\\.\\.%252f|%252e%252e%252f|etc/passwd|etc%2fpasswd|/etc/shadow|/etc/hosts|/etc/group|boot\\.ini|win\\.ini|windows/system32|/proc/self/|/proc/version|/proc/cmdline|php://filter|php://input|php://fd|expect://|file:///|data://text|zip://|phar://|/var/log/|/usr/local/|c:\\\\windows|\\.\\.%c0%af|\\.\\.%c1%9c)",
     "required": "URL",
     "target": "WA-lfi_traversal",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-lfi_traversal",
+    "upstream_target": "lfi_traversal",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -124,10 +151,13 @@
     "condition": "(=[ ]?(https?|ftp|ftps|php|data|expect|dict|gopher)(://|%3a%2f%2f)|=[ ]?%68%74%74%70|include=[ ]?https?|require=[ ]?https?)",
     "required": "URL",
     "target": "WA-rfi",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-rfi",
+    "upstream_target": "rfi",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -137,10 +167,13 @@
     "condition": "(169\\.254\\.169\\.254|metadata\\.google|metadata\\.azure\\.com|100\\.100\\.100\\.200|/latest/meta-data|/computemetadata|/metadata/instance|=[ ]?(file|dict|gopher|ldap|tftp|sftp|netdoc)://|=[ ]?https?://(localhost|127\\.0\\.0\\.1|0\\.0\\.0\\.0|\\[::1\\]|169\\.254|192\\.168\\.|10\\.[0-9]|172\\.1[6-9]\\.|172\\.2[0-9]\\.|172\\.3[01]\\.)|%6c%6f%63%61%6c%68%6f%73%74|burpcollaborator|oastify|interact\\.sh|\\.oast\\.|requestbin|\\.canarytokens)",
     "required": "URL",
     "target": "WA-ssrf",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-ssrf",
+    "upstream_target": "ssrf",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -150,10 +183,13 @@
     "condition": "(\\<!entity|\\<!doctype[ +]|%3c%21entity|%3c%21doctype|system[ +]%22file|system[ +]%22http|\\<\\?xml[ +].*entity|/etc/passwd%22[ ]?%3e|\\<!\\[cdata\\[|expect://.*%3c)",
     "required": "URL",
     "target": "WA-xxe",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-xxe",
+    "upstream_target": "xxe",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -163,10 +199,13 @@
     "condition": "(java\\.lang\\.runtime|java\\.lang\\.processbuilder|rO0AB|aced0005|__reduce__|__reduce_ex__|pickle\\.loads|cpickle|subprocess\\.popen|os\\.system|child_process|_\\$\\$nd_func|phar://|O:[0-9]+:%22|O:[0-9]+:\\\"|a:[0-9]+:\\{|commons-collections|ysoserial|readobject|marshal\\.loads|yaml\\.load|__proto__|constructor\\[)",
     "required": "URL",
     "target": "WA-deserialization",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-deserialization",
+    "upstream_target": "deserialization",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -176,10 +215,13 @@
     "condition": "(c99\\.php|c100\\.php|r57\\.php|wso\\.php|wso[0-9]|alfa\\.php|alfashell|indoxploit|priv8|mini[ ]?shell|shell\\.php|shell\\.asp|shell\\.jsp|shell\\.aspx|cmd\\.php|cmd\\.jsp|cmd\\.asp|eval-stdin\\.php|b374k|filesman|antsword|weevely|regeorg|regeorge|behinder|godzilla|webadmin\\.php|adminer\\.php|up\\.php|upload\\.php|gecko\\.php|madspot|backdoor|/1\\.php|/2\\.php|/x\\.php|/a\\.php|xx\\.php|404\\.php|radio\\.php|wp-conf\\.php|wp-cd\\.php|cmd=(whoami|id|dir|type|cat|net[ +]user)|(func|action|act)=(cmd|shell|command|exec))",
     "required": "URL",
     "target": "WA-webshell",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-webshell",
+    "upstream_target": "webshell",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -189,10 +231,13 @@
     "condition": "(\\$\\{jndi:|%24%7bjndi|\\$\\{jndi:(ldap|ldaps|rmi|dns|iiop|corba|nis|nds)|\\$\\{\\$\\{|\\$\\{lower:|\\$\\{upper:|\\$\\{env:|\\$\\{sys:|\\$\\{::-j|\\$\\{base64:|%24%7b%6a%6e%64%69|\\$\\{main:|\\$\\{date:)",
     "required": "URL",
     "target": "WA-log4shell",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-log4shell",
+    "upstream_target": "log4shell",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -202,10 +247,13 @@
     "condition": "(class\\.module\\.classloader|class\\.classloader|springframework.*classloader|%63%6c%61%73%73%2e%6d%6f%64%75%6c%65|class%2emodule%2eclassloader|getruntime\\(\\)\\.exec)",
     "required": "URL",
     "target": "WA-spring4shell",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-spring4shell",
+    "upstream_target": "spring4shell",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -215,10 +263,13 @@
     "condition": "(%\\{[ ]?\\(|\\$\\{[ ]?\\(|_memberaccess|ognl\\.|\\.getruntime|multipart/form-data.*%\\{|redirect:\\$\\{|\\.action\\?.*%\\{|\\#context\\[|\\#_memberaccess|\\@java\\.lang)",
     "required": "URL",
     "target": "WA-struts_ognl",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-struts_ognl",
+    "upstream_target": "struts_ognl",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -228,10 +279,13 @@
     "condition": "(%0d%0a|%0a%0d|%250d%250a|%0d%0aset-cookie|%0aset-cookie|%0alocation:|%0acontent-type|%0acontent-length|%3f%0d%0a|%23%0d%0a|%e5%98%8a%e5%98%8d)",
     "required": "URL",
     "target": "WA-crlf_injection",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-crlf_injection",
+    "upstream_target": "crlf_injection",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -241,10 +295,13 @@
     "condition": "((redirect|redir|url|next|return|returnurl|return_url|goto|dest|destination|continue|redirect_uri|redirect_url|callback|forward|image_url|go|out|link|target|checkout_url)=[ ]?(https?:|//|/\\\\|%2f%2f|%5c%5c|%68%74%74%70|/%2f))",
     "required": "URL",
     "target": "WA-open_redirect",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-open_redirect",
+    "upstream_target": "open_redirect",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -254,10 +311,13 @@
     "condition": "(\\.\\.;/|%2e%2e;|/\\.\\.;|;/\\.\\.|/%2e%2e/|/\\.;/|/;/|/\\.%2e/|%2e%2e%2f%2e%2e|/manager/\\.\\.;|/j_security_check|/\\.%00|/\\.\\./\\.\\./;|/;jsessionid|x-original-url|x-rewrite-url|/%2e/)",
     "required": "URL",
     "target": "WA-access_bypass",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-access_bypass",
+    "upstream_target": "access_bypass",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -267,10 +327,13 @@
     "condition": "(/\\.env|\\.env\\.bak|/\\.git/|/\\.git/config|/\\.gitignore|/\\.svn/|/\\.hg/|/\\.bzr/|/\\.ds_store|/web\\.config|/\\.htaccess|/\\.htpasswd|/wp-config\\.php|/config\\.php|/configuration\\.php|/settings\\.py|/database\\.yml|/credentials|/id_rsa|/\\.aws/|/\\.ssh/|/\\.bash_history|/backup\\.|/dump\\.sql|/database\\.sql|/\\.npmrc|/\\.dockercfg|/docker-compose\\.yml|/composer\\.lock|/phpinfo\\.php|/info\\.php|/server-status|/server-info|/\\.well-known/security|/\\.travis\\.yml|/config\\.json\\.bak|/\\.env\\.local|/\\.env\\.production|/secrets\\.|/\\.kube/config)",
     "required": "URL",
     "target": "WA-sensitive_file",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-sensitive_file",
+    "upstream_target": "sensitive_file",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -280,10 +343,13 @@
     "condition": "(%00|%2500|%c0%80|\\.php%00|%00\\.jpg|\\.jsp%00|%252e%252e)",
     "required": "URL",
     "target": "WA-null_byte",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-null_byte",
+    "upstream_target": "null_byte",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -293,10 +359,13 @@
     "condition": "(/vendor/phpunit|/phpunit/src/util/php/eval-stdin|xmlrpc\\.php|/wp-login\\.php|/wp-admin/|/wp-json/wp/|/wp-content/plugins/|/administrator/|/user/register\\?|\\?author=[0-9]|/cgi-bin/|/manager/html|/host-manager|/actuator|/actuator/env|/actuator/gateway|/solr/admin|/jenkins|/thinkphp|/tp/public|/index\\.php\\?s=|/hnap1|/boaform|/setup\\.cgi|/currentsetting\\.htm|/goform/|/api/jsonws/invoke|/druid/|/nacos/|/eureka/|/consul/|/_all_dbs|/owa/|/autodiscover|/ews/|/remote/fgt_lang|/remote/login|/dana-na/|/global-protect|/vpn/|/citrix|/vaadin|/wls-wsat|/_async/asyncresponseservice|/console/css|/adminer|/pma/|/phpmyadmin|/dbadmin|/typo3|/joomla|/jsonws|/cfide|/geoserver|/zabbix|/grafana/|/kibana|/_cat/|/telescope/requests|/debug/default/view|/frontend/web|/graphql|/v2/api-docs|/swagger|/api-docs|/wsdl|/soap|/\\.vscode/|/actuator/heapdump|/wp-content/uploads/.*\\.php|/mifs/|/cgi-bin/luci|/ecp/|/rpc/|/portal/|/\\+cscoe\\+|/api/v1/totp)",
     "required": "URL",
     "target": "WA-cve_probe",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-cve_probe",
+    "upstream_target": "cve_probe",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -306,10 +375,13 @@
     "condition": "(/trace\\.axd|/elmah\\.axd|/\\.axd|__viewstate=|/app_data/|/global\\.asax|/aspnet_client|/iisstart|/certsrv|/owa/auth|/scripts/.*\\.asp|/fckeditor|/ckeditor|web\\.config|/bin/.*\\.dll|%u002e%u002e)",
     "required": "URL",
     "target": "WA-iis_aspnet",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-iis_aspnet",
+    "upstream_target": "iis_aspnet",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -319,10 +391,13 @@
     "condition": "(/robots\\.txt.*\\.\\.|/\\.env.*/|/\\?rest_route=|/\\?p=[0-9]+' |wp-json/oembed|/sitemap\\.xml.*\\<|/\\.aws/credentials|/api/\\.\\./|/v1/\\.\\./|/static/\\.\\./)",
     "required": "URL",
     "target": "WA-recon_probe",
-    "reason": "Independent RE2 implementation; narrower high-signal patterns where appropriate",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-recon_probe",
+    "upstream_target": "recon_probe",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -332,10 +407,13 @@
     "condition": "['sqlmap', 'nikto', 'nuclei', 'gobuster', 'dirbuster', 'dirb', 'dirsearch', 'wpscan', 'joomscan', 'droopescan', 'cmsmap', 'wfuzz', 'ffuf', 'feroxbuster', 'arachni', 'acunetix', 'netsparker', 'burpsuite', 'burp', 'owasp zap', 'zaproxy', 'vega', 'skipfish', 'w3af', 'whatweb', 'wappalyzer', 'httprint', 'commix', 'xsstrike', 'nosqlmap', 'sqlninja', 'jsql', 'havij', 'pangolin', 'nmap', 'masscan', 'zgrab', 'zmap', 'shodan', 'censys', 'netcraft', 'fscan', 'goby', 'xray', 'rustscan', 'naabu', 'metasploit', 'hydra', 'medusa', 'patator', 'crackmapexec', 'impacket', 'python-requests', 'python-urllib', 'go-http-client', 'curl/', 'wget/', 'libwww-perl', 'winhttp', 'okhttp', 'httpclient', 'java/', 'aiohttp', 'node-fetch', 'axios/', 'guzzle', 'mechanize', 'scrapy', 'phantomjs', 'headlesschrome', 'selenium', 'zgrab', 'l9explore', 'l9tcpid', 'internetmeasurement', 'custom-asynchttp', 'hello world', 'mozila', 'morfeus', 'zmeu', 'muieblackcat', 'jaws']",
     "required": "User-Agent",
     "target": "WA-scanner",
-    "reason": "Exclude generic API clients and legitimate PUT/PATCH/DELETE for false-positive control",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-scanner",
+    "upstream_target": "SCANNER_UAS",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -345,10 +423,13 @@
     "condition": "['PUT', 'DELETE', 'TRACE', 'CONNECT', 'PROPFIND', 'MKCOL', 'MOVE', 'COPY', 'LOCK', 'UNLOCK', 'SEARCH', 'DEBUG', 'TRACK', 'PATCH']",
     "required": "method",
     "target": "WA-method",
-    "reason": "Exclude generic API clients and legitimate PUT/PATCH/DELETE for false-positive control",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestSignatures",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WA-method",
+    "upstream_target": "DANGEROUS_METHODS",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -358,10 +439,13 @@
     "condition": "brute_force",
     "required": "IP/time/status/bytes/UA",
     "target": "WB-auth",
-    "reason": "Adapted bounded event-time analysis",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestBehavior/TestStatistics",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WB-auth",
+    "upstream_target": "brute_force",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -371,10 +455,13 @@
     "condition": "enumeration_404",
     "required": "IP/time/status/bytes/UA",
     "target": "WB-404",
-    "reason": "Adapted bounded event-time analysis",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestBehavior/TestStatistics",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WB-404",
+    "upstream_target": "enumeration_404",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -384,10 +471,13 @@
     "condition": "exfil_bytes",
     "required": "IP/time/status/bytes/UA",
     "target": "WS-ip",
-    "reason": "Adapted bounded event-time analysis",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestBehavior/TestStatistics",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WS-ip",
+    "upstream_target": "exfil_bytes",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -397,10 +487,13 @@
     "condition": "rare_user_agent",
     "required": "IP/time/status/bytes/UA",
     "target": "",
-    "reason": "Rare UA alone has insufficient specificity",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "rare_user_agent",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "AuraDFIR",
@@ -410,10 +503,13 @@
     "condition": "traffic_spike",
     "required": "IP/time/status/bytes/UA",
     "target": "WS-hour",
-    "reason": "Adapted bounded event-time analysis",
+    "reason": "Source compatibility output is separate from legacy WebAudit incidents",
     "license": "MIT",
-    "test": "TestBehavior/TestStatistics",
-    "file_notices": []
+    "test": "TestAuraSourceGolden / TestAuraSourceBehaviorThresholds; see compatibility limits",
+    "file_notices": [],
+    "legacy_target": "WS-hour",
+    "upstream_target": "traffic_spike",
+    "upstream_status": "Python-side signature/UA/method conditions or offline case aggregate; ES runtime parity unverified"
   },
   {
     "repo": "hub",
@@ -423,10 +519,13 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n  (\n    any(File(\"log4j2_cve_2021_44228.txt\"), { Upper(evt.Meta.http_path) contains Upper(#)})\n  or\n    any(File(\"log4j2_cve_2021_44228.txt\"), { Upper(evt.Parsed.http_user_agent) contains Upper(#)})\n  or\n    any(File(\"log4j2_cve_2021_44228.txt\"), { Upper(evt.Parsed.http_referer) contains Upper(#)})  \n  ); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-log4shell",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-log4shell",
+    "upstream_target": "crowdsecurity/apache_log4j2_cve-2021-44228",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -436,10 +535,13 @@
     "condition": "|\n    evt.Meta.log_type == 'http_access-log' &&\n    Lower(evt.Meta.http_path) endsWith 'util/php/eval-stdin.php'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-cve_probe",
-    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestHubAdaptationCoverage/TestSignatures",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-cve_probe",
+    "upstream_target": "crowdsecurity/CVE-2017-9841",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -449,10 +551,13 @@
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Upper(QueryUnescape(evt.Meta.http_path)) startsWith Upper('/Telerik.Web.UI.WebResource.axd?type=rau'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2019-18935",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -462,10 +567,13 @@
     "condition": "\"Upper(PathUnescape(evt.Meta.http_path)) contains Upper('@java.lang.Runtime@getRuntime().exec(')\"; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-struts_ognl",
-    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestHubAdaptationCoverage/TestSignatures",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-struts_ognl",
+    "upstream_target": "crowdsecurity/CVE-2022-26134",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -475,10 +583,13 @@
     "condition": "\"Upper(evt.Meta.http_path) contains Upper('/vendor/htmlawed/htmlawed/htmLawedTest.php')\"; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2022-35914",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -488,10 +599,13 @@
     "condition": "|\n  (\n  Upper(evt.Meta.http_path) contains Upper('/service/extension/backup/mboximport?account-name=admin&ow=2&no-switch=1&append=1') ||\n  Upper(evt.Meta.http_path) contains Upper('/service/extension/backup/mboximport?account-name=admin&account-status=1&ow=cmd') \n  )\n  and evt.Meta.http_status startsWith ('40') and\n  Upper(evt.Meta.http_verb) == 'POST'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2022-37042",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -501,10 +615,13 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n  Upper(evt.Meta.http_path) startsWith Upper('/api/v2/cmdb/system/admin/') and Lower(evt.Parsed.http_user_agent) == 'report runner'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/fortinet-cve-2022-40684",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -514,10 +631,13 @@
     "condition": "|\n  Upper(evt.Meta.http_path) contains Upper('/autodiscover/autodiscover.json') &&\n  Upper(evt.Parsed.http_args) contains Upper('powershell'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2022-41082",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -527,10 +647,13 @@
     "condition": "|\n  Upper(evt.Meta.http_path) contains Upper('/ghost/api/admin/session') &&\n  Upper(evt.Parsed.verb) == 'POST' &&\n  evt.Meta.http_status == '404'; \"10s\"; 5; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2022-41697",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -540,10 +663,13 @@
     "condition": "|\n  Upper(PathUnescape(evt.Meta.http_path)) contains Upper('${script:javascript:java.lang.Runtime.getRuntime().exec(')\n  or\n  Upper(PathUnescape(evt.Meta.http_path)) contains Upper('${script:js:java.lang.Runtime.getRuntime().exec(')\n  or\n  Upper(PathUnescape(evt.Meta.http_path)) contains Upper('${url:UTF-8:') \n  or\n  Upper(PathUnescape(evt.Meta.http_path)) contains Upper('${dns:address|'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-deserialization",
-    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestHubAdaptationCoverage/TestSignatures",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-deserialization",
+    "upstream_target": "crowdsecurity/CVE-2022-42889",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -553,10 +679,13 @@
     "condition": "|\n  Lower(evt.Meta.http_path) contains '/index.php' &&\n  Upper(evt.Parsed.verb) == 'POST' &&\n  evt.Meta.http_status == '302' &&\n  Lower(evt.Parsed.http_args) matches 'login=.*(\\\\$|%24)(\\\\(|%28).*(\\\\)|%29)'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2022-44877",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -566,10 +695,13 @@
     "condition": "|\n  Upper(evt.Meta.http_path) contains Upper('/remote_agent.php') &&\n  Upper(evt.Parsed.verb) == 'GET' &&\n  Lower(evt.Parsed.http_args) contains 'host_id' &&\n  Lower(evt.Parsed.http_args) contains 'local_data_ids'; \"10s\"; 5; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2022-46169-bf",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -579,10 +711,13 @@
     "condition": "|\n  Upper(evt.Meta.http_path) contains Upper('/remote_agent.php') &&\n  Upper(evt.Parsed.verb) == 'GET' &&\n  Lower(evt.Parsed.http_args) contains 'action=polldata' &&\n  Lower(evt.Parsed.http_args) matches 'poller_id=.*(;|%3b)'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2022-46169-cmd",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -592,10 +727,13 @@
     "condition": "|\n  Lower(evt.Parsed.file_ext) == '.action' &&\n  (Lower(evt.Parsed.file_dir) contains '/setup' || Lower(evt.Parsed.file_frag) == 'server-info') &&\n  evt.Parsed.file_frag != nil; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2023-22515",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -605,10 +743,13 @@
     "condition": "|\n  Upper(evt.Meta.http_path) contains Upper('/json/setup-restore.action') &&\n  Upper(evt.Parsed.verb) == 'POST'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2023-22518",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -618,10 +759,13 @@
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Lower(evt.Meta.http_path) contains '/owncloud/apps/graphapi/vendor/microsoft/microsoft-graph/tests/getphpinfo.php'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2023-49103",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -631,10 +775,13 @@
     "condition": "|\n  let request = Lower(evt.Parsed.request);\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && \n  evt.Meta.http_status in ['404', '403'] &&\n  (request matches '/php/.*/\\\\.js\\\\.map' || request matches '/index.php/.*\\\\.js\\\\.map'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2024-0012",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -644,10 +791,13 @@
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && \n  evt.Meta.http_status in ['404', '403'] &&\n  Lower(evt.Parsed.request) endsWith '%3f'; \"evt.Meta.source_ip\"; \"evt.Parsed.request\"; 3; 10s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2024-38475",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -657,10 +807,13 @@
     "condition": "|\n  let request = Lower(evt.Parsed.request);\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && \n  evt.Meta.http_status in ['404', '403'] &&\n  evt.Meta.http_verb == 'POST' &&\n  request contains '/php/utils/createremoteappwebsession.php/watchtowr.js.map'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/CVE-2024-9474",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -670,10 +823,13 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n    (\n    Upper(evt.Meta.http_path) matches '/TMUI/LOGIN.JSP/..;/TMUI/[^.]+.JSP\\\\?(FILENAME|COMMAND|DIRECTORYPATH|TABID)='\n    or\n    Upper(evt.Meta.http_path) matches '/TMUI/LOGIN.JSP/%2E%2E;/TMUI/[^.]+.JSP\\\\?(FILENAME|COMMAND|DIRECTORYPATH|TABID)='\n    ); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-access_bypass",
-    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestHubAdaptationCoverage/TestSignatures",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-access_bypass",
+    "upstream_target": "crowdsecurity/f5-big-ip-cve-2020-5902",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -683,10 +839,13 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n    Upper(evt.Meta.http_path) contains Upper('/remote/fgt_lang?lang=/../../../..//////////dev/cmdb/sslvpn_websession'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-lfi_traversal",
-    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestHubAdaptationCoverage/TestSignatures",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-lfi_traversal",
+    "upstream_target": "crowdsecurity/fortinet-cve-2018-13379",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -696,10 +855,13 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n    (Upper(evt.Meta.http_path) matches '/PUBLIC/PLUGINS/[^/]+/../[./]+/'\n    or\n    Upper(evt.Meta.http_path) matches '/PUBLIC/PLUGINS/[^/]+/%2E%2E/[%2E/]+/'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-lfi_traversal",
-    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestHubAdaptationCoverage/TestSignatures",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-lfi_traversal",
+    "upstream_target": "crowdsecurity/grafana-cve-2021-43798",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -709,10 +871,13 @@
     "condition": "|\n  evt.Meta.service == 'http' and \n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] and \n  evt.Meta.http_status in ['404', '403'] and\n  any(File(\"admin_interfaces.txt\"), { Lower(evt.Meta.http_path) contains #}); evt.Meta.source_ip; \"evt.Meta.http_path\"; 2; \"10s\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WB-paths",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WB-paths",
+    "upstream_target": "crowdsecurity/http-admin-interface-probing",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -722,10 +887,13 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Meta.http_path startsWith '/apps/login' && evt.Parsed.verb == 'POST' && evt.Meta.http_status == '200'\"; evt.Meta.source_ip; 5; 10s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/http-apiscp-bf",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -735,10 +903,13 @@
     "condition": "'evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and any(File(\"backdoors.txt\"), { evt.Parsed.file_name == #})'; \"evt.Meta.source_ip\"; evt.Parsed.file_name; 1; 5s",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-webshell",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-webshell",
+    "upstream_target": "crowdsecurity/http-backdoors-attempts",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -748,10 +919,13 @@
     "condition": "'evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] && RegexpInFile(evt.Parsed.http_user_agent, \"bad_user_agents.regex.txt\")'; 1; 1m; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-scanner",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-scanner",
+    "upstream_target": "crowdsecurity/http-bad-user-agent",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -761,10 +935,13 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.file_name == 'wp-login.php' && evt.Parsed.verb == 'POST' && evt.Meta.http_status == '200'\"; evt.Meta.source_ip; 5; 10s",
     "required": "HTTP metadata; see filter expression",
     "target": "WB-login",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WB-login",
+    "upstream_target": "crowdsecurity/http-bf-wordpress_bf",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -774,10 +951,13 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.file_name == 'xmlrpc.php' && evt.Parsed.verb == 'POST'\"; evt.Meta.source_ip; 5; 2m",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/http-bf-wordpress_bf_xmlrpc",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -787,10 +967,13 @@
     "condition": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] && evt.Parsed.static_ressource == 'false' && evt.Parsed.verb in ['GET', 'HEAD']\"; \"evt.Parsed.file_name\"; 0.5s; 40; \"evt.Meta.source_ip + '/' + evt.Meta.target_fqdn\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WB-paths",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WB-paths",
+    "upstream_target": "crowdsecurity/http-crawl-non_statics",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -800,10 +983,13 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n    (Upper(evt.Meta.http_path) contains \"/.%2E/.%2E/\"\n      or\n     Upper(evt.Meta.http_path) contains \"/%2E%2E/%2E%2E\"); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-lfi_traversal",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-lfi_traversal",
+    "upstream_target": "crowdsecurity/http-cve-2021-41773",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -813,10 +999,13 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n    Upper(evt.Meta.http_path) contains \"/%%32%65%%32%65/\"; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-lfi_traversal",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-lfi_traversal",
+    "upstream_target": "crowdsecurity/http-cve-2021-42013",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -826,10 +1015,13 @@
     "condition": "|\n  evt.Meta.service == 'http' and \n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] and \n  evt.Meta.http_status in ['404', '403'] and\n  any(File(\"trendy_cves_uris.json\"), { \n    evt.Meta.http_path contains JsonExtract(#, \"uri\") ? evt.SetMeta(\"cve\", JsonExtract(#, \"cve\")) : false \n  }); evt.Meta.source_ip; \"evt.Meta.http_path\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-cve_probe",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-cve_probe",
+    "upstream_target": "crowdsecurity/http-cve-probing",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -839,10 +1031,13 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Meta.http_args_len != '' && int(evt.Meta.http_args_len) >= 7 && int(evt.Meta.http_args_len) <= 12 && evt.Parsed.http_args matches '^[0-9]+$' && evt.Parsed.static_ressource == 'false'\"; \"evt.Parsed.http_args\"; 1s; 30; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/http-dos-bypass-cache",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -852,10 +1047,13 @@
     "condition": "'evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] && evt.Parsed.http_version != \"\" && evt.Parsed.http_version not in [\"0.9\", \"1.0\", \"1.1\", \"2.0\", \"3.0\"]' ; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-protocol",
-    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestHubAdaptationCoverage/TestSignatures",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-protocol",
+    "upstream_target": "crowdsecurity/http-dos-invalid-http-versions",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -865,10 +1063,13 @@
     "condition": "|\n  evt.Meta.log_type == \"http_access-log\" &&\n  evt.Meta.http_verb == 'GET' &&\n  evt.Parsed.static_ressource == 'false' &&\n  Upper(evt.Parsed.file_frag) == evt.Parsed.file_frag &&\n  len(evt.Parsed.file_frag) == 6 &&\n  int(evt.Meta.http_args_len) == 0; 30; 1s; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/http-dos-random-uri",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -878,10 +1079,13 @@
     "condition": "'evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"]'; 10; evt.Parsed.http_user_agent; 8s; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WB-ua",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WB-ua",
+    "upstream_target": "crowdsecurity/http-dos-swithcing-ua",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -891,10 +1095,13 @@
     "condition": "\"evt.Meta.service == 'http' && evt.Meta.sub_type == 'auth_fail'\"; evt.Meta.source_ip; 5; \"10s\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WB-auth",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WB-auth",
+    "upstream_target": "crowdsecurity/http-generic-bf",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -904,10 +1111,13 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.verb == 'POST' && evt.Meta.http_status == '401'\"; \"evt.Meta.source_ip + ' ' + evt.Meta.http_path\"; 5; \"10s\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WB-auth",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WB-auth",
+    "upstream_target": "LePresidente/http-generic-401-bf",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -917,10 +1127,13 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.verb == 'POST' && evt.Meta.http_status == '403'\"; evt.Meta.source_ip; 5; \"10s\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WB-auth",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WB-auth",
+    "upstream_target": "LePresidente/http-generic-403-bf",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -930,10 +1143,13 @@
     "condition": "evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and\n  evt.Meta.http_path == \"/crowdsec-test-NtktlJHV4TfBSK3wvlhiOBnl\"; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Upstream installation test endpoint; no security signal for offline investigations",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/http-generic-test",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -943,10 +1159,13 @@
     "condition": "\"evt.Meta.log_type == 'ADMIN_LOGIN_FAILED'\"; evt.Meta.source_ip; 5; 10s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Requires Magento application audit events absent from access logs",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "",
+    "upstream_status": "requires Magento application events / enrichment"
   },
   {
     "repo": "hub",
@@ -956,10 +1175,13 @@
     "condition": "\"evt.Meta.log_type == 'PAYMENT_FAILED' and evt.Meta.ASNNumber != '' \"; evt.Meta.ASNNumber; evt.Meta.source_ip; 10; 30s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Requires Magento application audit events absent from access logs",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "",
+    "upstream_status": "requires Magento application events / enrichment"
   },
   {
     "repo": "hub",
@@ -969,10 +1191,13 @@
     "condition": "\"evt.Meta.log_type == 'PAYMENT_FAILED' and evt.Meta.IsoCode != '' \"; evt.Meta.IsoCode; evt.Meta.source_ip; 10; 30s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Requires Magento application audit events absent from access logs",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "",
+    "upstream_status": "requires Magento application events / enrichment"
   },
   {
     "repo": "hub",
@@ -982,10 +1207,13 @@
     "condition": "\"evt.Meta.log_type == 'PAYMENT_FAILED'\"; evt.Meta.source_ip; 3; 30s",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Requires Magento application audit events absent from access logs",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "",
+    "upstream_status": "requires Magento application events / enrichment"
   },
   {
     "repo": "hub",
@@ -995,10 +1223,13 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Meta.http_status in ['400','405'] && (evt.Parsed.verb == 'CONNECT' || evt.Parsed.request matches '^http[s]?://')\"; evt.Meta.source_ip",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-method",
-    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestHubAdaptationCoverage/TestSignatures",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-method",
+    "upstream_target": "crowdsecurity/http-open-proxy",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1008,10 +1239,13 @@
     "condition": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] && any(File('http_path_traversal.txt'),{evt.Meta.http_path contains #})\"; \"evt.Meta.source_ip\"; \"evt.Meta.http_path\"; 3; 10s",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-lfi_traversal",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-lfi_traversal",
+    "upstream_target": "crowdsecurity/http-path-traversal-probing",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1021,10 +1255,13 @@
     "condition": "\"evt.Meta.service == 'http' && evt.Meta.http_status in ['404', '403', '400'] && evt.Parsed.static_ressource == 'false'\"; \"evt.Meta.source_ip + '/' + evt.Meta.target_fqdn\"; \"evt.Meta.http_path\"; 10; \"10s\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WB-404",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WB-404",
+    "upstream_target": "crowdsecurity/http-probing",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1034,10 +1271,13 @@
     "condition": "|\n  evt.Meta.service == 'http' and \n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] and \n  evt.Meta.http_status in ['404', '403'] and (\n    let uri = Lower(evt.Meta.http_path);\n    uri contains \"/sap/bc/gui/sap/its/webgui\"\n    or uri contains \"/irj/portal\"\n    or uri contains \"/sap/bc/\"\n    or uri contains \"/sap/bc/ui2/flp\"\n    or uri contains \"/sap/bc/ui5_ui5/\"\n    or uri contains \"/sap/opu/odata/\"\n    or uri contains \"/sap/bc/webdynpro/\"\n    or uri contains \"/sap/public/bc/\"\n    or uri contains \"/sap/public/info\"\n    or uri contains \"/sap/public/icf_info\"\n    or uri contains \"/sap/admin/publicicp/\"\n    or uri contains \"/sap/admin/public/\"\n    or uri == \"/nwa\"\n    or uri contains \"/webdynpro/dispatcher/sap.com/tc~sec~ume~wd~umeadmin/umeadminapp\"\n    or uri contains \"/sap/hana/xs/admin\"\n    or uri contains \"/sap/hana/xs/formlogin\"\n    or uri contains \"/irj/go/km/navigation\"\n  ); evt.Meta.source_ip; \"10s\"; 1; evt.Meta.http_path",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/http-sap-interface-probing",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1047,10 +1287,13 @@
     "condition": "'evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and any(File(\"sensitive_data.txt\"), { evt.Parsed.request endsWith #})'; \"evt.Meta.source_ip\"; evt.Parsed.request; 4; 5s",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-sensitive_file/WB-sensitive",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-sensitive_file/WB-sensitive",
+    "upstream_target": "crowdsecurity/http-sensitive-files",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1060,10 +1303,13 @@
     "condition": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] && any(File('sqli_probe_patterns.txt'), {Upper(evt.Parsed.http_args) contains Upper(#)})\"; evt.Meta.source_ip; 10; 1s; evt.Parsed.http_args",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-sqli",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-sqli",
+    "upstream_target": "crowdsecurity/http-sqli-probbing-detection",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1073,10 +1319,13 @@
     "condition": "|\n  if (evt.Meta.service == 'http' and\n      evt.Meta.log_type in ['http_access-log', 'http_error-log'] and\n      evt.Meta.http_status in ['404', '403'])\n    {\n      let target_technology = LookupFile(evt.Meta.http_path, \"technology_probing.json\");\n      target_technology != \"\" ? evt.SetMeta(\"target_technology\", target_technology)  : false\n    } else { false }; evt.Meta.source_ip",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Requires external data list not audited/downloaded; deferred, no exact coverage claimed",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/http-technology-probing",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1086,10 +1335,13 @@
     "condition": "|\n  evt.Meta.service == 'http' and\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] and\n  evt.Meta.http_status in ['404', '403'] and\n  Lower(evt.Parsed.request) matches \"(?i)(/wp-.*\\\\.php|/wp-content/plugins/.*\\\\.(txt|md))$\"; evt.Meta.source_ip; evt.Parsed.request; 3; \"10s\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/http-wordpress-scan",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1099,10 +1351,13 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && Upper(evt.Parsed.http_args) contains 'AUTHOR='\"; evt.Meta.source_ip; evt.Parsed.http_args; 5; \"10s\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable but low specificity on normal sites; deferred pending representative benign calibration",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/http-wordpress_user-enum",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1112,10 +1367,13 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.file_name contains 'wp-config.php'\"; evt.Meta.source_ip; evt.Parsed.file_name; 5; \"10s\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-sensitive_file",
-    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestHubAdaptationCoverage/TestSignatures",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-sensitive_file",
+    "upstream_target": "crowdsecurity/http-wordpress_wpconfig",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1125,10 +1383,13 @@
     "condition": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] && any(File('xss_probe_patterns.txt'), {Upper(evt.Parsed.http_args) contains Upper(#)})\"; evt.Meta.source_ip; 5; 1s; evt.Parsed.http_args",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-xss",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-xss",
+    "upstream_target": "crowdsecurity/http-xss-probbing",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1138,10 +1399,13 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and any(File(\"jira_cve_2021-26086.txt\"), {Upper(evt.Meta.http_path) contains Upper(#)}); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Requires external data list not audited/downloaded; deferred, no exact coverage claimed",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/jira_cve-2021-26086",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1151,10 +1415,13 @@
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Lower(QueryUnescape(evt.Meta.http_path)) startsWith Lower('/setup.cgi?next_file=netgear.cfg&todo=syscmd&cmd='); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-webshell",
-    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestHubAdaptationCoverage/TestSignatures",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-webshell",
+    "upstream_target": "crowdsecurity/netgear_rce",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1164,10 +1431,13 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and \n    (Upper(evt.Meta.http_path) matches '/DANA-NA/../DANA/HTML5ACC/GUACAMOLE/../../../../../../../[^?]+\\\\?/DANA/HTML5ACC/GUACAMOLE/'\n    or\n    Upper(evt.Meta.http_path) matches '/DANA-NA/%2E%2E/DANA/HTML5ACC/GUACAMOLE/%2E%2E/%2E%2E/%2E%2E/%2E%2E/%2E%2E/%2E%2E/%2E%2E/[^?]+\\\\?/DANA/HTML5ACC/GUACAMOLE/'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-lfi_traversal",
-    "reason": "Independently adapted observable indicator, not upstream expression/bucket parity; see TestHubAdaptationCoverage and TestSignatures",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestHubAdaptationCoverage/TestSignatures",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-lfi_traversal",
+    "upstream_target": "crowdsecurity/pulse-secure-sslvpn-cve-2019-11510",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1177,10 +1447,13 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and\n    (Upper(evt.Meta.http_path) contains 'CLASS.MODULE.CLASSLOADER.'); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "WA-spring4shell",
-    "reason": "Condition-level adaptation; external File() lists are not copied; no claim of exact CrowdSec parity",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "TestBehavior/TestSignatures (adapted semantics)",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "WA-spring4shell",
+    "upstream_target": "crowdsecurity/spring4shell_cve-2022-22965",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1190,10 +1463,13 @@
     "condition": "|\n  evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] and RegexpInFile(Lower(evt.Meta.http_path), \"thinkphp_cve_2018-20062.txt\"); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Requires external data list not audited/downloaded; deferred, no exact coverage claimed",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/thinkphp-cve-2018-20062",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1203,10 +1479,13 @@
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Upper(QueryUnescape(evt.Meta.http_path)) startsWith Upper('/catalog-portal/ui/oauth/verify?error=&deviceUdid=${\"freemarker.template.utility.Execute\"?new()('); \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/vmware-cve-2022-22954",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1216,10 +1495,13 @@
     "condition": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && evt.Meta.http_path matches '/ui/vcav-bootstrap/rest/vcav-providers/provider-logo\\\\?url=(file|http)'; \"evt.Meta.source_ip\"",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "crowdsecurity/vmware-vcenter-vmsa-2021-0027",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   },
   {
     "repo": "hub",
@@ -1229,9 +1511,12 @@
     "condition": "\"evt.Meta.log_type == 'http_access-log' and (\n  evt.Parsed.file_name contains 'w00tw00t.at.ISC.SANS.DFind' or\n  Lower(evt.Meta.http_path) == '/core/skin/login.aspx'\n  )\"; evt.Meta.source_ip",
     "required": "HTTP metadata; see filter expression",
     "target": "",
-    "reason": "Observable application-specific predicate; deferred implementation and per-product tests. Access-only feasibility is not a claim of coverage",
+    "reason": "Source-ID compatibility engine; original narrowed mapping retained in legacy_target",
     "license": "MIT; no file override found",
-    "test": "not ported",
-    "file_notices": []
+    "test": "TestHubSourceGolden and source bucket boundary tests; per-rule fixture availability is recorded separately",
+    "file_notices": [],
+    "legacy_target": "",
+    "upstream_target": "ltsich/http-w00tw00t",
+    "upstream_status": "implemented HTTP predicate/bucket profile"
   }
 ]

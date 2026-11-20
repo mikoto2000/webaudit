@@ -60,7 +60,7 @@ func writeSummary(w io.Writer, r Report) error {
 	}
 	fmt.Fprintln(w, "\nTop findings:")
 	if len(r.Findings) == 0 {
-		fmt.Fprintln(w, "  No suspicious activity detected within available log coverage.")
+		fmt.Fprintln(w, "  No WebAudit incidents; review upstream detections and coverage below.")
 	}
 	for i, f := range r.Findings {
 		if i == 5 {
@@ -71,6 +71,13 @@ func writeSummary(w io.Writer, r Report) error {
 			desc = f.Rules[0].Description
 		}
 		fmt.Fprintf(w, "  %-8s %s | %s | %s | %d observations\n", strings.ToUpper(f.Severity), TerminalSafe(desc), TerminalSafe(f.IP), f.Outcome.Verdict, f.Count)
+	}
+	fmt.Fprintf(w, "\nUpstream detections:\n  Hub alerts: %d\n  Aura signature groups: %d\n  Aura analysis findings: %d\n", len(r.UpstreamAlerts), len(r.AuraMatches), len(r.AuraAnalysis))
+	for i, a := range r.UpstreamAlerts {
+		if i == 5 {
+			break
+		}
+		fmt.Fprintf(w, "  %s | %s | %d events\n", TerminalSafe(a.RuleID), TerminalSafe(a.IP), a.Count)
 	}
 	fmt.Fprintln(w, "\nWarnings:")
 	for _, s := range r.Warnings {
@@ -101,6 +108,9 @@ func writeCSV(w io.Writer, r Report) error {
 	}
 	meta := r
 	meta.Findings = nil
+	meta.UpstreamAlerts = nil
+	meta.AuraMatches = nil
+	meta.AuraAnalysis = nil
 	b, err := json.Marshal(meta)
 	if err != nil {
 		return err
@@ -119,6 +129,17 @@ func writeCSV(w io.Writer, r Report) error {
 		}
 		if err = write([]string{"incident", f.ID, f.Severity, f.Outcome.Verdict, f.IP, strconv.FormatInt(f.Count, 10), strings.Join(f.Outcome.Reasons, "; "), string(e), string(details)}); err != nil {
 			return err
+		}
+	}
+	for _, group := range [][]SourceAlert{r.UpstreamAlerts, r.AuraMatches, r.AuraAnalysis} {
+		for _, a := range group {
+			details, err := json.Marshal(a)
+			if err != nil {
+				return err
+			}
+			if err = write([]string{a.Source, a.RuleID, "", "unknown", a.IP, strconv.FormatInt(a.Count, 10), "Source detection; outcome not established", "", string(details)}); err != nil {
+				return err
+			}
 		}
 	}
 	c.Flush()
