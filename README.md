@@ -13,17 +13,17 @@ Apache HTTP Server / Nginx の既存アクセスログから、不審なアク�
 ```sh
 go test ./...
 go vet ./...
-go build -trimpath -o dist/webaudit ./cmd/webaudit
+go build -trimpath -buildvcs=false -o dist/webaudit ./cmd/webaudit
 ```
 
 Windowsでのビルド例:
 
 ```powershell
-go build -trimpath -o dist/webaudit-windows-amd64.exe ./cmd/webaudit
+go build -trimpath -buildvcs=false -o dist/webaudit-windows-amd64.exe ./cmd/webaudit
 $env:GOOS = "linux"
 $env:GOARCH = "amd64"
 $env:CGO_ENABLED = "0"
-go build -trimpath -o dist/webaudit-linux-amd64 ./cmd/webaudit
+go build -trimpath -buildvcs=false -o dist/webaudit-linux-amd64 ./cmd/webaudit
 ```
 
 ## 基本操作

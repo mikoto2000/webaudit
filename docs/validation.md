@@ -38,3 +38,5 @@ AuraDFIR 32項目を調査、31項目の条件を独立実装へ対応付け、1
 Windows/Linux amd64の単体バイナリとSHA256SUMSはdist/（Git追跡外）、ハッシュは measurements/binaries.json。README、ルール台帳、競合調査、出典、設計、精度・性能レポート、examples/の合成ログとHTML/JSON/CSVサンプルを含みます。
 
 本体バイナリの依存パッケージも確認し、ネットワーク関連はアドレス/URLの純粋な解析を行うnet/netipとnet/urlだけでした。net/httpやnetの接続API、os/execは本体依存にありません。パケットキャプチャによる検証は行っていません。CLI OAuth credentialのworkflow scope不足は、接続済みGitHub appで同じcommitのbranchを作成する方法で解決しました。
+
+配布ビルドは `-trimpath -buildvcs=false` とCGO_ENABLED=0を指定し、作業パスや未コミット時のVCS情報を埋め込まない構成です。コミットの同定は最終mainとPR履歴、配布物の同定はSHA256SUMSとbinaries.jsonで行います。ライセンス表示と文書を同梱したzip/tar.gzもdist/に作成しています。
