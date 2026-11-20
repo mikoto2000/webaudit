@@ -1,0 +1,698 @@
+{
+  "FN": 1,
+  "FP": 1,
+  "TN": 27,
+  "TP": 42,
+  "cases": 71,
+  "category_detection": {
+    "access_bypass": {
+      "total": 1,
+      "detected": 1
+    },
+    "bruteforce": {
+      "total": 2,
+      "detected": 2
+    },
+    "command_injection": {
+      "total": 2,
+      "detected": 2
+    },
+    "crlf_injection": {
+      "total": 1,
+      "detected": 1
+    },
+    "cve_probe": {
+      "total": 1,
+      "detected": 1
+    },
+    "deserialization": {
+      "total": 1,
+      "detected": 1
+    },
+    "iis_aspnet": {
+      "total": 1,
+      "detected": 1
+    },
+    "ldap_injection": {
+      "total": 1,
+      "detected": 1
+    },
+    "lfi_traversal": {
+      "total": 3,
+      "detected": 3
+    },
+    "log4shell": {
+      "total": 1,
+      "detected": 1
+    },
+    "method": {
+      "total": 1,
+      "detected": 1
+    },
+    "nosqli": {
+      "total": 1,
+      "detected": 1
+    },
+    "null_byte": {
+      "total": 1,
+      "detected": 1
+    },
+    "rfi": {
+      "total": 1,
+      "detected": 1
+    },
+    "scanner": {
+      "total": 1,
+      "detected": 1
+    },
+    "sensitive_file": {
+      "total": 6,
+      "detected": 6
+    },
+    "shellshock": {
+      "total": 1,
+      "detected": 1
+    },
+    "spring4shell": {
+      "total": 1,
+      "detected": 1
+    },
+    "sqli": {
+      "total": 4,
+      "detected": 4
+    },
+    "ssrf": {
+      "total": 2,
+      "detected": 2
+    },
+    "ssti": {
+      "total": 1,
+      "detected": 1
+    },
+    "struts_ognl": {
+      "total": 1,
+      "detected": 1
+    },
+    "traversal": {
+      "total": 1,
+      "detected": 1
+    },
+    "webshell": {
+      "total": 1,
+      "detected": 1
+    },
+    "xpath_injection": {
+      "total": 1,
+      "detected": 1
+    },
+    "xss": {
+      "total": 4,
+      "detected": 3
+    },
+    "xxe": {
+      "total": 1,
+      "detected": 1
+    }
+  },
+  "dataset": "synthetic calibration only; no production guarantee",
+  "details": [
+    {
+      "detected": true,
+      "id": "attack-00",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-01",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-02",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-03",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-04",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-05",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-06",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-07",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-08",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-09",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-10",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-11",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-12",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-13",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-14",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-15",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-16",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-17",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-18",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-19",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-20",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-21",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-22",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-23",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-24",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-25",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-26",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-27",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-28",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-29",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-30",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-31",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-32",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-33",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "attack-34",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-00",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-01",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-02",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-03",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-04",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-05",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-06",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-07",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-08",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-09",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-10",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-11",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-12",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-13",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-14",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-15",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-16",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-17",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-18",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "normal-19",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "benign-client-curl",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "benign-client-python-requests",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "benign-client-Go-http-client",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "benign-client-Googlebot",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "benign-client-Mozilla",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "benign-admin",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "benign-crawler",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": true,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "benign-fast-api",
+      "malicious": false,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "auth-burst",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "blocked-probes",
+      "malicious": true,
+      "outcome": "likely_failed",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "sensitive-transition",
+      "malicious": true,
+      "outcome": "possible_success",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "sensitive-soft404",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "sensitive-real-exposure",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "sql-500",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": true,
+      "id": "login-302",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    },
+    {
+      "detected": false,
+      "id": "unsupported-obfuscation",
+      "malicious": true,
+      "outcome": "unknown",
+      "partial": false,
+      "unparsed": 0
+    }
+  ],
+  "f1": 0.9767441860465116,
+  "false_positive_rate": 0.03571428571428571,
+  "outcome_accuracy_counting_abstentions": 0.4,
+  "outcome_answered": 2,
+  "outcome_conditional_accuracy": 1,
+  "outcome_known_truth_cases": 5,
+  "outcome_policy_accuracy": 1,
+  "outcome_unknown_rate": 0.9534883720930233,
+  "precision": 0.9767441860465116,
+  "recall": 0.9767441860465116
+}

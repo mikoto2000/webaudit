@@ -1,0 +1,38 @@
+{
+  "analysis_seconds": 90.2469834,
+  "arch": "amd64",
+  "cpus": 24,
+  "db_open_seconds": 0,
+  "detection_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+  "geoip_enabled": false,
+  "geoip_metrics": {
+    "public_lookup_calls": 0,
+    "lru_hits": 0,
+    "peer_cache_hits": 0,
+    "reader_lookups": 0,
+    "cached_ips": 0,
+    "untracked_requests": 0,
+    "cache_hit_rate": 0
+  },
+  "go": "go1.27.4",
+  "incidents": 0,
+  "input_bytes": 99524904,
+  "lines": 1000000,
+  "os": "windows",
+  "parsed": 1000000,
+  "partial": true,
+  "peak_process_resident_bytes": 63188992,
+  "peak_sampled_go_heap_bytes": 37431704,
+  "rss_error": "",
+  "scenario": "distinct_mixed",
+  "total_seconds": 90.2469834,
+  "unparsed": 0,
+  "warnings": [
+    "Request bodies and response contents are unavailable; authentication results and compromise cannot be verified",
+    "Client address is the recorded peer; forwarded headers are untrusted and proxy topology is unknown",
+    "Aura aggregation limit reached; source aggregations are incomplete",
+    "Upstream state limit reached; source alerts are incomplete",
+    "Tracked-key limit reached; behavior/statistical coverage is incomplete",
+    "Missing referer in 1000000 parsed requests reduces related detection coverage"
+  ]
+}

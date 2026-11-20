@@ -49,10 +49,14 @@ func (a *geoAnalysis) observe(ip string) {
 	}
 	if p := a.peers[ip]; p != nil {
 		p.Requests++
+		if p.Info.Classification == "public" {
+			a.g.peerHits++
+		}
 		return
 	}
 	if len(a.peers) >= a.max {
 		a.truncated = true
+		a.g.skipped++
 		return
 	}
 	a.peers[ip] = &GeoPeer{IP: ip, Info: a.g.Lookup(ip), Requests: 1}

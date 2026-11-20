@@ -1,0 +1,7 @@
+fuzz: elapsed: 0s, gathering baseline coverage: 0/2 completed
+fuzz: elapsed: 0s, gathering baseline coverage: 2/2 completed, now fuzzing with 2 workers
+fuzz: elapsed: 3s, execs: 53319 (17770/sec), new interesting: 85 (total: 87)
+fuzz: elapsed: 6s, execs: 98352 (15011/sec), new interesting: 86 (total: 88)
+fuzz: elapsed: 6s, execs: 98352 (0/sec), new interesting: 86 (total: 88)
+PASS
+ok  	webaudit/audit	6.205s

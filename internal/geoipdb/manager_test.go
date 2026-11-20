@@ -284,3 +284,41 @@ func TestMetadataPublicationFieldsAndSymlinkSafety(t *testing.T) {
 		}
 	}
 }
+
+// These regression boundaries are already enforced by the Phase B implementation.
+func TestGzipCRCAndManagedSymlinkBoundaries(t *testing.T) {
+	t.Run("CRC", func(t *testing.T) {
+		m, s := manager(t)
+		m.Source = crcSource{s}
+		if _, e := m.Reconcile(context.Background(), false); e == nil {
+			t.Fatal("bad gzip CRC published")
+		}
+	})
+	t.Run("symlink", func(t *testing.T) {
+		m, _ := manager(t)
+		outside := t.TempDir()
+		if e := os.Symlink(outside, filepath.Join(m.Dir, "versions")); e != nil {
+			t.Skip("symlink creation unavailable on this OS/account:", e)
+		}
+		if _, e := m.Reconcile(context.Background(), false); e == nil {
+			t.Fatal("managed symlink accepted")
+		}
+		entries, _ := os.ReadDir(outside)
+		if len(entries) != 0 {
+			t.Fatal("managed path escaped root")
+		}
+	})
+}
+
+type crcSource struct{ *fakeSource }
+
+func (s crcSource) Fetch(ctx context.Context, r Release, w io.Writer) error {
+	var b bytes.Buffer
+	if e := s.fakeSource.Fetch(ctx, r, &b); e != nil {
+		return e
+	}
+	data := b.Bytes()
+	data[len(data)-8] ^= 0xff
+	_, e := w.Write(data)
+	return e
+}

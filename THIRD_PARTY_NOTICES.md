@@ -187,8 +187,8 @@ DB-IP Lite is the preferred separately supplied Country / ASN MMDB source:
 [DB-IP Lite](https://db-ip.com/db/lite.php). Copyright DB-IP.com;
 [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
 Attribution: [IP Geolocation by DB-IP](https://db-ip.com).
-Lite has reduced accuracy/coverage and monthly updates. No provider DB is bundled
-or downloaded by WebAudit. Values are used as supplied; grouping into report
+Lite has reduced accuracy/coverage and monthly updates. No provider DB is bundled. Only the explicit `geoip download` / `geoip update`
+commands fetch data from the official HTTPS distribution; analysis and status stay offline. Values are used as supplied; grouping into report
 summaries is performed by WebAudit. Reports record database type and build date
 from MMDB metadata, not filesystem modification time. Other user-supplied databases
 remain subject to their provider's terms. Synthetic MMDB test fixtures contain no
