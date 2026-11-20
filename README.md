@@ -4,27 +4,11 @@ Apache HTTP Server / Nginx の既存アクセスログから、不審なアク�
 
 **アクセスログは攻撃の試行を示しても、侵害成功を確定できるとは限りません。** HTTP 200・302・500だけでは成功と判定しません。本文やアプリケーションの証拠が不足する場合は、成否不明を返します。
 
-## 配布・ビルド
+## 配布
 
 対象はWindows / Linux、amd64です。`dist/webaudit-windows-amd64.exe` または `dist/webaudit-linux-amd64` を任意の場所に置いて実行します。Linuxでは必要に応じて `chmod +x webaudit-linux-amd64` を実行してください。公開Releaseの配布は行っていません。
 
-開発環境はGo 1.27.4。公式の安定版情報とSHA-256を確認して選定しました。MMDBリーダーの依存ソースとライセンスは`vendor/`に保存し、ネットワークなしでビルドできます。
-
-```sh
-go test ./...
-go vet ./...
-go build -trimpath -buildvcs=false -o dist/webaudit ./cmd/webaudit
-```
-
-Windowsでのビルド例:
-
-```powershell
-go build -trimpath -buildvcs=false -o dist/webaudit-windows-amd64.exe ./cmd/webaudit
-$env:GOOS = "linux"
-$env:GOARCH = "amd64"
-$env:CGO_ENABLED = "0"
-go build -trimpath -buildvcs=false -o dist/webaudit-linux-amd64 ./cmd/webaudit
-```
+開発環境、ビルド・テスト・評価の手順は[開発者向けガイド](DEVELOPMENT.md)を参照してください。
 
 ## 基本操作
 
@@ -114,18 +98,9 @@ L2は9種類の時間窓・頻度・探索分析、L3は5種類の統計候補�
 
 URLの復号は最大2回、ケース・区切り・queryの `+`、ログの `\xNN` を検知用の候補として扱います。アプリケーションの解釈と同一であるとは保証しません。任意のUnicode正規化、`%uNNNN`、無制限の多重復号には対応しません。本文だけの攻撃、未収録CVE、実際の応答内容・認証結果・ファイル改ざんは確認できません。正常な高頻度APIも頻度異常の調査候補になり得ます。実ログでの検証は未実施です。
 
-開発用評価:
-
-```sh
-go run ./tools/evaluate
-go run ./tools/benchmark -lines 1000000
-go run ./tools/benchmark -lines 1000000 -padding 3000
-go test ./audit -run='^$' -fuzz=FuzzParse -fuzztime=10s -parallel=4
-```
-
 ## 出典とライセンス
 
-WebAuditはMIT。AuraDFIR、CrowdSec、CrowdSec Hubを参照して独立実装しました。[出典・ライセンス表示](THIRD_PARTY_NOTICES.md)、[競合調査](docs/competitor-analysis.md)、[ルール台帳](docs/rule-inventory.md)、[検知設計](docs/detection-design.md)、[対応範囲](docs/detection-coverage.md) を参照してください。外部データリストは無条件に移植せず、未対応の理由を台帳に記録しています。
+WebAuditはMIT。AuraDFIR、CrowdSec、CrowdSec Hubを参照して独立実装しました。[出典・ライセンス表示](THIRD_PARTY_NOTICES.md)、[対応範囲](docs/detection-coverage.md) を参照してください。
 
 ## GeoIP / ASN（任意・オフライン）
 
