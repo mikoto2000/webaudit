@@ -20,3 +20,7 @@ writerはLinux/macOS flock、Windows LockFileExによる排他ロックを取る
 通信は管理コマンドdownload/updateだけ。HTTPS・公式ホストとパスのallowlistを初回と各redirectに適用し、認証情報・任意port・queryを拒否する。proxyを使わずTLSを検証、HTTPクライアント45秒・コマンド全体5分、redirect最大5、ページ1MiB・圧縮64MiB・展開256MiBを上限とする。転送失敗・gzip CRC・配布元SHA1・MMDB Verify・全レコードの役割別schemaを検証する。SHA1は現行配布の転送確認であり、暗号学的な配布元署名ではない。ローカル整合性はSHA256・サイズ・種類・ビルド日時・公開版/URLの一致で検証する。
 
 公式ページの構造変更時は推測でURLを生成せずエラーにする。HTTP 403等でも既存DBを維持する。実DBはGit・実行ファイル・テストへ同梱しない。公式配布とライセンスの根拠は[設計](geoip-design.md)、テスト計画と実測は[検証](geoip-testing.md)を参照。
+
+## Phase B実機確認
+
+2026-11-20、Windows amd64で新しい`geoip download`を専用のXDG作業ディレクトリに対して実行し、公式Country/ASNの2026-11版を正常に取得・schema検証・有効化した。Countryの実buildは2026-11-01T02:47:39Z、ASNは2026-11-01T02:52:43Z。通常の自動テストはこの通信や実DBに依存しない。
