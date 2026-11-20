@@ -48,9 +48,10 @@ type window struct {
 	burst                             bool
 }
 type peer struct {
+	first, last                time.Time
 	n, errors, statusN, bytesN int64
-	bytes     float64
-	sample    Event
+	bytes                      float64
+	sample                     Event
 }
 type baseline struct {
 	values []float64
@@ -162,12 +163,23 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 	}
 	p := a.ips[key]
 	if p == nil && a.allow(len(a.ips)) {
-		p = &peer{sample: compactEvent(e)}
+		p = &peer{sample: compactEvent(e), first: e.Time, last: e.Time}
 		a.ips[key] = p
 	}
 	if p != nil {
 		p.n++
-		if e.Status!=nil{p.statusN++};if e.Bytes!=nil{p.bytesN++}
+		if e.Time.Before(p.first) {
+			p.first = e.Time
+		}
+		if e.Time.After(p.last) {
+			p.last = e.Time
+		}
+		if e.Status != nil {
+			p.statusN++
+		}
+		if e.Bytes != nil {
+			p.bytesN++
+		}
 		if val(e.Status) >= 400 {
 			p.errors++
 		}
@@ -176,11 +188,17 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 	hour := e.Time.Unix() / 3600
 	hp := a.hours[hour]
 	if hp == nil && a.allow(len(a.hours)) {
-		hp = &peer{sample: compactEvent(e)}
+		hp = &peer{sample: compactEvent(e), first: e.Time, last: e.Time}
 		a.hours[hour] = hp
 	}
 	if hp != nil {
 		hp.n++
+		if e.Time.Before(hp.first) {
+			hp.first = e.Time
+		}
+		if e.Time.After(hp.last) {
+			hp.last = e.Time
+		}
 	}
 	if e.Bytes != nil && e.Status != nil {
 		value := float64(*e.Bytes)
@@ -281,7 +299,9 @@ func (a *Analysis) Finish() []Signal {
 	var counts, rates, bytes []float64
 	for _, p := range a.ips {
 		counts = append(counts, float64(p.n))
-		if p.bytesN==p.n {bytes = append(bytes, p.bytes)}
+		if p.bytesN == p.n {
+			bytes = append(bytes, p.bytes)
+		}
 		if p.statusN >= 20 {
 			rates = append(rates, float64(p.errors)/float64(p.statusN))
 		}
@@ -293,11 +313,11 @@ func (a *Analysis) Finish() []Signal {
 	sort.Strings(keys)
 	for _, k := range keys {
 		p := a.ips[k]
-		if isOutlier(float64(p.n), counts, 100, 5) || (p.bytesN==p.n&&isOutlier(p.bytes, bytes, 1<<20, 10)) {
-			a.emit("WS-ip", "IP request/byte volume peer outlier", p.sample, p.n, "At least 20 peer groups; robust median/MAD and minimum effect size; not proof of exfiltration", p.sample.Time, p.sample.Time)
+		if isOutlier(float64(p.n), counts, 100, 5) || (p.bytesN == p.n && isOutlier(p.bytes, bytes, 1<<20, 10)) {
+			a.emit("WS-ip", "IP request/byte volume peer outlier", p.sample, p.n, "At least 20 peer groups; robust median/MAD and minimum effect size; not proof of exfiltration", p.first, p.last)
 		}
 		if p.statusN >= 20 && isOutlier(float64(p.errors)/float64(p.statusN), rates, 0.5, 3) {
-			a.emit("WS-errors", "IP HTTP-error-rate peer outlier", p.sample, p.n, "At least 20 requests per peer and 20 peers; >0.5 rate difference plus robust threshold", p.sample.Time, p.sample.Time)
+			a.emit("WS-errors", "IP HTTP-error-rate peer outlier", p.sample, p.n, "At least 20 requests per peer and 20 peers; >0.5 rate difference plus robust threshold", p.first, p.last)
 		}
 	}
 	if len(a.hours) >= 2 {
@@ -322,7 +342,7 @@ func (a *Analysis) Finish() []Signal {
 			for h := lo; h <= hi; h++ {
 				p := a.hours[h]
 				if p != nil && isOutlier(float64(p.n), baseline, 100, 5) {
-					a.emit("WS-hour", "Hourly traffic peer outlier", p.sample, p.n, "Observed hours including zero bins; >=20 bins; robust threshold, +100 requests and 5x median", p.sample.Time, p.sample.Time)
+					a.emit("WS-hour", "Hourly traffic peer outlier", p.sample, p.n, "Observed hours including zero bins; >=20 bins; robust threshold, +100 requests and 5x median", p.first, p.last)
 				}
 			}
 		} else {

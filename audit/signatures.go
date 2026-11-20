@@ -4,7 +4,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"regexp"
- "strings"
+	"strings"
 )
 
 //go:embed rules.json
@@ -19,7 +19,7 @@ type Rule struct {
 	Pattern     string   `json:"pattern"`
 	Field       string   `json:"field"`
 	Source      string   `json:"source"`
- Exclude []string `json:"exclude,omitempty"`
+	Exclude     []string `json:"exclude,omitempty"`
 	rx          *regexp.Regexp
 }
 
@@ -50,7 +50,9 @@ func Detect(e Event) ([]Rule, Normalized) {
 				values = []string{*e.Method}
 			}
 		case "protocol":
-			if e.Protocol!=nil {values=[]string{*e.Protocol}}
+			if e.Protocol != nil {
+				values = []string{*e.Protocol}
+			}
 		default:
 			values = n.Variants
 			if r.Field == "url_headers" {
@@ -58,7 +60,16 @@ func Detect(e Event) ([]Rule, Normalized) {
 			}
 		}
 		for _, v := range values {
- excluded:=false;for _,x:=range r.Exclude{if strings.EqualFold(x,v){excluded=true;break}};if excluded{continue}
+			excluded := false
+			for _, x := range r.Exclude {
+				if strings.EqualFold(x, v) {
+					excluded = true
+					break
+				}
+			}
+			if excluded {
+				continue
+			}
 			if r.rx.MatchString(v) {
 				hits = append(hits, r)
 				break

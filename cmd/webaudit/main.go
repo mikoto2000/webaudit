@@ -24,8 +24,8 @@ func run(args []string, out, errout io.Writer) int {
 	fs.IntVar(&o.MaxLineBytes, "max-line-bytes", 64*1024, "Maximum line size; oversized lines are skipped")
 	fs.Int64Var(&o.MaxFileBytes, "max-file-bytes", 8<<30, "Maximum decompressed bytes per file")
 	fs.IntVar(&o.MaxKeys, "max-keys", 4096, "Maximum retained keys per analysis table / dedup horizon")
-	fs.IntVar(&o.MaxEvidenceBytes,"max-evidence-bytes",32<<20,"Maximum retained incident evidence bytes")
- fs.IntVar(&o.MaxFindings, "max-findings", 2000, "Maximum retained incidents/signals")
+	fs.IntVar(&o.MaxEvidenceBytes, "max-evidence-bytes", 32<<20, "Maximum retained incident evidence bytes")
+	fs.IntVar(&o.MaxFindings, "max-findings", 2000, "Maximum retained incidents/signals")
 	fs.Usage = func() {
 		fmt.Fprintln(errout, "Usage: webaudit INPUT... [-o REPORT] [--format html|json|csv] [--verbose]\nInputs: files, gzip files, or directories. No output file without -o.")
 		fs.PrintDefaults()
@@ -53,7 +53,7 @@ func run(args []string, out, errout io.Writer) int {
 		fs.Usage()
 		return 2
 	}
-	if o.MaxEvidenceBytes<512||o.MaxEvidenceBytes>1<<30||o.MaxLineBytes < 64 || o.MaxLineBytes > 16<<20 || o.MaxFileBytes < 1 || o.MaxFileBytes > 1<<50 || o.MaxKeys < 1 || o.MaxKeys > 1000000 || o.MaxFindings < 1 || o.MaxFindings > 100000 {
+	if o.MaxEvidenceBytes < 512 || o.MaxEvidenceBytes > 1<<30 || o.MaxLineBytes < 64 || o.MaxLineBytes > 16<<20 || o.MaxFileBytes < 1 || o.MaxFileBytes > 1<<50 || o.MaxKeys < 1 || o.MaxKeys > 1000000 || o.MaxFindings < 1 || o.MaxFindings > 100000 {
 		fmt.Fprintln(errout, "Invalid resource limits (see --help)")
 		return 2
 	}

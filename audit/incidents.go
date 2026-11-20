@@ -45,10 +45,10 @@ type resource struct {
 	goodAt    []time.Time
 }
 type Correlator struct {
-	o        Options
-	items    map[string]*Incident
-	warnings []string
- evidenceBytes int
+	o             Options
+	items         map[string]*Incident
+	warnings      []string
+	evidenceBytes int
 }
 
 func NewCorrelator(o Options) *Correlator {
@@ -70,14 +70,12 @@ func family(r Rule) string {
 }
 func (c *Correlator) get(e Event, group string) *Incident {
 	key := e.IP + "\x00" + val(e.Host) + "\x00" + val(e.UA) + "\x00" + group + "\x00" + strconv.FormatInt(e.Time.Unix()/300, 10)
-	key=digest(key)
+	key = digest(key)
 	if f := c.items[key]; f != nil {
 		return f
 	}
 	if len(c.items) >= c.o.MaxFindings {
-		if len(c.warnings) == 0 {
-			c.warnings = append(c.warnings, "Incident limit reached; incident counts and evidence are incomplete")
-		}
+		uniqueAppend(&c.warnings, "Incident limit reached; incident counts and evidence are incomplete")
 		return nil
 	}
 	hash := sha256.Sum256([]byte(key))
@@ -195,9 +193,17 @@ func addRule(f *Incident, r Rule) {
 	}
 	uniqueAppend(&f.Reasons, r.Description)
 }
-func (c *Correlator)addEvidence(f *Incident, e Event, n Normalized) {
+func (c *Correlator) addEvidence(f *Incident, e Event, n Normalized) {
 	v := Evidence{compactEvent(e), compactNormalized(n)}
- delta:=evidenceSize(v);if len(f.Evidence)>=8{delta-=evidenceSize(f.Evidence[7])};if c.evidenceBytes+delta>c.o.MaxEvidenceBytes{uniqueAppend(&c.warnings,"Evidence-byte limit reached; samples are incomplete, use file/line references and original input logs");return};c.evidenceBytes+=delta
+	delta := evidenceSize(v)
+	if len(f.Evidence) >= 8 {
+		delta -= evidenceSize(f.Evidence[7])
+	}
+	if c.evidenceBytes+delta > c.o.MaxEvidenceBytes {
+		uniqueAppend(&c.warnings, "Evidence-byte limit reached; samples are incomplete, use file/line references and original input logs")
+		return
+	}
+	c.evidenceBytes += delta
 	if len(f.Evidence) < 8 {
 		f.Evidence = append(f.Evidence, v)
 	} else {

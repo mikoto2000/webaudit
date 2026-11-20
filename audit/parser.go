@@ -34,7 +34,7 @@ func Parse(line, file string, n int64, custom string) (Event, error) {
 			}
 		}
 	} else if strings.HasPrefix(strings.TrimSpace(line), "{") {
-		obj,err:=uniqueObject(line)
+		obj, err := uniqueObject(line)
 		if err != nil {
 			return Event{}, fmt.Errorf("invalid JSON: %w", err)
 		}
@@ -63,11 +63,38 @@ func Parse(line, file string, n int64, custom string) (Event, error) {
 	}
 	return eventFrom(fields, line, file, n)
 }
-func uniqueObject(line string)(map[string]json.RawMessage,error){
- d:=json.NewDecoder(strings.NewReader(line));t,err:=d.Token();if err!=nil||t!=json.Delim('{'){return nil,fmt.Errorf("expected object")}
- obj:=map[string]json.RawMessage{}
- for d.More(){t,err=d.Token();if err!=nil{return nil,err};k,ok:=t.(string);if !ok{return nil,fmt.Errorf("expected field name")};if _,exists:=obj[k];exists{return nil,fmt.Errorf("duplicate JSON field %s",k)};var v json.RawMessage;if err=d.Decode(&v);err!=nil{return nil,err};obj[k]=v}
- if _,err=d.Token();err!=nil{return nil,err};if _,err=d.Token();err!=io.EOF{return nil,fmt.Errorf("trailing JSON data")};return obj,nil
+func uniqueObject(line string) (map[string]json.RawMessage, error) {
+	d := json.NewDecoder(strings.NewReader(line))
+	t, err := d.Token()
+	if err != nil || t != json.Delim('{') {
+		return nil, fmt.Errorf("expected object")
+	}
+	obj := map[string]json.RawMessage{}
+	for d.More() {
+		t, err = d.Token()
+		if err != nil {
+			return nil, err
+		}
+		k, ok := t.(string)
+		if !ok {
+			return nil, fmt.Errorf("expected field name")
+		}
+		if _, exists := obj[k]; exists {
+			return nil, fmt.Errorf("duplicate JSON field %s", k)
+		}
+		var v json.RawMessage
+		if err = d.Decode(&v); err != nil {
+			return nil, err
+		}
+		obj[k] = v
+	}
+	if _, err = d.Token(); err != nil {
+		return nil, err
+	}
+	if _, err = d.Token(); err != io.EOF {
+		return nil, fmt.Errorf("trailing JSON data")
+	}
+	return obj, nil
 }
 func eventFrom(f map[string]string, raw, file string, n int64) (Event, error) {
 	e := Event{File: file, Line: n, Raw: raw, IP: f["ip"]}
