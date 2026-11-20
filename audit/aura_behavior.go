@@ -71,8 +71,8 @@ func (a *auraAnalysis) Observe(e Event) {
 			p.Worst = a.windows[key]
 		}
 	}
-	if e.UA != nil {
-		ua := val(e.UA)
+	{
+		ua := sourceUA(e)
 		key := digest(ua)
 		v := a.uas[key]
 		if v == nil {

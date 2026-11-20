@@ -85,6 +85,7 @@ var invalidURI = regexp.MustCompile(`Invalid URI in request (.*?)(?: +|$)$`)
 var apacheAuth = regexp.MustCompile(`\[auth_basic:[^\]]+\].*authentication failure for "([^"]+)": Password Mismatch`)
 var apacheNotFound = regexp.MustCompile(`\[auth_basic:[^\]]+\].*user [^:]+ not found: "?([^" ]+)"?`)
 var apacheDenied = regexp.MustCompile(`\[authz_core:[^\]]+\].*client denied by server configuration: (.*)$`)
+var nginxAuthFailure = regexp.MustCompile(`user "[^"]+"(?: was not found in "[^"]+"|: password mismatch)`)
 var errorHost = regexp.MustCompile(`server: ([^,]*),`)
 
 func fieldsFrom(rx *regexp.Regexp, s string) map[string]string {
@@ -192,12 +193,19 @@ func parseError(body, raw, file string, n int64) (Event, bool, error) {
 	e.TimezoneUnknown = true
 	e.WallTime = ptr(wall)
 	e.LogType = "http_error-log"
-	e.AuthFailure = subType == "auth_fail" || strings.Contains(body, "password mismatch") || strings.Contains(body, "was not found in")
+	message := strings.SplitN(body, ", client: ", 2)[0]
+	e.AuthFailure = subType == "auth_fail" || nginxErrTime.MatchString(body) && nginxAuthFailure.MatchString(message)
 	if e.AuthFailure {
 		subType = "auth_fail"
 	}
-	if strings.Contains(body, "Invalid URI") {
+	if strings.Contains(body, "[core:") && strings.Contains(body, "Invalid URI") {
 		subType = "invalid_uri"
+	}
+	if nginxErrTime.MatchString(body) && strings.Contains(message, "limiting requests, excess") {
+		subType = "req_limit_exceeded"
+	}
+	if strings.Contains(body, "[ssl:") && strings.Contains(body, "SSL handshake stopped") {
+		subType = "ssl_handshake_stopped"
 	}
 	e.SubType = subType
 	if m := errorHost.FindStringSubmatch(body); m != nil && m[1] != "" {

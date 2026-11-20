@@ -188,7 +188,7 @@ func sourceField(e Event, s string) string {
 		_, frag, ext := sourceFile(req)
 		return frag + ext
 	case "evt.Parsed.http_user_agent":
-		return val(e.UA)
+		return sourceUA(e)
 	}
 	return ""
 }
@@ -204,6 +204,18 @@ func sourceGroup(e Event, s string) string {
 		return e.IP + "/" + host
 	}
 	return e.IP
+}
+func sourceUA(e Event) string {
+	if e.RecordedUA != nil {
+		return val(e.RecordedUA)
+	}
+	return val(e.UA)
+}
+func sourceReferer(e Event) string {
+	if e.RecordedReferer != nil {
+		return val(e.RecordedReferer)
+	}
+	return val(e.Referer)
 }
 func (u *Upstream) reset(key string) {
 	if b := u.buckets[key]; b != nil {
@@ -236,7 +248,7 @@ func (u *Upstream) Observe(e Event) {
 			}
 			tokens := b.tokens
 			if e.Time.After(b.last) {
-				tokens += e.Time.Sub(b.last).Seconds() / b.leak.Seconds()
+				tokens += e.Time.Sub(b.last).Seconds() * (1 / b.leak.Seconds())
 			}
 			if tokens+1e-9 >= float64(b.capacity) {
 				u.reset(key)
@@ -287,7 +299,7 @@ func (u *Upstream) Observe(e Event) {
 			u.warning("Upstream event time moved backwards; source bucket parity requires ordered input")
 		}
 		if leak > 0 && e.Time.After(b.last) {
-			b.tokens += e.Time.Sub(b.last).Seconds() / leak.Seconds()
+			b.tokens += e.Time.Sub(b.last).Seconds() * (1 / leak.Seconds())
 			if b.tokens > float64(r.Capacity) {
 				b.tokens = float64(r.Capacity)
 			}
@@ -366,6 +378,14 @@ func (u *Upstream) observeAura(e Event) {
 			}
 			if e.Time.After(*a.Last) {
 				a.Last = ptr(e.Time)
+			}
+		} else {
+			wall := e.Time.Format("2006-01-02T15:04:05.999999999")
+			if wall < a.WallFirst {
+				a.WallFirst = wall
+			}
+			if wall > a.WallLast {
+				a.WallLast = wall
 			}
 		}
 		if len(a.Events) < 8 {

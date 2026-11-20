@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"net"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -46,6 +47,55 @@ func TestAuraSourceGolden(t *testing.T) {
 		}
 	}
 }
+func TestAuraScannerSourceGolden(t *testing.T) {
+	var rows []struct {
+		UA    string
+		Match bool
+	}
+	b, err := os.ReadFile("testdata/upstream/aura-scanner-cases.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = json.Unmarshal(b, &rows); err != nil {
+		t.Fatal(err)
+	}
+	for _, row := range rows {
+		u := NewUpstream(Options{})
+		e := sourceEvent(0)
+		e.UA = ptr(row.UA)
+		u.Observe(e)
+		found := false
+		for _, a := range u.aura {
+			if a.RuleID == "scanner_ua" {
+				found = true
+			}
+		}
+		if found != row.Match {
+			t.Fatal("source UA result differs", row.UA)
+		}
+	}
+}
+func TestSourceLogLiteralShapes(t *testing.T) {
+	for _, file := range []string{"aura-parser-cases.json", "crowdsec-literal-cases.json"} {
+		var rows []struct {
+			Raw      string
+			Accepted bool
+		}
+		b, err := os.ReadFile("testdata/upstream/" + file)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err = json.Unmarshal(b, &rows); err != nil {
+			t.Fatal(err)
+		}
+		for i, row := range rows {
+			_, err := Parse(row.Raw, file, int64(i+1), "")
+			if (err == nil) != row.Accepted {
+				t.Errorf("%s:%d expected acceptance=%v error=%v", file, i+1, row.Accepted, err)
+			}
+		}
+	}
+}
 func TestAuraPythonCaseSemantics(t *testing.T) {
 	u := NewUpstream(Options{})
 	e := sourceEvent(0)
@@ -81,12 +131,21 @@ func TestSourceCaseAndMalformedRequestBoundaries(t *testing.T) {
 	if sourceMatch(rule("crowdsecurity/http-open-proxy"), e) {
 		t.Fatal("source proxy regexp is case-sensitive")
 	}
+	e.Target = "/Telerik.Web.UI.WebResource.axd?type=rau&x=%ZZ"
+	if !sourceMatch(rule("crowdsecurity/CVE-2019-18935"), e) {
+		t.Fatal("source QueryUnescape preserves the original on malformed escapes")
+	}
+	e.Target = "/?x=${url:UTF-8:a}&y=%ZZ"
+	if !sourceMatch(rule("crowdsecurity/CVE-2022-42889"), e) {
+		t.Fatal("source PathUnescape preserves the original on malformed escapes")
+	}
 	e, err := Parse(strings.Replace(common, "HTTP/1.1", "HTTP/garbage", 1), "a", 1, "")
 	if err != nil || !e.RequestMalformed || e.Protocol != nil {
 		t.Fatal("nonnumeric source protocol belongs to raw request", err)
 	}
 }
 func TestHubSourceGolden(t *testing.T) {
+	cases, actualTotal, expectedTotal, metadataChecks := 0, 0, 0, 0
 	var rows []struct {
 		Name              string
 		Group             string
@@ -111,6 +170,7 @@ func TestHubSourceGolden(t *testing.T) {
 			if row.Group != "apache_nginx" {
 				t.Skip("Requires another product's acquisition/parser; retained for an explicit scope record")
 			}
+			cases++
 			u := NewUpstream(Options{})
 			var paths []string
 			for _, f := range row.Files {
@@ -141,6 +201,8 @@ func TestHubSourceGolden(t *testing.T) {
 			if row.Count != nil && len(actual) != *row.Count {
 				t.Errorf("alert count %d want %d", len(actual), *row.Count)
 			}
+			actualTotal += len(actual)
+			expectedTotal += len(row.Alerts)
 			used := map[int]bool{}
 			for _, want := range row.Alerts {
 				found := -1
@@ -178,9 +240,26 @@ func TestHubSourceGolden(t *testing.T) {
 							got = e.LogType
 						case "http_args_len":
 							got = strconv.Itoa(len(sourceField(e, "evt.Parsed.http_args")))
+						case "cve", "target_technology":
+							got = a.Metadata[key]
+						case "sub_type":
+							got = e.SubType
+						case "http_user_agent":
+							got = sourceUA(e)
+						case "target_fqdn":
+							got = val(e.Host)
+							if host, _, err := net.SplitHostPort(got); err == nil {
+								got = host
+							}
+						case "timestamp":
+							if e.TimezoneUnknown {
+								continue
+							}
+							got = e.Time.Format(time.RFC3339Nano)
 						default:
 							continue
 						}
+						metadataChecks++
 						if got != value {
 							t.Errorf("%s event %d %s got %q want %q", want.Rule, i, key, got, value)
 						}
@@ -189,6 +268,7 @@ func TestHubSourceGolden(t *testing.T) {
 			}
 		})
 	}
+	t.Logf("Native scenario cases: %d; configured source alerts: %d; original asserted alerts: %d; original metadata checks: %d", cases, actualTotal, expectedTotal, metadataChecks)
 }
 func TestUpstreamMultiplicityAndGrouping(t *testing.T) {
 	u := NewUpstream(Options{})

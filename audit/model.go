@@ -7,6 +7,8 @@ const Version = "0.2.0"
 const RulesVersion = "2026.11.20.2"
 
 type Event struct {
+	RecordedUA        *string   `json:"recorded_user_agent,omitempty"`
+	RecordedReferer   *string   `json:"recorded_referer,omitempty"`
 	SourceRequest     *string   `json:"source_request,omitempty"`
 	SubType           string    `json:"sub_type,omitempty"`
 	RawRequest        *string   `json:"raw_request"`

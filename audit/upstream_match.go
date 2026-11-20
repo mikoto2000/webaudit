@@ -32,8 +32,14 @@ func makeSourceView(e Event) sourceView {
 	filename := frag + extension
 	ext := strings.TrimPrefix(extension, ".")
 	static := strings.Contains("|JPG|CSS|JS|JPEG|PNG|SVG|MAP|ICO|OTF|GIF|MP3|MP4|WOFF|WOFF2|TTF|EOT|WEBP|WAV|GZ|BROTLI|BVR|TS|BMP|AVIF|MJS|TGZ|", "|"+strings.ToUpper(ext)+"|") && ext != ""
-	qu, _ := url.QueryUnescape(full)
-	pu, _ := url.PathUnescape(full)
+	qu, err := url.QueryUnescape(full)
+	if err != nil {
+		qu = full
+	}
+	pu, err := url.PathUnescape(full)
+	if err != nil {
+		pu = full
+	}
 	return sourceView{full: full, req: req, args: args, lower: lower, upper: upper, dir: dir, frag: frag, filename: filename, ext: ext, qu: qu, pu: pu, static: static}
 }
 
@@ -167,7 +173,7 @@ func sourceMatchView(r SourceRule, e Event, v sourceView) bool {
 	id := r.ID[strings.IndexByte(r.ID, '/')+1:]
 	switch id {
 	case "apache_log4j2_cve-2021-44228":
-		return listContains("log4j2_cve_2021_44228.txt", full, true) || listContains("log4j2_cve_2021_44228.txt", val(e.UA), true) || listContains("log4j2_cve_2021_44228.txt", val(e.Referer), true)
+		return listContains("log4j2_cve_2021_44228.txt", full, true) || listContains("log4j2_cve_2021_44228.txt", sourceUA(e), true) || listContains("log4j2_cve_2021_44228.txt", sourceReferer(e), true)
 	case "CVE-2017-9841":
 		return access && strings.HasSuffix(lower, "util/php/eval-stdin.php")
 	case "CVE-2019-18935":
@@ -217,7 +223,7 @@ func sourceMatchView(r SourceRule, e Event, v sourceView) bool {
 	case "http-backdoors-attempts":
 		return listExact("backdoors.txt", filename)
 	case "http-bad-user-agent":
-		return matchPatterns(dataPatterns["bad_user_agents.regex.txt"], val(e.UA))
+		return matchPatterns(dataPatterns["bad_user_agents.regex.txt"], sourceUA(e))
 	case "http-bf-wordpress_bf":
 		return access && filename == "wp-login.php" && verb == "POST" && status == 200
 	case "http-bf-wordpress_bf_xmlrpc":

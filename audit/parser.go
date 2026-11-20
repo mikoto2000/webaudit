@@ -124,6 +124,12 @@ func uniqueObject(line string) (map[string]json.RawMessage, error) {
 }
 func eventFrom(f map[string]string, raw, file string, n int64) (Event, error) {
 	e := Event{File: file, Line: n, Raw: raw, IP: f["ip"], LogType: "http_access-log"}
+	if ua, ok := f["ua"]; ok {
+		e.RecordedUA = ptr(ua)
+	}
+	if ref, ok := f["referer"]; ok {
+		e.RecordedReferer = ptr(ref)
+	}
 	if _, err := netip.ParseAddr(e.IP); err != nil {
 		return e, fmt.Errorf("invalid/missing client IP (recognized time/request/status); hostnames and XFF not trusted")
 	}
@@ -138,7 +144,9 @@ func eventFrom(f map[string]string, raw, file string, n int64) (Event, error) {
 	if req := f["request"]; req != "" {
 		p := strings.Split(req, " ")
 		e.RawRequest = ptr(req)
-		if len(p) != 3 || !requestMethod.MatchString(p[0]) || p[1] == "" || !requestVersion.MatchString(p[2]) {
+		if len(p) == 2 && requestMethod.MatchString(p[0]) && p[1] != "" {
+			f["method"], f["target"] = p[0], p[1]
+		} else if len(p) != 3 || !requestMethod.MatchString(p[0]) || p[1] == "" || !requestVersion.MatchString(p[2]) {
 			e.RequestMalformed = true
 		} else {
 			f["method"], f["target"], f["protocol"] = p[0], p[1], p[2]

@@ -3,6 +3,9 @@
   "AuraDFIR_commit": "23d4ec28381b77a6080d3d883adfc43d6decdc5e",
   "files": {
     "aura-cases.json": "d87e87a30b156fbcff4d47837251a65c682982de980b50cbff7d429c8c1b5593",
+    "aura-parser-cases.json": "29c2590848f229bbbbcdce4fe394ca08eb275285c38e79f84cb9250f3f0e5d6b",
+    "aura-scanner-cases.json": "efa8ce537886d666d39784897b328e99bba7a6f6706f71a30d2c024051792d7e",
+    "crowdsec-literal-cases.json": "6699bdbe6056b3363af90a0dd636dbba0bc3aa7371d7e90ec3deda2dbc3dab50",
     "hub-cases.json": "da8153777d4fe50ef12a80bfbea304f123ab86c83f49ae918548bebdf1cc345e",
     "README.md": "c2ff2eaf203bc9e4a33fe8297d2e352f967392370a545e152bd5770b6bb794fd",
     "actual-budget-whitelist/actual-budget-logs.log": "02ff0cb7779240823e102adf77ee20e85ea7eb11b6405592002ced5728ed96ec",
