@@ -12,21 +12,26 @@ type GeoPeer struct {
 	Requests int64     `json:"requests"`
 }
 type GeoGroup struct {
-	Key        string   `json:"key"`
-	Name       string   `json:"name"`
-	Requests   int64    `json:"requests"`
-	Incidents  int      `json:"incidents"`
-	IPs        []string `json:"ips"`
-	Categories []string `json:"categories"`
-	MultiIP    bool     `json:"multiple_suspicious_ips"`
+	IPCount           int      `json:"ip_count"`
+	SuspiciousIPCount int      `json:"suspicious_ip_count"`
+	Key               string   `json:"key"`
+	Name              string   `json:"name"`
+	Requests          int64    `json:"requests"`
+	Incidents         int      `json:"incidents"`
+	IPs               []string `json:"ips"`
+	Categories        []string `json:"categories"`
+	MultiIP           bool     `json:"multiple_suspicious_ips"`
 }
 type GeoIPReport struct {
-	Databases []GeoDatabase `json:"databases"`
-	Peers     []GeoPeer     `json:"peers"`
-	Countries []GeoGroup    `json:"countries"`
-	ASNs      []GeoGroup    `json:"asns"`
-	Truncated bool          `json:"truncated"`
-	Context   string        `json:"context"`
+	Enabled               bool             `json:"enabled"`
+	Correlations          []GeoCorrelation `json:"correlations"`
+	CorrelationsTruncated bool             `json:"correlations_truncated"`
+	Databases             []GeoDatabase    `json:"databases"`
+	Peers                 []GeoPeer        `json:"peers"`
+	Countries             []GeoGroup       `json:"countries"`
+	ASNs                  []GeoGroup       `json:"asns"`
+	Truncated             bool             `json:"truncated"`
+	Context               string           `json:"context"`
 }
 type geoAnalysis struct {
 	g         *GeoIP
@@ -56,7 +61,7 @@ func (a *geoAnalysis) finish(r *Report) {
 	if a == nil {
 		return
 	}
-	out := &GeoIPReport{Databases: a.g.Metadata(), Truncated: a.truncated, Context: "Investigation context only: shared country or ASN does not establish a shared actor, an attack, or attack success. Counts cover retained parsed peers and WebAudit incidents; upstream alerts are separate. IP/category samples are limited to 64 per group; counts may be lower bounds when truncated."}
+	out := &GeoIPReport{Enabled: true, Databases: a.g.Metadata(), Truncated: a.truncated, Context: "Investigation context only: shared country or ASN does not establish a shared actor, an attack, or attack success. Counts cover retained parsed peers and WebAudit incidents; upstream alerts are separate. IP/category samples are limited to 64 per group; counts may be lower bounds when truncated."}
 	countries, asns := map[string]*GeoGroup{}, map[string]*GeoGroup{}
 	group := func(m map[string]*GeoGroup, key, name, ip string, requests int64, incident *Incident) {
 		row := m[key]
@@ -131,6 +136,8 @@ func (a *geoAnalysis) finish(r *Report) {
 	}
 	out.Countries = sorted(countries)
 	out.ASNs = sorted(asns)
+	populateGeoCounts(out, r.Findings)
+	out.Correlations, out.CorrelationsTruncated = geoSimilarities(r.Findings, a.max)
 	r.GeoIP = out
 	if a.truncated {
 		r.warn("GeoIP peer limit reached; request/country/ASN counts are lower bounds")
