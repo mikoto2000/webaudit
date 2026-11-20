@@ -62,7 +62,7 @@ func TestHTMLMissingFieldsAndZeroValues(t *testing.T) {
 			}
 			f.Evidence = []Evidence{{Event: e}}
 			var b bytes.Buffer
-			if err := WriteReport(&b, Report{Findings: []Incident{f}}, "html"); err != nil {
+			if err := WriteReportWithLanguage(&b, Report{Findings: []Incident{f}}, "html", "en"); err != nil {
 				t.Fatal(err)
 			}
 			s := b.String()

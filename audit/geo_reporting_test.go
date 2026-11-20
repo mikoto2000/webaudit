@@ -61,7 +61,11 @@ func TestGeoIPManagedMetadataInEveryReport(t *testing.T) {
 		if e = WriteReport(&b, r, format); e != nil {
 			t.Fatal(e)
 		}
-		for _, want := range []string{"2026-11", "1970-01-01", "64500", "found"} {
+		status := "found"
+		if format == "html" {
+			status = "取得済み"
+		}
+		for _, want := range []string{"2026-11", "1970-01-01", "64500", status} {
 			if !strings.Contains(b.String(), want) {
 				t.Fatalf("%s missing %s", format, want)
 			}

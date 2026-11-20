@@ -14,16 +14,38 @@ import (
 
 //go:embed report.html
 var htmlSource string
-var htmlReport = template.Must(template.New("report").Parse(htmlSource))
+var htmlReport = template.Must(template.New("report").Funcs(template.FuncMap{
+	"t":          func(v any) string { return fmt.Sprint(v) },
+	"lang":       func() string { return "ja" },
+	"diagnostic": func(v string) string { return v },
+	"outcome":    func(v string) string { return v },
+}).Parse(htmlSource))
 
 func WriteReport(w io.Writer, r Report, format string) error {
+	return WriteReportWithLanguage(w, r, format, "ja")
+}
+
+// WriteReportWithLanguage localizes only HTML. Machine reports and the console
+// summary retain their existing contents. An empty language defaults to Japanese.
+func WriteReportWithLanguage(w io.Writer, r Report, format, language string) error {
+	if language == "" {
+		language = "ja"
+	}
+	if language != "ja" && language != "en" {
+		return fmt.Errorf("--lang must be ja or en")
+	}
 	switch format {
 	case "json":
 		enc := json.NewEncoder(w)
 		enc.SetIndent("", "  ")
 		return enc.Encode(r)
 	case "html":
-		return htmlReport.Execute(w, r)
+		view, err := htmlReport.Clone()
+		if err != nil {
+			return err
+		}
+		tr := reportTranslator{language: language}
+		return view.Funcs(template.FuncMap{"t": tr.text, "lang": func() string { return language }, "diagnostic": tr.diagnostic, "outcome": tr.outcome}).Execute(w, r)
 	case "csv":
 		return writeCSV(w, r)
 	case "summary":
