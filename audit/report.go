@@ -27,7 +27,12 @@ func WriteReport(w io.Writer, r Report, format string) error {
 	case "csv":
 		return writeCSV(w, r)
 	case "summary":
-		return writeSummary(w, r)
+		var b strings.Builder
+		if err := writeSummary(&b, r); err != nil {
+			return err
+		}
+		_, err := io.WriteString(w, b.String())
+		return err
 	default:
 		return fmt.Errorf("unsupported report format %q", format)
 	}

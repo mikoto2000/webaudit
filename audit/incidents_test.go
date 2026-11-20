@@ -53,6 +53,7 @@ func TestOutcome(t *testing.T) {
 	}{
 		{"200 alone", []int{200}, "unknown"}, {"500", []int{500}, "unknown"}, {"302", []int{302}, "unknown"}, {"404 alone", []int{404}, "unknown"},
 		{"blocked", []int{403, 404, 403}, "likely_failed"}, {"possible exposure", []int{404, 200, 200}, "possible_success"},
+		{"mixed server error", []int{403, 404, 403, 500}, "unknown"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			c := NewCorrelator(Options{})

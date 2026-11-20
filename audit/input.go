@@ -11,14 +11,13 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-	"time"
 )
 
 var logName = regexp.MustCompile(`(?i)(\.log(?:\.[0-9]+)?(?:\.gz)?$|\.gz$|^access(?:\.[0-9]+)?$)`)
 
 func Stream(paths []string, options Options, consume func(Event)) Report {
 	o := options.defaults()
-	r := Report{Schema: "webaudit/1", Version: Version, RulesVersion: RulesVersion, AnalyzedAt: time.Now().UTC(), Missing: map[string]int64{}}
+	r := Report{Schema: "webaudit/1", Version: Version, RulesVersion: RulesVersion, AnalyzedAt: o.Now().UTC(), Missing: map[string]int64{}}
 	files := map[string]bool{}
 	for _, p := range paths {
 		abs, err := filepath.Abs(p)
@@ -41,7 +40,12 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 					return nil
 				}
 				if !d.IsDir() && d.Type().IsRegular() && logName.MatchString(d.Name()) {
-					files[path] = true
+					if len(files) < o.MaxKeys {
+						files[path] = true
+					} else {
+						r.warn("Input-file limit reached; directory coverage incomplete")
+						r.Partial = true
+					}
 				}
 				return nil
 			})
@@ -108,6 +112,7 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 		r.Files = append(r.Files, in)
 	}
 	if r.Unparsed > 0 {
+		r.Partial = true
 		r.warn("Unparsed lines reduce detection coverage; inspect file/line diagnostics and --log-regex")
 	}
 	r.warn("Request bodies and response contents are unavailable; authentication results and compromise cannot be verified")

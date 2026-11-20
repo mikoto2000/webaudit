@@ -1,0 +1,32 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      CGO_ENABLED: "0"
+      GOTOOLCHAIN: local
+      GOPROXY: "off"
+      GOSUMDB: "off"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version: "1.27.4"
+          cache: false
+      - run: go test ./...
+      - run: go vet ./...
+      - run: go run ./tools/evaluate
+      - run: go run ./cmd/webaudit --version
+      - run: go run ./cmd/webaudit examples/sample.log --format json
+      - if: runner.os == 'Linux'
+        run: go test ./audit -run='^$' -fuzz='^FuzzParse$' -fuzztime=5s -parallel=2

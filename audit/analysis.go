@@ -48,9 +48,10 @@ type window struct {
 	burst                             bool
 }
 type peer struct {
-	n, errors int64
-	bytes     float64
-	sample    Event
+	first, last                time.Time
+	n, errors, statusN, bytesN int64
+	bytes                      float64
+	sample                     Event
 }
 type baseline struct {
 	values []float64
@@ -89,10 +90,11 @@ func (a *Analysis) allow(n int) bool {
 	return true
 }
 func (a *Analysis) distinct(m map[string]bool, k string) {
+	k = digest(k)
 	if m[k] {
 		return
 	}
-	if len(m) >= 128 {
+	if len(m) >= 64 {
 		a.warn("Distinct-value limit reached; diversity counts are lower bounds")
 		return
 	}
@@ -106,7 +108,7 @@ func (a *Analysis) emit(id, desc string, e Event, n int64, reason string, start,
 		a.warn("Signal limit reached; findings are incomplete")
 		return
 	}
-	a.signals = append(a.signals, Signal{Rule: behaviorRule(id, desc), Event: e, Count: n, Reason: reason, Start: start, End: end})
+	a.signals = append(a.signals, Signal{Rule: behaviorRule(id, desc), Event: compactEvent(e), Count: n, Reason: reason, Start: start, End: end})
 }
 func (a *Analysis) Observe(e Event, hits []Rule) {
 	if !a.last.IsZero() && e.Time.Before(a.last) {
@@ -114,7 +116,7 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 	}
 	a.last = e.Time
 	host := val(e.Host)
-	key := e.IP + "\x00" + host
+	key := digest(e.IP + "\x00" + host)
 	// Two overlapping 5-minute partitions reduce boundary misses, while remaining
 	// deterministic for shuffled files. This is not an exact rolling window.
 	for _, shift := range []int64{0, 150} {
@@ -125,7 +127,7 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 			if !a.allow(len(a.windows)) {
 				continue
 			}
-			w = &window{paths: map[string]bool{}, uas: map[string]bool{}, categories: map[string]bool{}, sensitive: map[string]bool{}, sample: e, first: e.Time, last: e.Time, leak: Leaky{Capacity: 300, LeakEvery: time.Second}}
+			w = &window{paths: map[string]bool{}, uas: map[string]bool{}, categories: map[string]bool{}, sensitive: map[string]bool{}, sample: compactEvent(e), first: e.Time, last: e.Time, leak: Leaky{Capacity: 300, LeakEvery: time.Second}}
 			a.windows[wk] = w
 		}
 		w.n++
@@ -161,11 +163,23 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 	}
 	p := a.ips[key]
 	if p == nil && a.allow(len(a.ips)) {
-		p = &peer{sample: e}
+		p = &peer{sample: compactEvent(e), first: e.Time, last: e.Time}
 		a.ips[key] = p
 	}
 	if p != nil {
 		p.n++
+		if e.Time.Before(p.first) {
+			p.first = e.Time
+		}
+		if e.Time.After(p.last) {
+			p.last = e.Time
+		}
+		if e.Status != nil {
+			p.statusN++
+		}
+		if e.Bytes != nil {
+			p.bytesN++
+		}
 		if val(e.Status) >= 400 {
 			p.errors++
 		}
@@ -174,18 +188,25 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 	hour := e.Time.Unix() / 3600
 	hp := a.hours[hour]
 	if hp == nil && a.allow(len(a.hours)) {
-		hp = &peer{sample: e}
+		hp = &peer{sample: compactEvent(e), first: e.Time, last: e.Time}
 		a.hours[hour] = hp
 	}
 	if hp != nil {
 		hp.n++
+		if e.Time.Before(hp.first) {
+			hp.first = e.Time
+		}
+		if e.Time.After(hp.last) {
+			hp.last = e.Time
+		}
 	}
 	if e.Bytes != nil && e.Status != nil {
 		value := float64(*e.Bytes)
 		uk := host + "\x00" + val(e.Method) + "\x00" + e.Path + "\x00" + strconv.Itoa(*e.Status)
+		uk = digest(uk)
 		b := a.urls[uk]
 		if b == nil && a.allow(len(a.urls)) {
-			b = &baseline{sample: e}
+			b = &baseline{sample: compactEvent(e)}
 			a.urls[uk] = b
 		}
 		if b != nil {
@@ -245,7 +266,7 @@ func (a *Analysis) Finish() []Signal {
 	for _, k := range keys {
 		w := a.windows[k]
 		emit := func(id, desc string, n int64) {
-			a.emit(id, desc, w.sample, n, fmt.Sprintf("%d observations in overlapping five-minute event-time window; diversity bounded at 128", n), w.first, w.last)
+			a.emit(id, desc, w.sample, n, fmt.Sprintf("%d observations in overlapping five-minute event-time window; diversity bounded at 64", n), w.first, w.last)
 		}
 		if w.n404 >= 20 {
 			emit("WB-404", "Concentrated HTTP 404 responses", w.n404)
@@ -278,9 +299,11 @@ func (a *Analysis) Finish() []Signal {
 	var counts, rates, bytes []float64
 	for _, p := range a.ips {
 		counts = append(counts, float64(p.n))
-		bytes = append(bytes, p.bytes)
-		if p.n >= 20 {
-			rates = append(rates, float64(p.errors)/float64(p.n))
+		if p.bytesN == p.n {
+			bytes = append(bytes, p.bytes)
+		}
+		if p.statusN >= 20 {
+			rates = append(rates, float64(p.errors)/float64(p.statusN))
 		}
 	}
 	keys = keys[:0]
@@ -290,11 +313,11 @@ func (a *Analysis) Finish() []Signal {
 	sort.Strings(keys)
 	for _, k := range keys {
 		p := a.ips[k]
-		if isOutlier(float64(p.n), counts, 100, 5) || isOutlier(p.bytes, bytes, 1<<20, 10) {
-			a.emit("WS-ip", "IP request/byte volume peer outlier", p.sample, p.n, "At least 20 peer groups; robust median/MAD and minimum effect size; not proof of exfiltration", p.sample.Time, p.sample.Time)
+		if isOutlier(float64(p.n), counts, 100, 5) || (p.bytesN == p.n && isOutlier(p.bytes, bytes, 1<<20, 10)) {
+			a.emit("WS-ip", "IP request/byte volume peer outlier", p.sample, p.n, "At least 20 peer groups; robust median/MAD and minimum effect size; not proof of exfiltration", p.first, p.last)
 		}
-		if p.n >= 20 && isOutlier(float64(p.errors)/float64(p.n), rates, 0.5, 3) {
-			a.emit("WS-errors", "IP HTTP-error-rate peer outlier", p.sample, p.n, "At least 20 requests per peer and 20 peers; >0.5 rate difference plus robust threshold", p.sample.Time, p.sample.Time)
+		if p.statusN >= 20 && isOutlier(float64(p.errors)/float64(p.statusN), rates, 0.5, 3) {
+			a.emit("WS-errors", "IP HTTP-error-rate peer outlier", p.sample, p.n, "At least 20 requests per peer and 20 peers; >0.5 rate difference plus robust threshold", p.first, p.last)
 		}
 	}
 	if len(a.hours) >= 2 {
@@ -319,7 +342,7 @@ func (a *Analysis) Finish() []Signal {
 			for h := lo; h <= hi; h++ {
 				p := a.hours[h]
 				if p != nil && isOutlier(float64(p.n), baseline, 100, 5) {
-					a.emit("WS-hour", "Hourly traffic peer outlier", p.sample, p.n, "Observed hours including zero bins; >=20 bins; robust threshold, +100 requests and 5x median", p.sample.Time, p.sample.Time)
+					a.emit("WS-hour", "Hourly traffic peer outlier", p.sample, p.n, "Observed hours including zero bins; >=20 bins; robust threshold, +100 requests and 5x median", p.first, p.last)
 				}
 			}
 		} else {

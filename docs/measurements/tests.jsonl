@@ -1,0 +1,362 @@
+{"Time":"2026-11-20T15:22:19.1263963+09:00","Action":"start","Package":"webaudit/audit"}
+{"Time":"2026-11-20T15:22:19.1263963+09:00","Action":"start","Package":"webaudit/cmd/webaudit"}
+{"Time":"2026-11-20T15:22:19.1263963+09:00","Action":"start","Package":"webaudit/tools/benchmark"}
+{"Time":"2026-11-20T15:22:19.1263963+09:00","Action":"output","Package":"webaudit/tools/benchmark","Output":"?   \twebaudit/tools/benchmark\t[no test files]\n"}
+{"Time":"2026-11-20T15:22:19.1263963+09:00","Action":"skip","Package":"webaudit/tools/benchmark","Elapsed":0}
+{"Time":"2026-11-20T15:22:19.1263963+09:00","Action":"start","Package":"webaudit/tools/evaluate"}
+{"Time":"2026-11-20T15:22:19.1269221+09:00","Action":"output","Package":"webaudit/tools/evaluate","Output":"?   \twebaudit/tools/evaluate\t[no test files]\n"}
+{"Time":"2026-11-20T15:22:19.1269221+09:00","Action":"skip","Package":"webaudit/tools/evaluate","Elapsed":0.001}
+{"Time":"2026-11-20T15:22:19.7822363+09:00","Action":"run","Package":"webaudit/cmd/webaudit","Test":"TestCLI"}
+{"Time":"2026-11-20T15:22:19.7822363+09:00","Action":"output","Package":"webaudit/cmd/webaudit","Test":"TestCLI","Output":"=== RUN   TestCLI\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:19.9201483+09:00","Action":"output","Package":"webaudit/cmd/webaudit","Test":"TestCLI","Output":"--- PASS: TestCLI (0.14s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:19.9201483+09:00","Action":"pass","Package":"webaudit/cmd/webaudit","Test":"TestCLI","Elapsed":0.14}
+{"Time":"2026-11-20T15:22:19.9201483+09:00","Action":"output","Package":"webaudit/cmd/webaudit","Output":"PASS\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:19.9217499+09:00","Action":"output","Package":"webaudit/cmd/webaudit","Output":"ok  \twebaudit/cmd/webaudit\t0.795s\n"}
+{"Time":"2026-11-20T15:22:19.9217499+09:00","Action":"pass","Package":"webaudit/cmd/webaudit","Elapsed":0.795}
+{"Time":"2026-11-20T15:22:20.398235+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior"}
+{"Time":"2026-11-20T15:22:20.398746+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior","Output":"=== RUN   TestBehavior\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.398746+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/404"}
+{"Time":"2026-11-20T15:22:20.398746+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/404","Output":"=== RUN   TestBehavior/404\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.398746+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/404","Output":"--- PASS: TestBehavior/404 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.398746+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/404","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.398746+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/authorization"}
+{"Time":"2026-11-20T15:22:20.398746+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/authorization","Output":"=== RUN   TestBehavior/authorization\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.3992895+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/authorization","Output":"--- PASS: TestBehavior/authorization (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.3992895+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/authorization","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.3992895+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/login"}
+{"Time":"2026-11-20T15:22:20.3992895+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/login","Output":"=== RUN   TestBehavior/login\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.3992895+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/login","Output":"--- PASS: TestBehavior/login (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.3992895+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/login","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.3992895+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/rate"}
+{"Time":"2026-11-20T15:22:20.3992895+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/rate","Output":"=== RUN   TestBehavior/rate\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/rate","Output":"--- PASS: TestBehavior/rate (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/rate","Elapsed":0.01}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/paths"}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/paths","Output":"=== RUN   TestBehavior/paths\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/paths","Output":"--- PASS: TestBehavior/paths (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/paths","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/sensitive"}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/sensitive","Output":"=== RUN   TestBehavior/sensitive\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/sensitive","Output":"--- PASS: TestBehavior/sensitive (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/sensitive","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/ua"}
+{"Time":"2026-11-20T15:22:20.406643+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/ua","Output":"=== RUN   TestBehavior/ua\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/ua","Output":"--- PASS: TestBehavior/ua (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/ua","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBehavior/categories"}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/categories","Output":"=== RUN   TestBehavior/categories\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior/categories","Output":"--- PASS: TestBehavior/categories (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior/categories","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBehavior","Output":"--- PASS: TestBehavior (0.01s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBehavior","Elapsed":0.01}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"run","Package":"webaudit/audit","Test":"TestLeaky"}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"output","Package":"webaudit/audit","Test":"TestLeaky","Output":"=== RUN   TestLeaky\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"output","Package":"webaudit/audit","Test":"TestLeaky","Output":"--- PASS: TestLeaky (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestLeaky","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"run","Package":"webaudit/audit","Test":"TestStatistics"}
+{"Time":"2026-11-20T15:22:20.4071602+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStatistics","Output":"=== RUN   TestStatistics\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4102787+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStatistics","Output":"--- PASS: TestStatistics (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4102787+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestStatistics","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4102787+09:00","Action":"run","Package":"webaudit/audit","Test":"TestAnalysisBoundsAndReorder"}
+{"Time":"2026-11-20T15:22:20.4102787+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAnalysisBoundsAndReorder","Output":"=== RUN   TestAnalysisBoundsAndReorder\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4102787+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAnalysisBoundsAndReorder","Output":"--- PASS: TestAnalysisBoundsAndReorder (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4102787+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestAnalysisBoundsAndReorder","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4102787+09:00","Action":"run","Package":"webaudit/audit","Test":"TestHubAdaptationCoverage"}
+{"Time":"2026-11-20T15:22:20.4102787+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubAdaptationCoverage","Output":"=== RUN   TestHubAdaptationCoverage\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestHubAdaptationCoverage","Output":"--- PASS: TestHubAdaptationCoverage (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestHubAdaptationCoverage","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"run","Package":"webaudit/audit","Test":"TestDuplicateJSONFieldsRejected"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestDuplicateJSONFieldsRejected","Output":"=== RUN   TestDuplicateJSONFieldsRejected\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestDuplicateJSONFieldsRejected","Output":"--- PASS: TestDuplicateJSONFieldsRejected (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestDuplicateJSONFieldsRejected","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"run","Package":"webaudit/audit","Test":"TestCorrelation"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestCorrelation","Output":"=== RUN   TestCorrelation\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestCorrelation","Output":"--- PASS: TestCorrelation (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestCorrelation","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome","Output":"=== RUN   TestOutcome\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/200_alone"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/200_alone","Output":"=== RUN   TestOutcome/200_alone\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/200_alone","Output":"--- PASS: TestOutcome/200_alone (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/200_alone","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/500"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/500","Output":"=== RUN   TestOutcome/500\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/500","Output":"--- PASS: TestOutcome/500 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/500","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/302"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/302","Output":"=== RUN   TestOutcome/302\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/302","Output":"--- PASS: TestOutcome/302 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4108163+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/302","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/404_alone"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/404_alone","Output":"=== RUN   TestOutcome/404_alone\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/404_alone","Output":"--- PASS: TestOutcome/404_alone (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/404_alone","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/blocked"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/blocked","Output":"=== RUN   TestOutcome/blocked\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/blocked","Output":"--- PASS: TestOutcome/blocked (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/blocked","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/possible_exposure"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/possible_exposure","Output":"=== RUN   TestOutcome/possible_exposure\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/possible_exposure","Output":"--- PASS: TestOutcome/possible_exposure (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/possible_exposure","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"run","Package":"webaudit/audit","Test":"TestOutcome/mixed_server_error"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/mixed_server_error","Output":"=== RUN   TestOutcome/mixed_server_error\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome/mixed_server_error","Output":"--- PASS: TestOutcome/mixed_server_error (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome/mixed_server_error","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"output","Package":"webaudit/audit","Test":"TestOutcome","Output":"--- PASS: TestOutcome (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestOutcome","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"run","Package":"webaudit/audit","Test":"TestEvidenceBounds"}
+{"Time":"2026-11-20T15:22:20.4113759+09:00","Action":"output","Package":"webaudit/audit","Test":"TestEvidenceBounds","Output":"=== RUN   TestEvidenceBounds\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4118994+09:00","Action":"output","Package":"webaudit/audit","Test":"TestEvidenceBounds","Output":"--- PASS: TestEvidenceBounds (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.4118994+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestEvidenceBounds","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.4118994+09:00","Action":"run","Package":"webaudit/audit","Test":"TestAnalyzeDedup"}
+{"Time":"2026-11-20T15:22:20.4118994+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAnalyzeDedup","Output":"=== RUN   TestAnalyzeDedup\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestAnalyzeDedup","Output":"--- PASS: TestAnalyzeDedup (0.42s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestAnalyzeDedup","Elapsed":0.42}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse","Output":"=== RUN   TestParse\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/common"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/common","Output":"=== RUN   TestParse/common\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/common","Output":"--- PASS: TestParse/common (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/common","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/combined"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/combined","Output":"=== RUN   TestParse/combined\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/combined","Output":"--- PASS: TestParse/combined (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/combined","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/vhost"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/vhost","Output":"=== RUN   TestParse/vhost\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/vhost","Output":"--- PASS: TestParse/vhost (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/vhost","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/ipv6"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/ipv6","Output":"=== RUN   TestParse/ipv6\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/ipv6","Output":"--- PASS: TestParse/ipv6 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/ipv6","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/unknown_suffix"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/unknown_suffix","Output":"=== RUN   TestParse/unknown_suffix\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/unknown_suffix","Output":"--- PASS: TestParse/unknown_suffix (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/unknown_suffix","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/invalid_IP"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/invalid_IP","Output":"=== RUN   TestParse/invalid_IP\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/invalid_IP","Output":"--- PASS: TestParse/invalid_IP (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/invalid_IP","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/invalid_status"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/invalid_status","Output":"=== RUN   TestParse/invalid_status\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/invalid_status","Output":"--- PASS: TestParse/invalid_status (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/invalid_status","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/malformed"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/malformed","Output":"=== RUN   TestParse/malformed\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/malformed","Output":"--- PASS: TestParse/malformed (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/malformed","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestParse/json"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/json","Output":"=== RUN   TestParse/json\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse/json","Output":"--- PASS: TestParse/json (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse/json","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestParse","Output":"--- PASS: TestParse (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestParse","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestCustomParser"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestCustomParser","Output":"=== RUN   TestCustomParser\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestCustomParser","Output":"--- PASS: TestCustomParser (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestCustomParser","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"run","Package":"webaudit/audit","Test":"TestStream"}
+{"Time":"2026-11-20T15:22:20.8365784+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStream","Output":"=== RUN   TestStream\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8965253+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStream","Output":"--- PASS: TestStream (0.06s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.8965253+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestStream","Elapsed":0.06}
+{"Time":"2026-11-20T15:22:20.8965253+09:00","Action":"run","Package":"webaudit/audit","Test":"TestBadUTF8AndRecovery"}
+{"Time":"2026-11-20T15:22:20.8965253+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBadUTF8AndRecovery","Output":"=== RUN   TestBadUTF8AndRecovery\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"output","Package":"webaudit/audit","Test":"TestBadUTF8AndRecovery","Output":"--- PASS: TestBadUTF8AndRecovery (0.10s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestBadUTF8AndRecovery","Elapsed":0.1}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"run","Package":"webaudit/audit","Test":"TestProtocolAllowlist"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"output","Package":"webaudit/audit","Test":"TestProtocolAllowlist","Output":"=== RUN   TestProtocolAllowlist\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"output","Package":"webaudit/audit","Test":"TestProtocolAllowlist","Output":"--- PASS: TestProtocolAllowlist (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestProtocolAllowlist","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"run","Package":"webaudit/audit","Test":"TestClockInjection"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"output","Package":"webaudit/audit","Test":"TestClockInjection","Output":"=== RUN   TestClockInjection\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"output","Package":"webaudit/audit","Test":"TestClockInjection","Output":"--- PASS: TestClockInjection (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestClockInjection","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"run","Package":"webaudit/audit","Test":"TestEvidenceBudget"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"output","Package":"webaudit/audit","Test":"TestEvidenceBudget","Output":"=== RUN   TestEvidenceBudget\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"output","Package":"webaudit/audit","Test":"TestEvidenceBudget","Output":"--- PASS: TestEvidenceBudget (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestEvidenceBudget","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"run","Package":"webaudit/audit","Test":"TestMissingStatusIsNotZeroErrorBaseline"}
+{"Time":"2026-11-20T15:22:20.9989704+09:00","Action":"output","Package":"webaudit/audit","Test":"TestMissingStatusIsNotZeroErrorBaseline","Output":"=== RUN   TestMissingStatusIsNotZeroErrorBaseline\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.9994943+09:00","Action":"output","Package":"webaudit/audit","Test":"TestMissingStatusIsNotZeroErrorBaseline","Output":"--- PASS: TestMissingStatusIsNotZeroErrorBaseline (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:20.9994943+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestMissingStatusIsNotZeroErrorBaseline","Elapsed":0}
+{"Time":"2026-11-20T15:22:20.9994943+09:00","Action":"run","Package":"webaudit/audit","Test":"TestStatisticalPeriod"}
+{"Time":"2026-11-20T15:22:20.9994943+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStatisticalPeriod","Output":"=== RUN   TestStatisticalPeriod\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0000209+09:00","Action":"output","Package":"webaudit/audit","Test":"TestStatisticalPeriod","Output":"--- PASS: TestStatisticalPeriod (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0000209+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestStatisticalPeriod","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0000209+09:00","Action":"run","Package":"webaudit/audit","Test":"TestReports"}
+{"Time":"2026-11-20T15:22:21.0000209+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports","Output":"=== RUN   TestReports\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0000209+09:00","Action":"run","Package":"webaudit/audit","Test":"TestReports/html"}
+{"Time":"2026-11-20T15:22:21.0000209+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/html","Output":"=== RUN   TestReports/html\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0005618+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/html","Output":"--- PASS: TestReports/html (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0005618+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestReports/html","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0005618+09:00","Action":"run","Package":"webaudit/audit","Test":"TestReports/json"}
+{"Time":"2026-11-20T15:22:21.0005618+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/json","Output":"=== RUN   TestReports/json\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/json","Output":"--- PASS: TestReports/json (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestReports/json","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"run","Package":"webaudit/audit","Test":"TestReports/csv"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/csv","Output":"=== RUN   TestReports/csv\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/csv","Output":"--- PASS: TestReports/csv (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestReports/csv","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"run","Package":"webaudit/audit","Test":"TestReports/summary"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/summary","Output":"=== RUN   TestReports/summary\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports/summary","Output":"--- PASS: TestReports/summary (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestReports/summary","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"output","Package":"webaudit/audit","Test":"TestReports","Output":"--- PASS: TestReports (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestReports","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"run","Package":"webaudit/audit","Test":"TestLogEscapeNormalization"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"output","Package":"webaudit/audit","Test":"TestLogEscapeNormalization","Output":"=== RUN   TestLogEscapeNormalization\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"output","Package":"webaudit/audit","Test":"TestLogEscapeNormalization","Output":"--- PASS: TestLogEscapeNormalization (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestLogEscapeNormalization","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"run","Package":"webaudit/audit","Test":"TestRetentionBounds"}
+{"Time":"2026-11-20T15:22:21.0011725+09:00","Action":"output","Package":"webaudit/audit","Test":"TestRetentionBounds","Output":"=== RUN   TestRetentionBounds\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0370603+09:00","Action":"output","Package":"webaudit/audit","Test":"TestRetentionBounds","Output":"--- PASS: TestRetentionBounds (0.04s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0375638+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestRetentionBounds","Elapsed":0.04}
+{"Time":"2026-11-20T15:22:21.0375638+09:00","Action":"run","Package":"webaudit/audit","Test":"TestUnrecognizedInputIsPartial"}
+{"Time":"2026-11-20T15:22:21.0375638+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUnrecognizedInputIsPartial","Output":"=== RUN   TestUnrecognizedInputIsPartial\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0799245+09:00","Action":"output","Package":"webaudit/audit","Test":"TestUnrecognizedInputIsPartial","Output":"--- PASS: TestUnrecognizedInputIsPartial (0.04s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0799245+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestUnrecognizedInputIsPartial","Elapsed":0.04}
+{"Time":"2026-11-20T15:22:21.0799245+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSummaryWriteErrors"}
+{"Time":"2026-11-20T15:22:21.0799245+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSummaryWriteErrors","Output":"=== RUN   TestSummaryWriteErrors\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0799245+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSummaryWriteErrors","Output":"--- PASS: TestSummaryWriteErrors (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0799245+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSummaryWriteErrors","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0799245+09:00","Action":"run","Package":"webaudit/audit","Test":"TestGzipCRCAndBombLimit"}
+{"Time":"2026-11-20T15:22:21.0799245+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGzipCRCAndBombLimit","Output":"=== RUN   TestGzipCRCAndBombLimit\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestGzipCRCAndBombLimit","Output":"--- PASS: TestGzipCRCAndBombLimit (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestGzipCRCAndBombLimit","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"run","Package":"webaudit/audit","Test":"TestNormalize"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestNormalize","Output":"=== RUN   TestNormalize\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestNormalize","Output":"--- PASS: TestNormalize (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestNormalize","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures","Output":"=== RUN   TestSignatures\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/sqli"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sqli","Output":"=== RUN   TestSignatures/sqli\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sqli","Output":"--- PASS: TestSignatures/sqli (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/sqli","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/nosqli"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/nosqli","Output":"=== RUN   TestSignatures/nosqli\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/nosqli","Output":"--- PASS: TestSignatures/nosqli (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/nosqli","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/command_injection"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/command_injection","Output":"=== RUN   TestSignatures/command_injection\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/command_injection","Output":"--- PASS: TestSignatures/command_injection (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/command_injection","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/shellshock"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/shellshock","Output":"=== RUN   TestSignatures/shellshock\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/shellshock","Output":"--- PASS: TestSignatures/shellshock (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/shellshock","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/ssti"}
+{"Time":"2026-11-20T15:22:21.0841019+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ssti","Output":"=== RUN   TestSignatures/ssti\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ssti","Output":"--- PASS: TestSignatures/ssti (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/ssti","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/ldap_injection"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ldap_injection","Output":"=== RUN   TestSignatures/ldap_injection\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ldap_injection","Output":"--- PASS: TestSignatures/ldap_injection (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/ldap_injection","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/xpath_injection"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xpath_injection","Output":"=== RUN   TestSignatures/xpath_injection\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xpath_injection","Output":"--- PASS: TestSignatures/xpath_injection (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/xpath_injection","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/xss"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xss","Output":"=== RUN   TestSignatures/xss\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xss","Output":"--- PASS: TestSignatures/xss (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/xss","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/lfi_traversal"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/lfi_traversal","Output":"=== RUN   TestSignatures/lfi_traversal\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/lfi_traversal","Output":"--- PASS: TestSignatures/lfi_traversal (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/lfi_traversal","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/rfi"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/rfi","Output":"=== RUN   TestSignatures/rfi\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/rfi","Output":"--- PASS: TestSignatures/rfi (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/rfi","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/ssrf"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ssrf","Output":"=== RUN   TestSignatures/ssrf\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/ssrf","Output":"--- PASS: TestSignatures/ssrf (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/ssrf","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/xxe"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xxe","Output":"=== RUN   TestSignatures/xxe\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/xxe","Output":"--- PASS: TestSignatures/xxe (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/xxe","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/deserialization"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/deserialization","Output":"=== RUN   TestSignatures/deserialization\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/deserialization","Output":"--- PASS: TestSignatures/deserialization (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/deserialization","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/webshell"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/webshell","Output":"=== RUN   TestSignatures/webshell\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/webshell","Output":"--- PASS: TestSignatures/webshell (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/webshell","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/log4shell"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/log4shell","Output":"=== RUN   TestSignatures/log4shell\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/log4shell","Output":"--- PASS: TestSignatures/log4shell (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/log4shell","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/spring4shell"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/spring4shell","Output":"=== RUN   TestSignatures/spring4shell\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/spring4shell","Output":"--- PASS: TestSignatures/spring4shell (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/spring4shell","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/struts_ognl"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/struts_ognl","Output":"=== RUN   TestSignatures/struts_ognl\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/struts_ognl","Output":"--- PASS: TestSignatures/struts_ognl (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/struts_ognl","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/crlf_injection"}
+{"Time":"2026-11-20T15:22:21.0846223+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/crlf_injection","Output":"=== RUN   TestSignatures/crlf_injection\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/crlf_injection","Output":"--- PASS: TestSignatures/crlf_injection (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/crlf_injection","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/open_redirect"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/open_redirect","Output":"=== RUN   TestSignatures/open_redirect\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/open_redirect","Output":"--- PASS: TestSignatures/open_redirect (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/open_redirect","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/access_bypass"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/access_bypass","Output":"=== RUN   TestSignatures/access_bypass\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/access_bypass","Output":"--- PASS: TestSignatures/access_bypass (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/access_bypass","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file","Output":"=== RUN   TestSignatures/sensitive_file\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file","Output":"--- PASS: TestSignatures/sensitive_file (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file#01"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file#01","Output":"=== RUN   TestSignatures/sensitive_file#01\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file#01","Output":"--- PASS: TestSignatures/sensitive_file#01 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/sensitive_file#01","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/cve_probe"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/cve_probe","Output":"=== RUN   TestSignatures/cve_probe\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/cve_probe","Output":"--- PASS: TestSignatures/cve_probe (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/cve_probe","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/null_byte"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/null_byte","Output":"=== RUN   TestSignatures/null_byte\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/null_byte","Output":"--- PASS: TestSignatures/null_byte (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/null_byte","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/cve_probe#01"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/cve_probe#01","Output":"=== RUN   TestSignatures/cve_probe#01\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/cve_probe#01","Output":"--- PASS: TestSignatures/cve_probe#01 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/cve_probe#01","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/iis_aspnet"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/iis_aspnet","Output":"=== RUN   TestSignatures/iis_aspnet\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/iis_aspnet","Output":"--- PASS: TestSignatures/iis_aspnet (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/iis_aspnet","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestSignatures/recon_probe"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/recon_probe","Output":"=== RUN   TestSignatures/recon_probe\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures/recon_probe","Output":"--- PASS: TestSignatures/recon_probe (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures/recon_probe","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestSignatures","Output":"--- PASS: TestSignatures (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestSignatures","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"TestRulesUnique"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestRulesUnique","Output":"=== RUN   TestRulesUnique\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"TestRulesUnique","Output":"--- PASS: TestRulesUnique (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"pass","Package":"webaudit/audit","Test":"TestRulesUnique","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"FuzzParse"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse","Output":"=== RUN   FuzzParse\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"run","Package":"webaudit/audit","Test":"FuzzParse/seed#0"}
+{"Time":"2026-11-20T15:22:21.0851387+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse/seed#0","Output":"=== RUN   FuzzParse/seed#0\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0856545+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse/seed#0","Output":"--- PASS: FuzzParse/seed#0 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0856545+09:00","Action":"pass","Package":"webaudit/audit","Test":"FuzzParse/seed#0","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0856545+09:00","Action":"run","Package":"webaudit/audit","Test":"FuzzParse/seed#1"}
+{"Time":"2026-11-20T15:22:21.0856545+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse/seed#1","Output":"=== RUN   FuzzParse/seed#1\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0856545+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse/seed#1","Output":"--- PASS: FuzzParse/seed#1 (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0856545+09:00","Action":"pass","Package":"webaudit/audit","Test":"FuzzParse/seed#1","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0856545+09:00","Action":"output","Package":"webaudit/audit","Test":"FuzzParse","Output":"--- PASS: FuzzParse (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0856545+09:00","Action":"pass","Package":"webaudit/audit","Test":"FuzzParse","Elapsed":0}
+{"Time":"2026-11-20T15:22:21.0856545+09:00","Action":"output","Package":"webaudit/audit","Output":"PASS\n","OutputType":"frame"}
+{"Time":"2026-11-20T15:22:21.0932386+09:00","Action":"output","Package":"webaudit/audit","Output":"ok  \twebaudit/audit\t1.967s\n"}
+{"Time":"2026-11-20T15:22:21.0932386+09:00","Action":"pass","Package":"webaudit/audit","Elapsed":1.967}

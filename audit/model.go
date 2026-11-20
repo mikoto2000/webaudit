@@ -7,28 +7,31 @@ const Version = "0.1.0"
 const RulesVersion = "2026.11.20.1"
 
 type Event struct {
-	Time     time.Time `json:"time"`
-	IP       string    `json:"ip"`
-	Host     *string   `json:"host"`
-	Method   *string   `json:"method"`
-	Target   string    `json:"target"`
-	Path     string    `json:"path"`
-	Query    *string   `json:"query"`
-	Protocol *string   `json:"protocol"`
-	Status   *int      `json:"status"`
-	Bytes    *int64    `json:"bytes"`
-	UA       *string   `json:"user_agent"`
-	Referer  *string   `json:"referer"`
-	File     string    `json:"file"`
-	Line     int64     `json:"line"`
-	Raw      string    `json:"raw"`
+	EvidenceTruncated bool      `json:"evidence_truncated,omitempty"`
+	Time              time.Time `json:"time"`
+	IP                string    `json:"ip"`
+	Host              *string   `json:"host"`
+	Method            *string   `json:"method"`
+	Target            string    `json:"target"`
+	Path              string    `json:"path"`
+	Query             *string   `json:"query"`
+	Protocol          *string   `json:"protocol"`
+	Status            *int      `json:"status"`
+	Bytes             *int64    `json:"bytes"`
+	UA                *string   `json:"user_agent"`
+	Referer           *string   `json:"referer"`
+	File              string    `json:"file"`
+	Line              int64     `json:"line"`
+	Raw               string    `json:"raw"`
 }
 type Options struct {
-	MaxLineBytes int
-	MaxFileBytes int64
-	MaxKeys      int
-	MaxFindings  int
-	LogRegex     string
+	Now              func() time.Time
+	MaxEvidenceBytes int
+	MaxLineBytes     int
+	MaxFileBytes     int64
+	MaxKeys          int
+	MaxFindings      int
+	LogRegex         string
 }
 
 func (o Options) defaults() Options {
@@ -43,6 +46,12 @@ func (o Options) defaults() Options {
 	}
 	if o.MaxFindings <= 0 {
 		o.MaxFindings = 2000
+	}
+	if o.Now == nil {
+		o.Now = time.Now
+	}
+	if o.MaxEvidenceBytes <= 0 {
+		o.MaxEvidenceBytes = 32 << 20
 	}
 	return o
 }

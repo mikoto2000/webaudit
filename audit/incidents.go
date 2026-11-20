@@ -45,9 +45,10 @@ type resource struct {
 	goodAt    []time.Time
 }
 type Correlator struct {
-	o        Options
-	items    map[string]*Incident
-	warnings []string
+	o             Options
+	items         map[string]*Incident
+	warnings      []string
+	evidenceBytes int
 }
 
 func NewCorrelator(o Options) *Correlator {
@@ -69,17 +70,16 @@ func family(r Rule) string {
 }
 func (c *Correlator) get(e Event, group string) *Incident {
 	key := e.IP + "\x00" + val(e.Host) + "\x00" + val(e.UA) + "\x00" + group + "\x00" + strconv.FormatInt(e.Time.Unix()/300, 10)
+	key = digest(key)
 	if f := c.items[key]; f != nil {
 		return f
 	}
 	if len(c.items) >= c.o.MaxFindings {
-		if len(c.warnings) == 0 {
-			c.warnings = append(c.warnings, "Incident limit reached; incident counts and evidence are incomplete")
-		}
+		uniqueAppend(&c.warnings, "Incident limit reached; incident counts and evidence are incomplete")
 		return nil
 	}
 	hash := sha256.Sum256([]byte(key))
-	f := &Incident{ID: fmt.Sprintf("WA-%x", hash[:8]), IP: e.IP, Host: e.Host, UA: e.UA, First: e.Time, Last: e.Time, Severity: "low", Phase: group, resources: map[string]*resource{}, Correlation: []string{"Same recorded peer IP, target host (when available), User-Agent, technique family and five-minute event-time partition; this is a hypothesis, not verified identity"}}
+	f := &Incident{ID: fmt.Sprintf("WA-%x", hash[:8]), IP: strings.Clone(e.IP), Host: compactEvent(e).Host, UA: compactEvent(e).UA, First: e.Time, Last: e.Time, Severity: "low", Phase: group, resources: map[string]*resource{}, Correlation: []string{"Same recorded peer IP, target host (when available), User-Agent, technique family and five-minute event-time partition; this is a hypothesis, not verified identity"}}
 	c.items[key] = f
 	return f
 }
@@ -103,7 +103,7 @@ func (c *Correlator) Add(e Event, hits []Rule, n Normalized) {
 		for _, r := range rules {
 			addRule(f, r)
 		}
-		addEvidence(f, e, n)
+		c.addEvidence(f, e, n)
 		status := val(e.Status)
 		if status == 403 || status == 404 {
 			f.blocked++
@@ -118,10 +118,10 @@ func (c *Correlator) Add(e Event, hits []Rule, n Normalized) {
 			}
 		}
 		if sensitive {
-			res := f.resources[e.Path]
+			res := f.resources[digest(e.Path)]
 			if res == nil && len(f.resources) < 128 {
 				res = &resource{}
-				f.resources[e.Path] = res
+				f.resources[digest(e.Path)] = res
 			}
 			if res != nil {
 				if status == 403 || status == 404 {
@@ -153,7 +153,7 @@ func (c *Correlator) AddSignal(s Signal) {
 	}
 	uniqueAppend(&f.Reasons, s.Reason)
 	if len(f.Evidence) == 0 {
-		addEvidence(f, s.Event, Normalize(s.Event.Target))
+		c.addEvidence(f, s.Event, Normalize(s.Event.Target))
 	}
 }
 func uniqueAppend(dst *[]string, s string) {
@@ -193,8 +193,17 @@ func addRule(f *Incident, r Rule) {
 	}
 	uniqueAppend(&f.Reasons, r.Description)
 }
-func addEvidence(f *Incident, e Event, n Normalized) {
-	v := Evidence{e, n}
+func (c *Correlator) addEvidence(f *Incident, e Event, n Normalized) {
+	v := Evidence{compactEvent(e), compactNormalized(n)}
+	delta := evidenceSize(v)
+	if len(f.Evidence) >= 8 {
+		delta -= evidenceSize(f.Evidence[7])
+	}
+	if c.evidenceBytes+delta > c.o.MaxEvidenceBytes {
+		uniqueAppend(&c.warnings, "Evidence-byte limit reached; samples are incomplete, use file/line references and original input logs")
+		return
+	}
+	c.evidenceBytes += delta
 	if len(f.Evidence) < 8 {
 		f.Evidence = append(f.Evidence, v)
 	} else {
@@ -221,10 +230,10 @@ func infer(f *Incident) Outcome {
 			return o
 		}
 	}
-	if f.blocked >= 3 && f.good == 0 {
+	if f.blocked >= 3 && f.blocked == f.Count {
 		o.Verdict = "likely_failed"
 		o.Confidence = 0.5
-		o.Reasons = append(o.Reasons, "At least three blocked/not-found observations and no observed 2xx within this activity; status mapping and unobserved attempts prevent confirmation")
+		o.Reasons = append(o.Reasons, "All observed responses in this activity were blocked/not-found, with at least three observations; status mapping and unobserved attempts prevent confirmation")
 	}
 	return o
 }

@@ -1,0 +1,1 @@
+Synthetic demonstration only. The 2xx sensitive-resource sequence suggests exposure but does not confirm it; the SQLi 500 remains unknown. All report formats use portable source references to examples/sample.log.
