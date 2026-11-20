@@ -76,3 +76,43 @@ func mustURL(s string) *url.URL {
 	}
 	return u
 }
+
+func TestDownloadTransferBoundsAndRedirects(t *testing.T) {
+	p := NewProvider()
+	p.maxDownload = 3
+	p.client.Transport = roundTripFunc(func(r *http.Request) (*http.Response, error) {
+		return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader("1234"))}, nil
+	})
+	r := Release{URL: "https://download.db-ip.com/free/dbip-country-lite-2026-11.mmdb.gz"}
+	if e := p.Fetch(context.Background(), r, io.Discard); e == nil {
+		t.Fatal("compressed size cap ignored")
+	}
+	p.client.Transport = roundTripFunc(func(r *http.Request) (*http.Response, error) {
+		if r.URL.Host == "db-ip.com" {
+			return &http.Response{StatusCode: 302, Header: http.Header{"Location": []string{"https://download.db-ip.com/free/dbip-country-lite-2026-11.mmdb.gz"}}, Body: io.NopCloser(strings.NewReader(""))}, nil
+		}
+		return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader("ok"))}, nil
+	})
+	if body, e := p.get(context.Background(), "https://db-ip.com/db/download/ip-to-country-lite"); e != nil {
+		t.Fatal(e)
+	} else {
+		body.Close()
+	}
+	p.client.Transport = roundTripFunc(func(r *http.Request) (*http.Response, error) {
+		return &http.Response{StatusCode: 302, Header: http.Header{"Location": []string{"http://evil.test/x"}}, Body: io.NopCloser(strings.NewReader(""))}, nil
+	})
+	if _, e := p.get(context.Background(), "https://db-ip.com/db/download/ip-to-country-lite"); e == nil {
+		t.Fatal("unsafe redirect followed")
+	}
+	p.client.Transport = roundTripFunc(func(r *http.Request) (*http.Response, error) {
+		return &http.Response{StatusCode: 200, Body: shortRead{}}, nil
+	})
+	if e := p.Fetch(context.Background(), r, io.Discard); e == nil {
+		t.Fatal("truncated connection accepted")
+	}
+}
+
+type shortRead struct{}
+
+func (shortRead) Read(b []byte) (int, error) { return 0, io.ErrUnexpectedEOF }
+func (shortRead) Close() error               { return nil }
