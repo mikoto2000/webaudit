@@ -40,3 +40,9 @@ Windows/Linux amd64の単体バイナリとSHA256SUMSはdist/（Git追跡外）�
 本体バイナリの依存パッケージも確認し、ネットワーク関連はアドレス/URLの純粋な解析を行うnet/netipとnet/urlだけでした。net/httpやnetの接続API、os/execは本体依存にありません。パケットキャプチャによる検証は行っていません。CLI OAuth credentialのworkflow scope不足は、接続済みGitHub appで同じcommitのbranchを作成する方法で解決しました。
 
 配布ビルドは `-trimpath -buildvcs=false` とCGO_ENABLED=0を指定し、作業パスや未コミット時のVCS情報を埋め込まない構成です。コミットの同定は最終mainとPR履歴、配布物の同定はSHA256SUMSとbinaries.jsonで行います。ライセンス表示と文書を同梱したzip/tar.gzもdist/に作成しています。
+
+## 配布物の改行と再現性
+
+マージ後の再ビルドで、Windows上の作業ファイルに混在したCRLFと、Git内のLFとの差が埋め込みHTML/JSONのバイト列を変え、配布ハッシュが変わることを検出しました。解析動作の回帰テストは成功していましたが、ビルド再現性のため追加修正を行いました。
+
+`.gitattributes`で埋め込み資産を含むテキストのLFを指定し、クリーンなcheckoutを起点に配布物を再生成しました。Go 1.27.4、CGO_ENABLED=0、-trimpath -buildvcs=falseで、mainと別worktreeから作るWindows/Linux両バイナリがそれぞれ同じSHA256になることを確認しています。生成スクリプトが改行変換する可能性があるため、配布ビルドはクリーンなcheckoutから行ってください。最新の実行ファイルハッシュはmeasurements/binaries.jsonです。
