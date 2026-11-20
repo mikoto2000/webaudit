@@ -30,3 +30,11 @@
 HTTPS・許可ホスト・許可パスを初回URL/リダイレクトとも検査。タイムアウト、ページ/転送/展開の上限、gzip CRC、SHA1、MMDB Verify・役割/全レコード型の検査を行う。メタデータのパス逸脱・SHA256不一致も拒否する。API・DNS検索・通常解析中の自動更新は追加しない。
 
 各Phaseに専用worktree/PRを用い、Red → Green → Refactorを細粒度コミットで記録する。Bは注入したHTTPクライアント・時計・失敗点と合成MMDBで全更新境界を検証、Cは管理DB検出/検索状態と互換性、DはIP数/類似性/出力、Eは両OS CI・seccompオフライン・100万行の実測を行う。外部サイトに依存するテストは作らない。
+
+## Phase D — 集計・類似性の補助情報
+
+国/ASNごとに保持されたpeerと事案のIP集合から異なるIP数、不審事案に現れるIP数を求める。表示用IPは64件までだが、IP数を64で打ち切らない。保持上限超過時の件数は下限。不明な国/ASNはunknown群に数え、unknown ASNを同一ネットワークとして扱わない。
+
+同一の既知ASNに属する2 IP以上で、記録されたパス、host（あれば）、検知技法category、UTCの同じ5分区間が一致した事案だけを類似性ヒントとして参照する。host不明は同一の実サーバーと確認したことを意味しない。タイムゾーン不明、区間をまたぐ事案、証拠が切り詰められたパスはヒント対象外。候補数はmax-keys、参照ID/IPサンプルは64件、上限はcorrelations_truncated / samples_truncatedで示す。IP集合全体も既存のpeer/事案予算で有限。事案本体、危険度、成否、確信度は変更しない。
+
+有効時のJSON geoip.enabledはtrue。GeoIP未導入・無効時は既存互換のためgeoip自体を省略し、利用なしを意味する。CLI/HTMLも無効時の専用セクションなし、CSVの列は不変。有効時の事案lookup status、各役割のstatus、国名/ASN、版・取得・build日時を出力する。明示DBに公開版/取得日時がなければunknown/nullを保つ。
