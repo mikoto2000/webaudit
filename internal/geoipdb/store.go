@@ -1,6 +1,7 @@
 package geoipdb
 
 import (
+	"crypto/sha1"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -8,6 +9,7 @@ import (
 	"fmt"
 	"github.com/oschwald/maxminddb-golang/v2"
 	"io"
+	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -84,6 +86,14 @@ func validateGeneration(dir string, g Generation) error {
 		if d.Role != role || d.File != expected || d.Size <= 0 || len(d.SHA256) != 64 {
 			return fmt.Errorf("invalid GeoIP %s metadata/path", role)
 		}
+		u, _ := url.Parse(d.URL)
+		var releaseParts []string
+		if u != nil {
+			releaseParts = downloadPath.FindStringSubmatch(u.Path)
+		}
+		if allowedURL(d.URL) != nil || len(releaseParts) != 3 || releaseParts[1] != role || releaseParts[2] != d.Version || d.Provider != "DB-IP Lite" || d.DownloadedAt.IsZero() {
+			return fmt.Errorf("GeoIP %s publication metadata mismatch", role)
+		}
 		sum, e := hex.DecodeString(d.SHA256)
 		if e != nil || len(sum) != 32 {
 			return fmt.Errorf("invalid GeoIP SHA256")
@@ -103,7 +113,7 @@ func validateGeneration(dir string, g Generation) error {
 		if e != nil {
 			return e
 		}
-		if info.Size != d.Size || info.SHA256 != d.SHA256 || info.Type != d.Type || !sameTime(info.BuildTime, d.BuildTime) {
+		if info.Size != d.Size || info.SHA256 != d.SHA256 || info.Type != d.Type || info.SourceSHA1 != d.SourceSHA1 || !sameTime(info.BuildTime, d.BuildTime) {
 			return fmt.Errorf("GeoIP %s integrity mismatch (size/SHA256/type/build)", role)
 		}
 	}
@@ -134,13 +144,15 @@ func InspectFile(path, role string) (Database, error) {
 		return d, fmt.Errorf("GeoIP file is not a regular MMDB within size limit")
 	}
 	h := sha256.New()
-	_, err = io.Copy(h, f)
+	h1 := sha1.New()
+	_, err = io.Copy(io.MultiWriter(h, h1), f)
 	f.Close()
 	if err != nil {
 		return d, err
 	}
 	d.Size = st.Size()
 	d.SHA256 = hex.EncodeToString(h.Sum(nil))
+	d.SourceSHA1 = hex.EncodeToString(h1.Sum(nil))
 	db, err := maxminddb.Open(path)
 	if err != nil {
 		return d, fmt.Errorf("GeoIP %s MMDB: %w", role, err)

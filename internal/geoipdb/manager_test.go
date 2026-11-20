@@ -269,10 +269,18 @@ func TestLockReleasedWhenProcessExits(t *testing.T) {
 	release()
 }
 
-func TestMetadataPublicationFieldsAndSymlinkSafety(t *testing.T){
- m,_:=manager(t);r,e:=m.Reconcile(context.Background(),false);if e!=nil{t.Fatal(e)}
- original:=r.Metadata.Current.Databases[0]
- for _,mutate:=range []func(*Database){func(d *Database){d.Version="2099-12"},func(d *Database){d.URL="https://evil.test/file"},func(d *Database){d.SourceSHA1=strings.Repeat("0",40)}} {
-  r.Metadata.Current.Databases[0]=original;mutate(&r.Metadata.Current.Databases[0]);if e=ValidateCurrent(m.Dir,r.Metadata);e==nil{t.Fatal("inconsistent publication metadata accepted")}
- }
+func TestMetadataPublicationFieldsAndSymlinkSafety(t *testing.T) {
+	m, _ := manager(t)
+	r, e := m.Reconcile(context.Background(), false)
+	if e != nil {
+		t.Fatal(e)
+	}
+	original := r.Metadata.Current.Databases[0]
+	for _, mutate := range []func(*Database){func(d *Database) { d.Version = "2099-12" }, func(d *Database) { d.URL = "https://evil.test/file" }, func(d *Database) { d.SourceSHA1 = strings.Repeat("0", 40) }} {
+		r.Metadata.Current.Databases[0] = original
+		mutate(&r.Metadata.Current.Databases[0])
+		if e = ValidateCurrent(m.Dir, r.Metadata); e == nil {
+			t.Fatal("inconsistent publication metadata accepted")
+		}
+	}
 }

@@ -42,6 +42,9 @@ func (m *Manager) Reconcile(ctx context.Context, update bool) (Result, error) {
 	if e := os.MkdirAll(m.Dir, 0700); e != nil {
 		return out, e
 	}
+	if e := safeManagedPaths(m.Dir); e != nil {
+		return out, e
+	}
 	unlock, e := lock(m.Dir)
 	if e != nil {
 		return out, e
@@ -318,4 +321,20 @@ func (m *Manager) cleanup(meta *Metadata, out *Result) {
 			}
 		}
 	}
+}
+
+func safeManagedPaths(dir string) error {
+	for _, name := range []string{"versions", ".lock", "metadata.json"} {
+		st, e := os.Lstat(filepath.Join(dir, name))
+		if os.IsNotExist(e) {
+			continue
+		}
+		if e != nil {
+			return e
+		}
+		if st.Mode()&os.ModeSymlink != 0 {
+			return fmt.Errorf("GeoIP managed %s must not be a symlink", name)
+		}
+	}
+	return nil
 }
