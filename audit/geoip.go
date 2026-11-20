@@ -16,6 +16,9 @@ import (
 // GeoIPInfo is context only. It is never consumed by detection or outcome scoring.
 // Nil fields mean unknown, including a miss or a database not being configured.
 type GeoIPInfo struct {
+	Status          string  `json:"status"`
+	CountryStatus   string  `json:"country_status"`
+	ASNStatus       string  `json:"asn_status"`
 	Classification  string  `json:"classification"`
 	CountryCode     *string `json:"country_code"`
 	CountryName     *string `json:"country_name"`
@@ -23,12 +26,18 @@ type GeoIPInfo struct {
 	ASNOrganization *string `json:"asn_organization"`
 }
 type GeoDatabase struct {
-	Role      string  `json:"role"`
-	File      string  `json:"file"`
-	Provider  string  `json:"provider"`
-	Type      string  `json:"type"`
-	UpdatedAt *string `json:"updated_at"`
-	License   string  `json:"license"`
+	Version       *string    `json:"version"`
+	DownloadedAt  *time.Time `json:"downloaded_at"`
+	BuildTime     *time.Time `json:"build_time"`
+	SourceURL     *string    `json:"source_url"`
+	Generation    *string    `json:"generation"`
+	LastCheckedAt *time.Time `json:"last_checked_at"`
+	Role          string     `json:"role"`
+	File          string     `json:"file"`
+	Provider      string     `json:"provider"`
+	Type          string     `json:"type"`
+	UpdatedAt     *string    `json:"updated_at"`
+	License       string     `json:"license"`
 }
 type geoCacheEntry struct {
 	ip   netip.Addr
@@ -77,6 +86,12 @@ func OpenGeoIP(country, asn, dir string, capacity int) (*GeoIP, error) {
 		db, err := maxminddb.Open(path)
 		if err == nil {
 			err = db.Verify()
+			if err == nil {
+				kind := strings.ToLower(db.Metadata.DatabaseType)
+				if (s.role == "country" && strings.Contains(kind, "asn") && !strings.Contains(kind, "country")) || (s.role == "asn" && (strings.Contains(kind, "country") || strings.Contains(kind, "city")) && !strings.Contains(kind, "asn")) {
+					err = fmt.Errorf("wrong database type %q for %s", db.Metadata.DatabaseType, s.role)
+				}
+			}
 		}
 		if err != nil {
 			if db != nil {
@@ -93,7 +108,9 @@ func OpenGeoIP(country, asn, dir string, capacity int) (*GeoIP, error) {
 		*s.dst = db
 		m := GeoDatabase{Role: s.role, File: path, Provider: "unknown", Type: db.Metadata.DatabaseType, License: "unknown (see database provider terms)"}
 		if db.Metadata.BuildEpoch > 0 {
-			v := time.Unix(int64(db.Metadata.BuildEpoch), 0).UTC().Format("2006-01-02")
+			build := time.Unix(int64(db.Metadata.BuildEpoch), 0).UTC()
+			m.BuildTime = &build
+			v := build.Format("2006-01-02")
 			m.UpdatedAt = &v
 		}
 		if strings.HasPrefix(strings.ToLower(m.Type), "dbip-") {
@@ -169,7 +186,16 @@ func (g *GeoIP) Lookup(address string) GeoIPInfo {
 	if err == nil {
 		ip = ip.Unmap()
 	}
-	x := GeoIPInfo{Classification: classifyIP(ip)}
+	x := GeoIPInfo{Classification: classifyIP(ip), Status: "db_not_installed", CountryStatus: "db_not_installed", ASNStatus: "db_not_installed"}
+	if x.Classification == "invalid" {
+		x.Status = "invalid_ip"
+	} else if x.Classification != "public" {
+		x.Status = "non_public"
+	}
+	if x.Classification != "public" {
+		x.CountryStatus = "not_queried"
+		x.ASNStatus = "not_queried"
+	}
 	if x.Classification != "public" || g == nil {
 		return x
 	}
@@ -178,6 +204,7 @@ func (g *GeoIP) Lookup(address string) GeoIPInfo {
 		return e.Value.(geoCacheEntry).info
 	}
 	if g.country != nil {
+		x.CountryStatus = "not_found"
 		var r struct {
 			Country struct {
 				Code  *string           `maxminddb:"iso_code"`
@@ -186,26 +213,42 @@ func (g *GeoIP) Lookup(address string) GeoIPInfo {
 		}
 		g.lookups++
 		if err := g.country.Lookup(ip).Decode(&r); err != nil {
+			x.CountryStatus = "read_error"
 			g.lookupError("country", err)
 		} else {
 			x.CountryCode = nonempty(r.Country.Code)
+			if x.CountryCode != nil || len(r.Country.Names) > 0 {
+				x.CountryStatus = "found"
+			}
 			if v := r.Country.Names["en"]; v != "" {
 				x.CountryName = ptr(v)
 			}
 		}
 	}
 	if g.asn != nil {
+		x.ASNStatus = "not_found"
 		var r struct {
 			Number       *uint32 `maxminddb:"autonomous_system_number"`
 			Organization *string `maxminddb:"autonomous_system_organization"`
 		}
 		g.lookups++
 		if err := g.asn.Lookup(ip).Decode(&r); err != nil {
+			x.ASNStatus = "read_error"
 			g.lookupError("asn", err)
 		} else {
 			x.ASN = r.Number
+			if x.ASN != nil || nonempty(r.Organization) != nil {
+				x.ASNStatus = "found"
+			}
 			x.ASNOrganization = nonempty(r.Organization)
 		}
+	}
+	if x.CountryStatus == "read_error" || x.ASNStatus == "read_error" {
+		x.Status = "read_error"
+	} else if x.CountryStatus == "found" || x.ASNStatus == "found" {
+		x.Status = "found"
+	} else if g.country != nil || g.asn != nil {
+		x.Status = "not_found"
 	}
 	if g.cache.Len() >= g.capacity {
 		e := g.cache.Back()

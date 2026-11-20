@@ -28,22 +28,18 @@ func runGeoIP(args []string, out, errout io.Writer) int {
 	fmt.Fprintf(out, "WebAudit GeoIP %s\nDirectory: %s\n", args[0], audit.TerminalSafe(dir))
 	switch args[0] {
 	case "status":
-		meta, e := geoipdb.ReadMetadata(dir)
+		e := geoipdb.WithCurrent(dir, func(meta *geoipdb.Metadata) error { printGeoStatus(out, meta); return nil })
 		if errors.Is(e, geoipdb.ErrNotInstalled) {
 			fmt.Fprintln(out, "Not installed. Run: webaudit geoip download")
 			return 0
 		}
 		if e != nil {
-			fmt.Fprintln(errout, e)
-			return 1
-		}
-		printGeoStatus(out, meta)
-		if e = geoipdb.ValidateCurrent(dir, meta); e != nil {
 			fmt.Fprintln(errout, "Integrity: FAILED:", e)
 			return 1
 		}
 		fmt.Fprintln(out, "Integrity: OK")
 		return 0
+
 	case "rollback":
 		if e = m.Rollback(context.Background()); e != nil {
 			fmt.Fprintln(errout, e)
