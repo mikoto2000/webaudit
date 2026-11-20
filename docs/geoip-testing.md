@@ -25,7 +25,7 @@ Phase Dは64表示サンプルを超える異なるIP数、既知ASN内のpath/c
 
 ## Phase E — 最終ローカル検証
 
-Windows amd64 / Go 1.27.4で`go test ./... -count=1`は233件成功（サブテスト含む、top level 89）、失敗0。既存のHTTP製品固有ケース11件は従来の対象外としてskip。`go vet ./...`成功、Parse fuzzは5秒指定で98,352実行・クラッシュなし。合成評価は従来と完全一致（TP42 / FP1 / TN27 / FN1）。クロスビルドはWindows/Linux/macOSそれぞれamd64/arm64の6対象で成功。実行時検証はWindowsローカルとWindows/Linux CIを対象とし、macOS/ARM64のネイティブ実行は確認していない。
+Windows amd64 / Go 1.27.4で`go test ./... -count=1`は235件成功（サブテスト含む、top level 89）、失敗0。既存のHTTP製品固有ケース11件は従来の対象外としてskip。`go vet ./...`成功、Parse fuzzは5秒指定で98,352実行・クラッシュなし。合成評価は従来と完全一致（TP42 / FP1 / TN27 / FN1）。クロスビルドはWindows/Linux/macOSそれぞれamd64/arm64の6対象で成功。実行時検証はWindowsローカルとWindows/Linux CIを対象とし、macOS/ARM64のネイティブ実行は確認していない。
 
 追加の回帰境界はgzip CRC、managed symlink拒否、IP分類単独、大量IP後のキャッシュ/peer上限、新世代が旧世代の検索キャッシュを再利用しないこと。元の世代を開いたreaderは以前の結果を保持し、新しいreaderは新世代の値を得る。
 
@@ -65,3 +65,5 @@ go run ./tools/geoip-benchmark -lines 1000000 -scenario distinct_mixed -geoip
 通常解析・statusの開始時にwriterと競合した場合、解析は警告して自動GeoIPを無効にする。既に開いているreaderの解析は旧snapshotで継続する。更新中のDBペア混在を避けるための判断で、後から通常解析を再実行すれば公開済み世代を利用できる。statusはwriter終了後の再実行を案内するエラーを返す。
 
 Windowsで保持中の古い世代を削除できない場合は回収を次のwriterへ延期する。更新中断は一つのmanifest置換とOSロックで保護するが、ストレージの電源断・媒体故障に対する耐久性はファイルシステムに依存する。公式ページ変更や配布障害時は推測URLで続行せず、正常な現世代を維持する。既知の検知上のFP/FNは今回変更しない。
+
+Windowsの保存先にはdrive絶対パスに加え、末尾区切りのないUNC share root（backslash/forward slash表記）も受理する。追加RED/GREENテストで境界を確認した。

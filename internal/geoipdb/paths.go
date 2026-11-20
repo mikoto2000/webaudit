@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-var windowsAbsolute = regexp.MustCompile(`^(?:[a-zA-Z]:[\\/]|\\\\[^\\/]+[\\/][^\\/]+[\\/])`)
+var windowsAbsolute = regexp.MustCompile(`^(?:[a-zA-Z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+(?:[\\/]|$))`)
 
 func ResolveDir(goos string, getenv func(string) string) (string, error) {
 	absolute := func(s string) bool {
