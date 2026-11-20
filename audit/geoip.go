@@ -86,6 +86,12 @@ func OpenGeoIP(country, asn, dir string, capacity int) (*GeoIP, error) {
 		db, err := maxminddb.Open(path)
 		if err == nil {
 			err = db.Verify()
+			if err == nil {
+				kind := strings.ToLower(db.Metadata.DatabaseType)
+				if (s.role == "country" && strings.Contains(kind, "asn") && !strings.Contains(kind, "country")) || (s.role == "asn" && (strings.Contains(kind, "country") || strings.Contains(kind, "city")) && !strings.Contains(kind, "asn")) {
+					err = fmt.Errorf("wrong database type %q for %s", db.Metadata.DatabaseType, s.role)
+				}
+			}
 		}
 		if err != nil {
 			if db != nil {
@@ -185,6 +191,10 @@ func (g *GeoIP) Lookup(address string) GeoIPInfo {
 		x.Status = "invalid_ip"
 	} else if x.Classification != "public" {
 		x.Status = "non_public"
+	}
+	if x.Classification != "public" {
+		x.CountryStatus = "not_queried"
+		x.ASNStatus = "not_queried"
 	}
 	if x.Classification != "public" || g == nil {
 		return x
