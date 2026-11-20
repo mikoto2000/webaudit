@@ -6,8 +6,8 @@ from pathlib import Path
 
 def head(t, n):
     extra = b"" if t < 8 else bytes([t-7])
-    if n < 29: return bytes([(min(t, 7) << 5) | n]) + extra
-    if n < 285: return bytes([(min(t, 7) << 5) | 29]) + extra + bytes([n-29])
+    if n < 29: return bytes([((t if t < 8 else 0) << 5) | n]) + extra
+    if n < 285: return bytes([((t if t < 8 else 0) << 5) | 29]) + extra + bytes([n-29])
     raise ValueError(n)
 
 def enc(x):

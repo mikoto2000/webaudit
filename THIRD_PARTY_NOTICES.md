@@ -180,3 +180,75 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ```
+
+## Optional GeoIP / ASN data and MMDB reader
+
+DB-IP Lite is the preferred separately supplied Country / ASN MMDB source:
+[DB-IP Lite](https://db-ip.com/db/lite.php). Copyright DB-IP.com;
+[Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
+Attribution: [IP Geolocation by DB-IP](https://db-ip.com).
+Lite has reduced accuracy/coverage and monthly updates. No provider DB is bundled
+or downloaded by WebAudit. Values are used as supplied; grouping into report
+summaries is performed by WebAudit. Reports record database type and build date
+from MMDB metadata, not filesystem modification time. Other user-supplied databases
+remain subject to their provider's terms. Synthetic MMDB test fixtures contain no
+DB-IP data and are distributed under this project's MIT license.
+
+Runtime dependencies (vendored for offline builds):
+
+- github.com/oschwald/maxminddb-golang/v2 v2.9.1, ISC;
+  https://github.com/oschwald/maxminddb-golang/tree/v2.9.1
+- golang.org/x/sys v0.50.0, BSD-3-Clause; https://cs.opensource.google/go/x/sys
+  (includes its PATENTS grant in vendor/golang.org/x/sys/PATENTS).
+
+### maxminddb-golang license
+
+```text
+ISC License
+
+Copyright (c) 2015, Gregory J. Oschwald <oschwald@gmail.com>
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+```
+
+### golang.org/x/sys license
+
+```text
+Copyright 2009 The Go Authors.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+   * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+   * Neither the name of Google LLC nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```

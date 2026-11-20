@@ -79,6 +79,9 @@ func writeSummary(w io.Writer, r Report) error {
 		}
 		fmt.Fprintf(w, "  %s | %s | %d events\n", TerminalSafe(a.RuleID), TerminalSafe(a.IP), a.Count)
 	}
+	if r.GeoIP != nil {
+		writeGeoSummary(w, r.GeoIP)
+	}
 	fmt.Fprintln(w, "\nWarnings:")
 	for _, s := range r.Warnings {
 		fmt.Fprintln(w, "  "+TerminalSafe(s))
@@ -144,4 +147,34 @@ func writeCSV(w io.Writer, r Report) error {
 	}
 	c.Flush()
 	return c.Error()
+}
+
+func writeGeoSummary(w io.Writer, g *GeoIPReport) {
+	fmt.Fprintln(w, "\nGeoIP / ASN (investigation context):")
+	for _, d := range g.Databases {
+		date := "unknown"
+		if d.UpdatedAt != nil {
+			date = *d.UpdatedAt
+		}
+		fmt.Fprintf(w, "  %s | %s | %s | updated %s | %s\n", TerminalSafe(d.Provider), TerminalSafe(d.File), TerminalSafe(d.Type), date, TerminalSafe(d.License))
+	}
+	fmt.Fprintln(w, "  "+g.Context)
+	for _, set := range []struct {
+		name string
+		rows []GeoGroup
+	}{{"Country", g.Countries}, {"ASN", g.ASNs}} {
+		for i, x := range set.rows {
+			if i == 5 {
+				break
+			}
+			fmt.Fprintf(w, "  %s %s (%s): %d requests, %d incidents, multiple suspicious IPs: %t; %s\n", set.name, TerminalSafe(x.Key), TerminalSafe(x.Name), x.Requests, x.Incidents, x.MultiIP, TerminalSafe(strings.Join(x.IPs, ", ")))
+		}
+	}
+	for i, p := range g.Peers {
+		if i == 5 {
+			break
+		}
+		ck, cn, ak, an := geoKeys(p.Info)
+		fmt.Fprintf(w, "  Peer %s: %s | %s %s | ASN %s %s\n", TerminalSafe(p.IP), p.Info.Classification, TerminalSafe(ck), TerminalSafe(cn), TerminalSafe(ak), TerminalSafe(an))
+	}
 }

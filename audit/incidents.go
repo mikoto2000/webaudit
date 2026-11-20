@@ -22,6 +22,8 @@ type Evidence struct {
 	Normalization Normalized `json:"normalization"`
 }
 type Incident struct {
+	GeoIP *GeoIPInfo `json:"geoip,omitempty"`
+
 	TimezoneUnknown bool       `json:"timezone_unknown,omitempty"`
 	ID              string     `json:"id"`
 	IP              string     `json:"ip"`
@@ -272,6 +274,10 @@ func (c *Correlator) Finish() []Incident {
 }
 func Analyze(paths []string, o Options) Report {
 	o = o.defaults()
+	var geo *geoAnalysis
+	if o.GeoIP != nil {
+		geo = &geoAnalysis{g: o.GeoIP, max: o.MaxKeys, peers: map[string]*GeoPeer{}}
+	}
 	a := NewAnalysis(o)
 	u := NewUpstream(o)
 	aa := newAuraAnalysis(o)
@@ -281,6 +287,7 @@ func Analyze(paths []string, o Options) Report {
 	wallFile := ""
 	outOfOrder := false
 	r := Stream(paths, o, func(e Event) {
+		geo.observe(e.IP)
 		if e.TimezoneUnknown {
 			if wallFile == e.File && !previousWall.IsZero() && e.Time.Before(previousWall) {
 				outOfOrder = true
@@ -355,6 +362,7 @@ func Analyze(paths []string, o Options) Report {
 			r.warn(fmt.Sprintf("Missing %s in %d parsed requests reduces related detection coverage", field, count))
 		}
 	}
+	geo.finish(&r)
 	return r
 }
 

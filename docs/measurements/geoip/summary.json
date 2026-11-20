@@ -1,0 +1,9 @@
+{
+  "passed_including_subtests": 186,
+  "top_level_tests": 65,
+  "failed": 0,
+  "geoip_tests": 10,
+  "platform": "Windows amd64 / Go 1.27.4",
+  "offline_build": "GOPROXY=off GOSUMDB=off -mod=vendor",
+  "vet": "passed"
+}

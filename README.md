@@ -1,6 +1,6 @@
 # WebAudit
 
-Apache HTTP Server / Nginx の既存アクセスログから、不審なアクセス、関連事案、成否の推定と追加調査事項を得るオフラインCLIです。Go標準ライブラリだけで動作し、DB・CrowdSec・Docker・APIキー・設定ファイル・管理者権限を必要としません。実行中のネットワーク通信はありません。
+Apache HTTP Server / Nginx の既存アクセスログから、不審なアクセス、関連事案、成否の推定と追加調査事項を得るオフラインCLIです。単体の実行ファイルで動作し、DB・CrowdSec・Docker・APIキー・設定ファイル・管理者権限を必要としません。実行中のネットワーク通信はありません。
 
 **アクセスログは攻撃の試行を示しても、侵害成功を確定できるとは限りません。** HTTP 200・302・500だけでは成功と判定しません。本文やアプリケーションの証拠が不足する場合は、成否不明を返します。
 
@@ -8,7 +8,7 @@ Apache HTTP Server / Nginx の既存アクセスログから、不審なアク�
 
 対象はWindows / Linux、amd64です。`dist/webaudit-windows-amd64.exe` または `dist/webaudit-linux-amd64` を任意の場所に置いて実行します。Linuxでは必要に応じて `chmod +x webaudit-linux-amd64` を実行してください。公開Releaseの配布は行っていません。
 
-開発環境はGo 1.27.4。公式の安定版情報とSHA-256を確認して選定しました。外部Goモジュールの依存はありません。
+開発環境はGo 1.27.4。公式の安定版情報とSHA-256を確認して選定しました。MMDBリーダーの依存ソースとライセンスは`vendor/`に保存し、ネットワークなしでビルドできます。
 
 ```sh
 go test ./...
@@ -126,3 +126,23 @@ go test ./audit -run='^$' -fuzz=FuzzParse -fuzztime=10s -parallel=4
 ## 出典とライセンス
 
 WebAuditはMIT。AuraDFIR、CrowdSec、CrowdSec Hubを参照して独立実装しました。[出典・ライセンス表示](THIRD_PARTY_NOTICES.md)、[競合調査](docs/competitor-analysis.md)、[ルール台帳](docs/rule-inventory.md)、[検知設計](docs/detection-design.md)、[対応範囲](docs/detection-coverage.md) を参照してください。外部データリストは無条件に移植せず、未対応の理由を台帳に記録しています。
+
+## GeoIP / ASN（任意・オフライン）
+
+```sh
+webaudit access.log --geoip-country ./country.mmdb --geoip-asn ./asn.mmdb
+```
+
+DB-IP LiteのCountry / ASN MMDBを第一候補とします。DBは利用者が別途取得・展開して配置し、実行ファイルには同梱しません。解析中のダウンロード・外部API・DNS検索はありません。Countryだけ、ASNだけでも動作します。
+
+明示指定を優先し、未指定の役割は実行ファイルと同じ場所の`geoip/country.mmdb`・`geoip/asn.mmdb`を探します。固定名がなければ`geoip/dbip-country-lite-YYYY-MM.mmdb`・`geoip/dbip-asn-lite-YYYY-MM.mmdb`の辞書順で最後を選びます。カレントディレクトリは探索しません。DBがなければ従来どおり動作し、GeoIP出力項目も追加しません。明示DBの不存在・破損は解析開始前に終了コード2、破損した自動検出DBは警告して継続します。
+
+国コード・英語の国名・ASN番号・組織名、DB提供元・使用パス・種類・MMDBのbuild_epochによるUTC更新日を出力します。不明はJSONの`null`、画面では`unknown`です。IPv4/IPv6に対応し、IPv4 mapped IPv6は正規化します。private / loopback / link_local / shared / multicast / unspecified / reserved / invalidを区別し、公開IPだけをMMDB検索します。特殊用途範囲は保守的に除外します。
+
+国別・ASN別の既存WebAudit事案数・技法、ASNに属する複数の不審IP、通常アクセスを含むASN別リクエスト集中を調査用に表示します。同じ国・ASNだけでは同一攻撃者と推定せず、危険度・事案の統合・成否・確信度は変更しません。上流検出は既存の別集計を維持します。
+
+JSONは任意の`geoip`ブロックと各事案の`geoip`を追加します。CSVは既存列を維持し、metadata / incidentの`details_json`に格納します。CLIは上位5群・5 IP、HTMLは保持した全群・IPを表示します。DB-IPの出典・ライセンスリンクもHTMLに記録します。
+
+LRUはヒット・未収録結果ともIP単位で最大`--max-keys`件。リクエスト集計のIP保持も同じ上限で、超過時は部分解析と件数の下限を明示します。群ごとのIP・技法サンプルは64件までです。MMDBはメモリマップするため、キャッシュ以外にDBサイズに応じたアドレス空間・ページキャッシュを使用します。解析中はDBファイルを変更・切り詰めず、更新版は次回解析から使ってください。
+
+調査・設計・検証の詳細は[GeoIP設計と検証](docs/geoip.md)、ライセンス全文は[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)を参照してください。
