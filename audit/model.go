@@ -3,10 +3,22 @@ package audit
 
 import "time"
 
-const Version = "0.1.0"
-const RulesVersion = "2026.11.20.1"
+const Version = "0.2.0"
+const RulesVersion = "2026.11.20.2"
 
 type Event struct {
+	RecordedUA        *string   `json:"recorded_user_agent,omitempty"`
+	RecordedReferer   *string   `json:"recorded_referer,omitempty"`
+	SourceRequest     *string   `json:"source_request,omitempty"`
+	SubType           string    `json:"sub_type,omitempty"`
+	RawRequest        *string   `json:"raw_request"`
+	RequestMalformed  bool      `json:"request_malformed,omitempty"`
+	LogType           string    `json:"log_type"`
+	AuthFailure       bool      `json:"auth_failure,omitempty"`
+	TimezoneUnknown   bool      `json:"timezone_unknown,omitempty"`
+	WallTime          *string   `json:"wall_time,omitempty"`
+	Envelope          *string   `json:"syslog_envelope,omitempty"`
+	Suffix            *string   `json:"unmapped_suffix,omitempty"`
 	EvidenceTruncated bool      `json:"evidence_truncated,omitempty"`
 	Time              time.Time `json:"time"`
 	IP                string    `json:"ip"`
@@ -25,6 +37,8 @@ type Event struct {
 	Raw               string    `json:"raw"`
 }
 type Options struct {
+	ErrorTimezone    string
+	DeduplicateFiles bool
 	Now              func() time.Time
 	MaxEvidenceBytes int
 	MaxLineBytes     int
@@ -57,29 +71,36 @@ func (o Options) defaults() Options {
 }
 
 type Input struct {
-	Path     string `json:"path"`
-	Parsed   int64  `json:"parsed"`
-	Unparsed int64  `json:"unparsed"`
-	Error    string `json:"error,omitempty"`
+	DuplicateOf string `json:"duplicate_of,omitempty"`
+	Path        string `json:"path"`
+	Parsed      int64  `json:"parsed"`
+	Unparsed    int64  `json:"unparsed"`
+	Error       string `json:"error,omitempty"`
 }
 type Report struct {
-	Findings     []Incident       `json:"findings"`
-	Categories   map[string]int   `json:"categories"`
-	Outcomes     map[string]int   `json:"outcomes"`
-	Severities   map[string]int   `json:"severities"`
-	Schema       string           `json:"schema"`
-	Version      string           `json:"version"`
-	RulesVersion string           `json:"rules_version"`
-	AnalyzedAt   time.Time        `json:"analyzed_at"`
-	Files        []Input          `json:"files"`
-	Parsed       int64            `json:"requests"`
-	Unparsed     int64            `json:"unparsed"`
-	Duplicates   int64            `json:"duplicates"`
-	First        *time.Time       `json:"first"`
-	Last         *time.Time       `json:"last"`
-	Warnings     []string         `json:"warnings"`
-	Partial      bool             `json:"partial"`
-	Missing      map[string]int64 `json:"missing_fields"`
+	UpstreamSources map[string]string `json:"upstream_sources"`
+	ErrorTimezone   string            `json:"error_timezone,omitempty"`
+	AuraAnalysis    []SourceAlert     `json:"aura_analysis"`
+	UpstreamAlerts  []SourceAlert     `json:"upstream_alerts"`
+	AuraMatches     []SourceAlert     `json:"aura_matches"`
+	UpstreamRules   []SourceRule      `json:"upstream_rules"`
+	Findings        []Incident        `json:"findings"`
+	Categories      map[string]int    `json:"categories"`
+	Outcomes        map[string]int    `json:"outcomes"`
+	Severities      map[string]int    `json:"severities"`
+	Schema          string            `json:"schema"`
+	Version         string            `json:"version"`
+	RulesVersion    string            `json:"rules_version"`
+	AnalyzedAt      time.Time         `json:"analyzed_at"`
+	Files           []Input           `json:"files"`
+	Parsed          int64             `json:"requests"`
+	Unparsed        int64             `json:"unparsed"`
+	Duplicates      int64             `json:"duplicates"`
+	First           *time.Time        `json:"first"`
+	Last            *time.Time        `json:"last"`
+	Warnings        []string          `json:"warnings"`
+	Partial         bool              `json:"partial"`
+	Missing         map[string]int64  `json:"missing_fields"`
 }
 
 func (r *Report) warn(s string) {

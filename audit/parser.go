@@ -12,11 +12,28 @@ import (
 	"unicode/utf8"
 )
 
-var standard = regexp.MustCompile(`^(?:(?P<host>[^\s]+) )?(?P<ip>[^\s]+) [^\s]+ [^\s]+ \[(?P<time>[^\]]+)\] "(?P<request>(?:[^"\\]|\\.)*)" (?P<status>[0-9]{3}|-) (?P<bytes>[0-9]+|-)(?: "(?P<referer>(?:[^"\\]|\\.)*)" "(?P<ua>(?:[^"\\]|\\.)*)")?$`)
+var requestMethod = regexp.MustCompile(`^[A-Za-z0-9_]+$`)
+var requestVersion = regexp.MustCompile(`^HTTP/[+-]?[0-9]+(?:\.[0-9]+)?$`)
+var standard = regexp.MustCompile(`^(?:(?P<host>[^\s]+) )?(?P<ip>[0-9a-fA-F:.]+) [^\s]+ (?:[^\s]+ )?\[(?P<time>[^\]]+)\] "(?P<request>(?:[^"\\]|\\.)*)" (?P<status>[0-9]{3}|-) (?P<bytes>[0-9]+|-)(?: "(?P<referer>(?:[^"\\]|\\.)*)" "(?P<ua>(?:[^"\\]|\\.)*)")?$`)
 
 func Parse(line, file string, n int64, custom string) (Event, error) {
 	if !utf8.ValidString(line) || strings.ContainsAny(line, "\x00\r\n") {
 		return Event{}, fmt.Errorf("invalid UTF-8 or control line")
+	}
+	original := line
+	envelope := ""
+	if custom == "" {
+		var err error
+		line, envelope, err = unwrapSyslog(line)
+		if err != nil {
+			return Event{}, err
+		}
+		if e, ok, err := parseError(line, original, file, n); ok {
+			if envelope != "" {
+				e.Envelope = ptr(envelope)
+			}
+			return e, err
+		}
 	}
 	fields := map[string]string{}
 	if custom != "" {
@@ -51,17 +68,26 @@ func Parse(line, file string, n int64, custom string) (Event, error) {
 			}
 		}
 	} else {
-		m := standard.FindStringSubmatch(line)
-		if m == nil {
+		fields = fieldsFrom(standard, line)
+		if fields == nil {
+			fields = fieldsFrom(extendedStandard, line)
+		}
+		if fields == nil {
+			fields = fieldsFrom(npmPlus, line)
+		}
+		if fields == nil {
+			fields = fieldsFrom(npmLegacy, line)
+		}
+		if fields == nil {
 			return Event{}, fmt.Errorf("unrecognized layout; expected ip/time/request/status/bytes; use --log-regex with named groups for custom fields")
 		}
-		for i, name := range standard.SubexpNames() {
-			if i > 0 && name != "" {
-				fields[name] = m[i]
-			}
-		}
+
 	}
-	return eventFrom(fields, line, file, n)
+	e, err := eventFrom(fields, original, file, n)
+	if envelope != "" {
+		e.Envelope = ptr(envelope)
+	}
+	return e, err
 }
 func uniqueObject(line string) (map[string]json.RawMessage, error) {
 	d := json.NewDecoder(strings.NewReader(line))
@@ -97,7 +123,13 @@ func uniqueObject(line string) (map[string]json.RawMessage, error) {
 	return obj, nil
 }
 func eventFrom(f map[string]string, raw, file string, n int64) (Event, error) {
-	e := Event{File: file, Line: n, Raw: raw, IP: f["ip"]}
+	e := Event{File: file, Line: n, Raw: raw, IP: f["ip"], LogType: "http_access-log"}
+	if ua, ok := f["ua"]; ok {
+		e.RecordedUA = ptr(ua)
+	}
+	if ref, ok := f["referer"]; ok {
+		e.RecordedReferer = ptr(ref)
+	}
 	if _, err := netip.ParseAddr(e.IP); err != nil {
 		return e, fmt.Errorf("invalid/missing client IP (recognized time/request/status); hostnames and XFF not trusted")
 	}
@@ -111,13 +143,17 @@ func eventFrom(f map[string]string, raw, file string, n int64) (Event, error) {
 	}
 	if req := f["request"]; req != "" {
 		p := strings.Split(req, " ")
-		if len(p) != 3 || p[0] == "" || p[1] == "" || !strings.HasPrefix(p[2], "HTTP/") {
-			return e, fmt.Errorf("malformed request line; method/target/protocol not inferred")
+		e.RawRequest = ptr(req)
+		if len(p) == 2 && requestMethod.MatchString(p[0]) && p[1] != "" {
+			f["method"], f["target"] = p[0], p[1]
+		} else if len(p) != 3 || !requestMethod.MatchString(p[0]) || p[1] == "" || !requestVersion.MatchString(p[2]) {
+			e.RequestMalformed = true
+		} else {
+			f["method"], f["target"], f["protocol"] = p[0], p[1], p[2]
 		}
-		f["method"], f["target"], f["protocol"] = p[0], p[1], p[2]
 	}
 	e.Target = f["target"]
-	if e.Target == "" || e.Target == "-" {
+	if (e.Target == "" || e.Target == "-") && !e.RequestMalformed {
 		return e, fmt.Errorf("missing request target")
 	}
 	e.Path = e.Target
@@ -132,6 +168,7 @@ func eventFrom(f map[string]string, raw, file string, n int64) (Event, error) {
 		}
 		return ptr(s)
 	}
+	e.Suffix = optional("suffix")
 	e.Host = optional("host")
 	e.Method = optional("method")
 	e.Protocol = optional("protocol")

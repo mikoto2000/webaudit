@@ -31,6 +31,12 @@ func compactEvent(e Event) Event {
 		}
 		return ptr(clip(*s, n))
 	}
+	e.SourceRequest = optional(e.SourceRequest, 4096)
+	e.RecordedUA = optional(e.RecordedUA, 512)
+	e.RecordedReferer = optional(e.RecordedReferer, 512)
+	e.RawRequest = optional(e.RawRequest, 4096)
+	e.Envelope = optional(e.Envelope, 1024)
+	e.Suffix = optional(e.Suffix, 1024)
 	e.Raw = clip(e.Raw, 4096)
 	e.Target = clip(e.Target, 4096)
 	e.Path = clip(e.Path, 1024)
@@ -56,6 +62,8 @@ func evidenceSize(v Evidence) int {
 	e := v.Event
 	n := v.Normalization
 	size := len(e.Raw) + len(e.Target) + len(e.Path) + len(val(e.Query)) + len(val(e.UA)) + len(val(e.Host)) + len(val(e.Referer)) + len(n.Original)
+	size += len(val(e.RawRequest)) + len(val(e.Envelope)) + len(val(e.Suffix)) + len(val(e.WallTime))
+	size += len(val(e.SourceRequest)) + len(val(e.RecordedUA)) + len(val(e.RecordedReferer))
 	for _, s := range n.Variants {
 		size += len(s)
 	}

@@ -1,6 +1,6 @@
 # Detection coverage and limits
 
-Planned supported: Apache Common/Combined, Nginx combined, explicit vhost prefix, Nginx JSON with exact canonical keys, optional named-regex mapping. gzip magic, multiple/rotated files and directories. Ambiguous suffixes rejected unless explicitly mapped. No arbitrary Apache LogFormat inference, WAF/body/error-log parsing or trusted proxy inference.
+Planned supported: Apache Common/Combined, Nginx combined, explicit vhost prefix, Nginx JSON with exact canonical keys, optional named-regex mapping. gzip magic, multiple/rotated files and directories. Complete Combined records may carry an opaque suffix; no suffix is trusted as XFF. Version 0.2 adds syslog envelopes, NPM formats and selected HTTP error shapes. No arbitrary Apache LogFormat, WAF/body, mail/stream or trusted proxy inference. See upstream-compatibility.md for source profiles and limits.
 
 L1: injection (SQL/NoSQL/OS/LDAP/XPath/template), XSS, traversal/LFI/RFI/SSRF, URL-visible XXE, deserialization/RCE, webshell, Log4Shell, Spring4Shell, Struts, CRLF/null bytes, sensitive files, selected CVE probes and IIS probes; scanner UA and unusual methods. Admin routes alone are benign; repeated failed diverse-route probes are behavioral. Unseen CVEs, body-only payloads, obfuscation outside bounded decode variants, actual auth state and filesystem integrity cannot be verified.
 

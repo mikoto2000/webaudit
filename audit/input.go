@@ -3,6 +3,7 @@ package audit
 import (
 	"bufio"
 	"compress/gzip"
+	"crypto/sha256"
 	"fmt"
 	"io"
 	"io/fs"
@@ -11,13 +12,26 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"time"
+	_ "time/tzdata"
 )
 
 var logName = regexp.MustCompile(`(?i)(\.log(?:\.[0-9]+)?(?:\.gz)?$|\.gz$|^access(?:\.[0-9]+)?$)`)
 
 func Stream(paths []string, options Options, consume func(Event)) Report {
 	o := options.defaults()
-	r := Report{Schema: "webaudit/1", Version: Version, RulesVersion: RulesVersion, AnalyzedAt: o.Now().UTC(), Missing: map[string]int64{}}
+	r := Report{Schema: "webaudit/2", Version: Version, RulesVersion: RulesVersion, AnalyzedAt: o.Now().UTC(), Missing: map[string]int64{}}
+	var location *time.Location
+	if o.ErrorTimezone != "" {
+		var err error
+		location, err = time.LoadLocation(o.ErrorTimezone)
+		if err != nil {
+			r.Partial = true
+			r.warn("Invalid error log timezone: " + err.Error())
+			return r
+		}
+		r.ErrorTimezone = o.ErrorTimezone
+	}
 	files := map[string]bool{}
 	for _, p := range paths {
 		abs, err := filepath.Abs(p)
@@ -69,8 +83,34 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 		r.warn("No regular log files found")
 		r.Partial = true
 	}
+	seenFiles := map[[32]byte]Input{}
 	for _, p := range sorted {
 		in := Input{Path: p}
+		var signature [32]byte
+		hashedComplete := false
+		if o.DeduplicateFiles {
+			f, err := os.Open(p)
+			if err == nil {
+				h := sha256.New()
+				n, copyErr := io.Copy(h, io.LimitReader(f, o.MaxFileBytes+1))
+				err = copyErr
+				_ = f.Close()
+				if err == nil && n <= o.MaxFileBytes {
+					hashedComplete = true
+					copy(signature[:], h.Sum(nil))
+					if old, ok := seenFiles[signature]; ok {
+						in.Parsed = old.Parsed
+						in.Unparsed = old.Unparsed
+						in.DuplicateOf = old.Path
+						r.Parsed += in.Parsed
+						r.Unparsed += in.Unparsed
+						r.Duplicates += in.Parsed
+						r.Files = append(r.Files, in)
+						continue
+					}
+				}
+			}
+		}
 		err := readLog(p, o, func(line string, n int64, tooLong bool) {
 			if tooLong {
 				in.Unparsed++
@@ -89,13 +129,18 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 				return
 			}
 			in.Parsed++
-			if r.First == nil || e.Time.Before(*r.First) {
+			if e.TimezoneUnknown && location != nil {
+				v := e.Time
+				e.Time = time.Date(v.Year(), v.Month(), v.Day(), v.Hour(), v.Minute(), v.Second(), v.Nanosecond(), location)
+				e.TimezoneUnknown = false
+			}
+			if !e.TimezoneUnknown && (r.First == nil || e.Time.Before(*r.First)) {
 				r.First = ptr(e.Time)
 			}
-			if r.Last == nil || e.Time.After(*r.Last) {
+			if !e.TimezoneUnknown && (r.Last == nil || e.Time.After(*r.Last)) {
 				r.Last = ptr(e.Time)
 			}
-			for name, missing := range map[string]bool{"status": e.Status == nil, "bytes": e.Bytes == nil, "user_agent": e.UA == nil, "referer": e.Referer == nil, "method": e.Method == nil, "protocol": e.Protocol == nil} {
+			for name, missing := range map[string]bool{"status": e.Status == nil, "bytes": e.Bytes == nil, "user_agent": e.UA == nil, "referer": e.Referer == nil, "method": e.Method == nil, "protocol": e.Protocol == nil, "target": e.Target == "", "timezone": e.TimezoneUnknown} {
 				if missing {
 					r.Missing[name]++
 				}
@@ -110,6 +155,12 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 		r.Parsed += in.Parsed
 		r.Unparsed += in.Unparsed
 		r.Files = append(r.Files, in)
+		if o.DeduplicateFiles && hashedComplete && in.Error == "" {
+			seenFiles[signature] = in
+		}
+	}
+	if r.Duplicates > 0 {
+		r.warn("Identical complete input files excluded by explicit --dedup-files; repeated requests within a file are preserved")
 	}
 	if r.Unparsed > 0 {
 		r.Partial = true

@@ -1,5 +1,7 @@
 # 実装・検証状況
 
+以下は0.1.0完了時の履歴です。0.2.0の変更・互換性は[上流互換性](upstream-compatibility.md)、現行テスト結果は`measurements/upstream`を参照してください。同一行の既定重複除外は廃止し、HTTPエラー/syslogと固定上流辞書を追加しています。
+
 ## 実装済み
 
 Apache Common/Combined、Nginx Combined、vhost prefix、明示的JSONキー、名前付き正規表現でのカスタム形式。複数入力・ディレクトリ・gzip・ローテーション、ストリーミング、読み込みエラー隔離、巨大行/UTF-8/CRC/展開量上限、重複検出、元ログ参照。L1 28ルール、L2 9検知、L3 5検知、相関と保守的な成否推定、HTML/JSON/CSVとCLI要約、ログ品質と保持上限の警告。ルールとHTMLは埋め込みで、ネットワークや外部サービスは使いません。

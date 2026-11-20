@@ -1,6 +1,6 @@
 # Third-party notices
 
-WebAudit uses only the Go standard library (Go distribution: BSD-3-Clause). No runtime module dependencies. Algorithms and detection conditions are independently reimplemented; no Python, CrowdSec Go implementation or downloaded Hub data lists are bundled. Provenance remains recorded even for independent implementations.
+WebAudit uses only the Go standard library (Go distribution: BSD-3-Clause). No runtime module dependencies. The Go engine is independently implemented. Aura signature definitions, Hub scenario definitions/test fixtures and sec-lists dictionaries are redistributed under their notices. No Python or CrowdSec runtime is bundled. The exact input snapshots and hashes are in audit/upstream/manifest.json.
 
 ## AuraDFIR @ 23d4ec28381b77a6080d3d883adfc43d6decdc5e
 
@@ -123,3 +123,60 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
 Development-only CI references actions/checkout v7.0.1 and actions/setup-go v7.1.0, both MIT, pinned to verified commits in ci.yml. They are fetched by GitHub Actions and are not bundled in WebAudit binaries. Official releases: https://github.com/actions/checkout/releases/tag/v7.0.1 and https://github.com/actions/setup-go/releases/tag/v7.1.0 .
+
+## crowdsecurity/sec-lists @ 81734435645b603991fb31f6dbedc9b6b6f5f50c
+
+Embedded dictionaries in audit/upstream/data retain original headers and bytes. Root license:
+
+```text
+MIT License
+
+Copyright (c) 2020 crowdsecurity
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+```
+
+The bad_user_agents files additionally carry this file-level notice (preserved in the embedded data):
+
+```text
+MIT License
+
+Copyright (c) 2017 Mitchell Krog - mitchellkrog@gmail.com
+https://github.com/mitchellkrogza
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+```
