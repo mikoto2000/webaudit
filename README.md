@@ -10,12 +10,16 @@ Apache HTTP Server / Nginx のログから、不審なアクセスと関連す�
 
 ### 1. 実行ファイルをダウンロードする
 
-[GitHub Releases](https://github.com/mikoto2000/webaudit/releases)から、お使いの環境に合うファイルを取得してください。対応環境はWindows / Linuxのamd64（x86-64）です。
+[GitHub Releases](https://github.com/mikoto2000/webaudit/releases)から、お使いのOSとCPUに合うファイルを取得してください。配布対象はWindows / Linux / macOSのamd64（x86-64）・arm64（ARM64）です。リリースごとの添付ファイルを確認してください。
 
 | 環境 | ダウンロードするファイル |
 |---|---|
-| Windows | `webaudit-windows-amd64.exe` |
-| Linux | `webaudit-linux-amd64` |
+| Windows（x86-64） | `webaudit-windows-amd64.exe` |
+| Windows（ARM64） | `webaudit-windows-arm64.exe` |
+| Linux（x86-64） | `webaudit-linux-amd64` |
+| Linux（ARM64） | `webaudit-linux-arm64` |
+| macOS（Intel） | `webaudit-darwin-amd64` |
+| macOS（Apple Silicon） | `webaudit-darwin-arm64` |
 
 ### 2. ログを指定して実行する
 
@@ -33,6 +37,15 @@ Apache HTTP Server / Nginx のログから、不審なアクセスと関連す�
 chmod +x ./webaudit-linux-amd64
 ./webaudit-linux-amd64 ./access.log -o ./report.html
 ```
+
+**macOS（Apple Silicon）**
+
+```sh
+chmod +x ./webaudit-darwin-arm64
+./webaudit-darwin-arm64 ./access.log -o ./report.html
+```
+
+Windows / LinuxのARM64環境では、例のファイル名の `amd64` を `arm64` に置き換えてください。Intel Macでは `webaudit-darwin-amd64` を使います。
 
 元のログは変更しません。`report.html` がすでにある場合は上書きせず終了するため、別の出力名を指定してください。
 
@@ -61,7 +74,7 @@ chmod +x ./webaudit-linux-amd64
 
 ## よく使う操作
 
-以降の例の `webaudit` は、実行ファイルのパスに置き換えてください。Windowsでは `.\webaudit-windows-amd64.exe`、Linuxでは `./webaudit-linux-amd64` です。
+以降の例の `webaudit` は、ダウンロードした実行ファイルのパスに置き換えてください。例：Windows x86-64では `.\webaudit-windows-amd64.exe`、Linux x86-64では `./webaudit-linux-amd64`、Apple SiliconのMacでは `./webaudit-darwin-arm64` です。
 
 ### 画面の要約だけで確認する
 

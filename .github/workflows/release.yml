@@ -36,7 +36,11 @@ jobs:
         run: |
           mkdir -p release
           GOOS=windows GOARCH=amd64 go build -mod=vendor -trimpath -buildvcs=false -o release/webaudit-windows-amd64.exe ./cmd/webaudit
+          GOOS=windows GOARCH=arm64 go build -mod=vendor -trimpath -buildvcs=false -o release/webaudit-windows-arm64.exe ./cmd/webaudit
           GOOS=linux GOARCH=amd64 go build -mod=vendor -trimpath -buildvcs=false -o release/webaudit-linux-amd64 ./cmd/webaudit
+          GOOS=linux GOARCH=arm64 go build -mod=vendor -trimpath -buildvcs=false -o release/webaudit-linux-arm64 ./cmd/webaudit
+          GOOS=darwin GOARCH=amd64 go build -mod=vendor -trimpath -buildvcs=false -o release/webaudit-darwin-amd64 ./cmd/webaudit
+          GOOS=darwin GOARCH=arm64 go build -mod=vendor -trimpath -buildvcs=false -o release/webaudit-darwin-arm64 ./cmd/webaudit
       - name: Create GitHub Release and upload binaries
         env:
           GH_TOKEN: ${{ github.token }}
@@ -47,4 +51,8 @@ jobs:
             --verify-tag \
             --generate-notes \
             release/webaudit-windows-amd64.exe \
-            release/webaudit-linux-amd64
+            release/webaudit-windows-arm64.exe \
+            release/webaudit-linux-amd64 \
+            release/webaudit-linux-arm64 \
+            release/webaudit-darwin-amd64 \
+            release/webaudit-darwin-arm64

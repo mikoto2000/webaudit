@@ -24,10 +24,14 @@ go build -trimpath -buildvcs=false -o dist/webaudit-linux-amd64 ./cmd/webaudit
 
 ## リリース
 
-`v1.2.3` のように `v` で始まるタグをpushすると、[リリースワークフロー](.github/workflows/release.yml)が実行されます。タグが指すコミットでテストと静的解析を実行し、成功した場合にWindows / Linuxのamd64向けバイナリをビルドします。GitHub Releaseには自動生成したリリースノートと、以下のバイナリを添付します。
+`v1.2.3` のように `v` で始まるタグをpushすると、[リリースワークフロー](.github/workflows/release.yml)が実行されます。タグが指すコミットでテストと静的解析を実行し、成功した場合にWindows / Linux / macOSのamd64・arm64向けバイナリをクロスビルドします。全ビルドが成功すると、GitHub Releaseに自動生成したリリースノートと、以下の6種類のバイナリを添付します。
 
 - `webaudit-windows-amd64.exe`
+- `webaudit-windows-arm64.exe`
 - `webaudit-linux-amd64`
+- `webaudit-linux-arm64`
+- `webaudit-darwin-amd64`
+- `webaudit-darwin-arm64`
 
 ```sh
 git tag v1.2.3
