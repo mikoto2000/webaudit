@@ -96,7 +96,7 @@ func TestAnalyzeDedup(t *testing.T) {
 	line := strings.Replace(common, "/index?q=1", "/.env", 1)
 	_ = os.WriteFile(p, []byte(line+"\n"+line+"\n"), 0600)
 	r := Analyze([]string{p}, Options{})
-	if r.Parsed != 2 || r.Duplicates != 1 || len(r.Findings) != 1 || r.Findings[0].Count != 1 {
+	if r.Parsed != 2 || r.Duplicates != 0 || len(r.Findings) != 1 || r.Findings[0].Count != 2 {
 		t.Fatalf("%+v", r)
 	}
 }

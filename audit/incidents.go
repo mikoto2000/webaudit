@@ -265,10 +265,6 @@ func Analyze(paths []string, o Options) Report {
 	o = o.defaults()
 	a := NewAnalysis(o)
 	c := NewCorrelator(o)
-	fingerprints := make(map[[32]byte]bool)
-	queue := make([][32]byte, 0, o.MaxKeys)
-	cursor := 0
-	var duplicates int64
 	var previous time.Time
 	outOfOrder := false
 	r := Stream(paths, o, func(e Event) {
@@ -276,28 +272,16 @@ func Analyze(paths []string, o Options) Report {
 			outOfOrder = true
 		}
 		previous = e.Time
-		hash := sha256.Sum256([]byte(e.Raw))
-		if fingerprints[hash] {
-			duplicates++
-			return
-		}
-		fingerprints[hash] = true
-		if len(queue) < o.MaxKeys {
-			queue = append(queue, hash)
-		} else {
-			delete(fingerprints, queue[cursor])
-			queue[cursor] = hash
-			cursor = (cursor + 1) % o.MaxKeys
-		}
 		hits, n := Detect(e)
 		c.Add(e, hits, n)
-		a.Observe(e, hits)
+		if !e.TimezoneUnknown {
+			a.Observe(e, hits)
+		}
 	})
 	for _, s := range a.Finish() {
 		c.AddSignal(s)
 	}
 	r.Findings = c.Finish()
-	r.Duplicates = duplicates
 	r.Outcomes = map[string]int{"confirmed_success": 0, "possible_success": 0, "unknown": 0, "likely_failed": 0, "confirmed_failure": 0}
 	r.Categories = map[string]int{}
 	r.Severities = map[string]int{}
@@ -316,9 +300,6 @@ func Analyze(paths []string, o Options) Report {
 	}
 	if outOfOrder {
 		r.warn("Input time order is incomplete; correlations use bounded fixed event-time partitions")
-	}
-	if duplicates > 0 {
-		r.warn("Exact raw-line duplicates excluded within bounded fingerprint horizon; identical legitimate requests can be indistinguishable")
 	}
 	for field, count := range r.Missing {
 		if count > 0 {

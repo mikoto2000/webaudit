@@ -31,6 +31,9 @@ func compactEvent(e Event) Event {
 		}
 		return ptr(clip(*s, n))
 	}
+	e.RawRequest = optional(e.RawRequest, 4096)
+	e.Envelope = optional(e.Envelope, 1024)
+	e.Suffix = optional(e.Suffix, 1024)
 	e.Raw = clip(e.Raw, 4096)
 	e.Target = clip(e.Target, 4096)
 	e.Path = clip(e.Path, 1024)

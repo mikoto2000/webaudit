@@ -3,6 +3,7 @@ package audit
 import (
 	"bufio"
 	"compress/gzip"
+	"crypto/sha256"
 	"fmt"
 	"io"
 	"io/fs"
@@ -69,8 +70,31 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 		r.warn("No regular log files found")
 		r.Partial = true
 	}
+	seenFiles := map[[32]byte]Input{}
 	for _, p := range sorted {
 		in := Input{Path: p}
+		var signature [32]byte
+		if o.DeduplicateFiles {
+			f, err := os.Open(p)
+			if err == nil {
+				h := sha256.New()
+				_, err = io.Copy(h, io.LimitReader(f, o.MaxFileBytes+1))
+				_ = f.Close()
+				if err == nil {
+					copy(signature[:], h.Sum(nil))
+					if old, ok := seenFiles[signature]; ok {
+						in.Parsed = old.Parsed
+						in.Unparsed = old.Unparsed
+						in.DuplicateOf = old.Path
+						r.Parsed += in.Parsed
+						r.Unparsed += in.Unparsed
+						r.Duplicates += in.Parsed
+						r.Files = append(r.Files, in)
+						continue
+					}
+				}
+			}
+		}
 		err := readLog(p, o, func(line string, n int64, tooLong bool) {
 			if tooLong {
 				in.Unparsed++
@@ -89,13 +113,13 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 				return
 			}
 			in.Parsed++
-			if r.First == nil || e.Time.Before(*r.First) {
+			if !e.TimezoneUnknown && (r.First == nil || e.Time.Before(*r.First)) {
 				r.First = ptr(e.Time)
 			}
-			if r.Last == nil || e.Time.After(*r.Last) {
+			if !e.TimezoneUnknown && (r.Last == nil || e.Time.After(*r.Last)) {
 				r.Last = ptr(e.Time)
 			}
-			for name, missing := range map[string]bool{"status": e.Status == nil, "bytes": e.Bytes == nil, "user_agent": e.UA == nil, "referer": e.Referer == nil, "method": e.Method == nil, "protocol": e.Protocol == nil} {
+			for name, missing := range map[string]bool{"status": e.Status == nil, "bytes": e.Bytes == nil, "user_agent": e.UA == nil, "referer": e.Referer == nil, "method": e.Method == nil, "protocol": e.Protocol == nil, "target": e.Target == "", "timezone": e.TimezoneUnknown} {
 				if missing {
 					r.Missing[name]++
 				}
@@ -110,6 +134,12 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 		r.Parsed += in.Parsed
 		r.Unparsed += in.Unparsed
 		r.Files = append(r.Files, in)
+		if o.DeduplicateFiles && in.Error == "" {
+			seenFiles[signature] = in
+		}
+	}
+	if r.Duplicates > 0 {
+		r.warn("Identical complete input files excluded by explicit --dedup-files; repeated requests within a file are preserved")
 	}
 	if r.Unparsed > 0 {
 		r.Partial = true

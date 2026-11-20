@@ -7,6 +7,14 @@ const Version = "0.1.0"
 const RulesVersion = "2026.11.20.1"
 
 type Event struct {
+	RawRequest        *string   `json:"raw_request"`
+	RequestMalformed  bool      `json:"request_malformed,omitempty"`
+	LogType           string    `json:"log_type"`
+	AuthFailure       bool      `json:"auth_failure,omitempty"`
+	TimezoneUnknown   bool      `json:"timezone_unknown,omitempty"`
+	WallTime          *string   `json:"wall_time,omitempty"`
+	Envelope          *string   `json:"syslog_envelope,omitempty"`
+	Suffix            *string   `json:"unmapped_suffix,omitempty"`
 	EvidenceTruncated bool      `json:"evidence_truncated,omitempty"`
 	Time              time.Time `json:"time"`
 	IP                string    `json:"ip"`
@@ -25,6 +33,7 @@ type Event struct {
 	Raw               string    `json:"raw"`
 }
 type Options struct {
+	DeduplicateFiles bool
 	Now              func() time.Time
 	MaxEvidenceBytes int
 	MaxLineBytes     int
@@ -57,10 +66,11 @@ func (o Options) defaults() Options {
 }
 
 type Input struct {
-	Path     string `json:"path"`
-	Parsed   int64  `json:"parsed"`
-	Unparsed int64  `json:"unparsed"`
-	Error    string `json:"error,omitempty"`
+	DuplicateOf string `json:"duplicate_of,omitempty"`
+	Path        string `json:"path"`
+	Parsed      int64  `json:"parsed"`
+	Unparsed    int64  `json:"unparsed"`
+	Error       string `json:"error,omitempty"`
 }
 type Report struct {
 	Findings     []Incident       `json:"findings"`

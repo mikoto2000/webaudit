@@ -20,6 +20,7 @@ func run(args []string, out, errout io.Writer) int {
 	version := fs.Bool("version", false, "Show version")
 	help := fs.Bool("help", false, "Show help")
 	var o audit.Options
+	fs.BoolVar(&o.DeduplicateFiles, "dedup-files", false, "Opt-in: exclude byte-identical complete input files; retain repeated requests")
 	fs.StringVar(&o.LogRegex, "log-regex", "", "Explicit custom format with named groups ip,time,target,...")
 	fs.IntVar(&o.MaxLineBytes, "max-line-bytes", 64*1024, "Maximum line size; oversized lines are skipped")
 	fs.Int64Var(&o.MaxFileBytes, "max-file-bytes", 8<<30, "Maximum decompressed bytes per file")
