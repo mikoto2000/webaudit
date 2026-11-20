@@ -6,6 +6,8 @@ Apache HTTP Server / Nginx のログから、不審なアクセスと関連す�
 
 **アクセスログだけで侵害の成功を確定できるとは限りません。** HTTP 200・302・500だけでは成功と判定せず、証拠が不足する場合は「成否不明」とします。
 
+v1.1.0ではGeoIP / ASNデータベースの取得・更新管理に対応しました。変更点は[v1.1.0リリースノート](docs/releases/v1.1.0.md)、初回導入と更新は[GeoIPデータベース管理](docs/geoip-database-management.md)を参照してください。
+
 ## はじめに：ログを解析してHTMLレポートを開く
 
 ### 1. 実行ファイルをダウンロードする
@@ -20,6 +22,14 @@ Apache HTTP Server / Nginx のログから、不審なアクセスと関連す�
 | Linux（ARM64） | `webaudit-linux-arm64` |
 | macOS（Intel） | `webaudit-darwin-amd64` |
 | macOS（Apple Silicon） | `webaudit-darwin-arm64` |
+
+配布ファイルと同じリリースに`SHA256SUMS.txt`、`LICENSE`、`THIRD_PARTY_NOTICES.md`も添付しています。取得したバイナリのSHA-256を一覧と照合できます。
+
+| 環境 | SHA-256を表示するコマンド |
+|---|---|
+| Windows（PowerShell） | `Get-FileHash .\webaudit-windows-amd64.exe -Algorithm SHA256` |
+| Linux | `sha256sum ./webaudit-linux-amd64` |
+| macOS | `shasum -a 256 ./webaudit-darwin-arm64` |
 
 ### 2. ログを指定して実行する
 
