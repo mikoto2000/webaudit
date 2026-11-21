@@ -38,11 +38,12 @@ type trackedFile struct {
 	detached time.Time
 }
 type Reader struct {
-	Targets     []string
-	o           ReaderOptions
-	files       []*trackedFile
-	initialized bool
-	open func(string)(*os.File,error)
+	Targets        []string
+	o              ReaderOptions
+	files          []*trackedFile
+	initialized    bool
+	open           func(string) (*os.File, error)
+	scanIncomplete bool
 }
 
 func NewReader(paths []string, o ReaderOptions) (*Reader, error) {
@@ -63,7 +64,7 @@ func NewReader(paths []string, o ReaderOptions) (*Reader, error) {
 			return nil, e
 		}
 	}
-	r := &Reader{o: o,open:openLog}
+	r := &Reader{o: o, open: openLog}
 	for _, p := range paths {
 		a, e := filepath.Abs(p)
 		if e != nil {
@@ -107,6 +108,7 @@ func (r *Reader) candidates() ([]string, error) {
 		}
 		if e != nil {
 			r.warn("input unavailable: " + p)
+			r.scanIncomplete = true
 			continue
 		}
 		if st.Mode()&os.ModeSymlink != 0 {
@@ -116,6 +118,7 @@ func (r *Reader) candidates() ([]string, error) {
 			d, e := os.Open(p)
 			if e != nil {
 				r.warn("directory unavailable: " + p)
+				r.scanIncomplete = true
 				continue
 			}
 			for {
@@ -138,6 +141,10 @@ func (r *Reader) candidates() ([]string, error) {
 						}
 					}
 				}
+				if er != nil && er != io.EOF {
+					r.scanIncomplete = true
+					r.warn("directory enumeration failed: " + p)
+				}
 				if er != nil || len(paths) >= r.o.MaxFiles {
 					break
 				}
@@ -156,6 +163,7 @@ func (r *Reader) candidates() ([]string, error) {
 	return unique(paths), nil
 }
 func (r *Reader) discover() error {
+	r.scanIncomplete = false
 	paths, e := r.candidates()
 	if e != nil {
 		return e
@@ -165,6 +173,7 @@ func (r *Reader) discover() error {
 		f, e := r.open(p)
 		if e != nil {
 			r.warn("cannot open input: " + p)
+			r.scanIncomplete = true
 			continue
 		}
 		st, e := f.Stat()
@@ -172,12 +181,14 @@ func (r *Reader) discover() error {
 		if e != nil || le != nil || !st.Mode().IsRegular() || ls.Mode()&os.ModeSymlink != 0 || !os.SameFile(st, ls) {
 			f.Close()
 			r.warn("input changed during open: " + p)
+			r.scanIncomplete = true
 			continue
 		}
 		id, e := fileID(f)
 		if e != nil {
 			f.Close()
 			r.warn("file identity unavailable: " + p)
+			r.scanIncomplete = true
 			continue
 		}
 		active[id] = true
@@ -212,6 +223,9 @@ func (r *Reader) discover() error {
 		}
 		r.files = append(r.files, v)
 	}
+	if r.scanIncomplete {
+		return nil
+	} // Unknown availability is not deletion/rotation.
 	now := time.Now()
 	for _, v := range r.files {
 		if !active[v.ID] && v.detached.IsZero() {
