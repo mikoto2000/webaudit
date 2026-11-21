@@ -28,6 +28,8 @@ func runWatch(args []string, out, errout io.Writer) int {
 	lateness := fs.Duration("allowed-lateness", 30*time.Second, "Maximum out-of-order event delay")
 	retention := fs.Duration("retention", 15*time.Minute, "Detection retention horizon")
 	maxEvents := fs.Int("max-events", 8192, "Maximum retained normalized events")
+	noState := fs.Bool("no-state", false, "Disable all checkpoint persistence")
+	resetState := fs.Bool("reset-state", false, "Ignore saved checkpoint and start from --from")
 	fs.Usage = func() {
 		fmt.Fprintln(errout, "Usage: webaudit watch INPUT... [--from beginning|end]")
 		fs.PrintDefaults()
@@ -63,6 +65,32 @@ func runWatch(args []string, out, errout io.Writer) int {
 	}
 	defer r.Close()
 	engine := watch.NewEngine(watch.EngineOptions{AllowedLateness: *lateness, Retention: *retention, MaxEvents: *maxEvents, Warn: warn})
+	var store *watch.Store
+	if !*noState {
+		key := fmt.Sprintf("%s/%s/%s/%d/%d/%s/%s", audit.RulesVersion, *lateness, *retention, *maxEvents, *maxLine, *include, *exclude)
+		store, e = watch.OpenStore(r.Targets, key, *resetState)
+		if e != nil {
+			warn(e.Error())
+			return 2
+		}
+		defer store.Close()
+		state, er := store.Load()
+		if er != nil {
+			warn(er.Error())
+			return 2
+		}
+		if er = watch.Restore(r, engine, state); er != nil {
+			warn(er.Error())
+			return 2
+		}
+	}
+	save := func() error {
+		if store != nil {
+			return store.Save(watch.Capture(r, engine, nil))
+		}
+		return nil
+	}
+	lastSave := time.Now()
 	encode := json.NewEncoder(out)
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
@@ -81,6 +109,10 @@ func runWatch(args []string, out, errout io.Writer) int {
 		})
 		if e != nil {
 			if ctx.Err() != nil {
+				if er := save(); er != nil {
+					warn(er.Error())
+					return 1
+				}
 				return 0
 			}
 			warn(e.Error())
@@ -97,8 +129,19 @@ func runWatch(args []string, out, errout io.Writer) int {
 				return 1
 			}
 		}
+		if time.Since(lastSave) >= time.Second {
+			if er := save(); er != nil {
+				warn(er.Error())
+				return 1
+			}
+			lastSave = time.Now()
+		}
 		select {
 		case <-ctx.Done():
+			if er := save(); er != nil {
+				warn(er.Error())
+				return 1
+			}
 			return 0
 		case <-ticker.C:
 		}
