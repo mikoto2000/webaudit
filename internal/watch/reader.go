@@ -231,12 +231,20 @@ func (r *Reader) Poll(ctx context.Context, consume func(Line) error) error {
 		return e
 	}
 	kept := r.files[:0]
+	blocked := map[string]bool{}
 	// Existing handles precede newly discovered replacements, draining old data first.
 	for _, v := range r.files {
+		if blocked[v.Path] {
+			kept = append(kept, v)
+			continue
+		}
 		if e := r.read(ctx, v, consume); e != nil {
 			return e
 		}
 		st, e := v.file.Stat()
+		if !v.detached.IsZero() && e == nil && v.Offset < st.Size() {
+			blocked[v.Path] = true
+		}
 		if !v.detached.IsZero() && time.Since(v.detached) > 2*time.Second && e == nil && v.Offset >= st.Size() {
 			if len(v.Partial) > 0 {
 				r.warn("incomplete rotated line discarded")
