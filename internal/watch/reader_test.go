@@ -117,3 +117,11 @@ func TestReaderDirectoryLimitsAndCancel(t *testing.T) {
 		t.Fatal("cancel ignored")
 	}
 }
+
+func TestReaderDrainsOldBeforeReplacement(t *testing.T) {
+ p:=filepath.Join(t.TempDir(),"access.log");put(t,p,"")
+ r,e:=NewReader([]string{p},ReaderOptions{Beginning:true});if e!=nil{t.Fatal(e)};defer r.Close()
+ appendLog(t,p,strings.Repeat("old\n",300000));if e=os.Rename(p,p+".1");e!=nil{t.Fatal(e)};put(t,p,"new\n")
+ got:=poll(t,r);for _,s:=range got{if s=="new"{t.Fatal("replacement consumed before old file drained")}}
+ got=poll(t,r);if len(got)==0||got[len(got)-1]!="new"{t.Fatal("replacement not consumed after drain")}
+}
