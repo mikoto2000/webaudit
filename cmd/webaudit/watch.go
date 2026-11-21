@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"sync"
 	"time"
 	"webaudit/audit"
 	"webaudit/internal/watch"
@@ -30,6 +31,30 @@ func runWatch(args []string, out, errout io.Writer) int {
 	maxEvents := fs.Int("max-events", 8192, "Maximum retained normalized events")
 	noState := fs.Bool("no-state", false, "Disable all checkpoint persistence")
 	resetState := fs.Bool("reset-state", false, "Ignore saved checkpoint and start from --from")
+	var hooks []watch.Hook
+	fs.Func("on-detect", "Hook executable path; repeat for multiple hooks", func(s string) error {
+		if len(hooks) >= 16 {
+			return fmt.Errorf("maximum 16 hooks")
+		}
+		hooks = append(hooks, watch.Hook{Executable: s})
+		return nil
+	})
+	fs.Func("on-detect-arg", "Literal argument for preceding --on-detect", func(s string) error {
+		if len(hooks) == 0 {
+			return fmt.Errorf("requires preceding --on-detect")
+		}
+		h := &hooks[len(hooks)-1]
+		if len(h.Args) >= 64 {
+			return fmt.Errorf("maximum 64 hook arguments")
+		}
+		h.Args = append(h.Args, s)
+		return nil
+	})
+	severity := fs.String("on-detect-severity", "high", "Minimum hook severity: low, medium, high, critical")
+	events := fs.String("on-detect-event", "created", "Hook events: created, updated, all (significant changes only)")
+	hookTimeout := fs.Duration("hook-timeout", 10*time.Second, "Timeout per hook")
+	hookConcurrency := fs.Int("hook-concurrency", 1, "Concurrent hooks (1..32)")
+	hookQueue := fs.Int("hook-queue-size", 128, "Maximum queued hook notifications")
 	fs.Usage = func() {
 		fmt.Fprintln(errout, "Usage: webaudit watch INPUT... [--from beginning|end]")
 		fs.PrintDefaults()
@@ -57,7 +82,14 @@ func runWatch(args []string, out, errout io.Writer) int {
 		fmt.Fprintln(errout, "invalid watch detection options")
 		return 2
 	}
-	warn := func(s string) { fmt.Fprintln(errout, audit.TerminalSafe(s)) }
+	var diagnosticMu sync.Mutex
+	warn := func(s string) {
+		diagnosticMu.Lock()
+		defer diagnosticMu.Unlock()
+		fmt.Fprintln(errout, audit.TerminalSafe(s))
+	}
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
 	r, e := watch.NewReader(fs.Args(), watch.ReaderOptions{Beginning: *from == "beginning", MaxFiles: *maxFiles, MaxLineBytes: *maxLine, Include: *include, Exclude: *exclude, Warn: warn})
 	if e != nil {
 		warn(e.Error())
@@ -66,6 +98,7 @@ func runWatch(args []string, out, errout io.Writer) int {
 	defer r.Close()
 	engine := watch.NewEngine(watch.EngineOptions{AllowedLateness: *lateness, Retention: *retention, MaxEvents: *maxEvents, Warn: warn})
 	var store *watch.Store
+	var history map[string]uint64
 	if !*noState {
 		key := fmt.Sprintf("%s/%s/%s/%d/%d/%s/%s", audit.RulesVersion, *lateness, *retention, *maxEvents, *maxLine, *include, *exclude)
 		store, e = watch.OpenStore(r.Targets, key, *resetState)
@@ -83,17 +116,24 @@ func runWatch(args []string, out, errout io.Writer) int {
 			warn(er.Error())
 			return 2
 		}
+		if state != nil {
+			history = state.Notifications
+		}
 	}
+	dispatcher, e := watch.NewDispatcher(ctx, watch.HookOptions{Hooks: hooks, Severity: *severity, Events: *events, Timeout: *hookTimeout, Concurrency: *hookConcurrency, QueueSize: *hookQueue, Warn: warn}, history)
+	if e != nil {
+		warn(e.Error())
+		return 2
+	}
+	defer dispatcher.Close()
 	save := func() error {
 		if store != nil {
-			return store.Save(watch.Capture(r, engine, nil))
+			return store.Save(watch.Capture(r, engine, dispatcher.History()))
 		}
 		return nil
 	}
 	lastSave := time.Now()
 	encode := json.NewEncoder(out)
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
-	defer stop()
 	ticker := time.NewTicker(*interval)
 	defer ticker.Stop()
 	fmt.Fprintln(errout, "WebAudit Watch: monitoring", audit.TerminalSafe(fmt.Sprint(r.Targets)))
@@ -128,7 +168,9 @@ func runWatch(args []string, out, errout io.Writer) int {
 				warn(e.Error())
 				return 1
 			}
+			dispatcher.Dispatch(v)
 		}
+		dispatcher.Prune(engine.Incidents)
 		if time.Since(lastSave) >= time.Second {
 			if er := save(); er != nil {
 				warn(er.Error())
