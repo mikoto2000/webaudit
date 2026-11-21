@@ -42,7 +42,7 @@ func run(args []string, out, errout io.Writer) int {
 	fs.IntVar(&o.MaxEvidenceBytes, "max-evidence-bytes", 32<<20, "Maximum retained incident evidence bytes")
 	fs.IntVar(&o.MaxFindings, "max-findings", 2000, "Maximum incidents, signals and source alerts per collection")
 	fs.Usage = func() {
-		fmt.Fprintln(errout, "Usage: webaudit INPUT... [-o REPORT] [--format html|json|csv] [--lang ja|en] [--verbose]\nInputs: files, gzip files, or directories. No output file without -o.\nGeoIP management: webaudit geoip download|update|status|rollback")
+		fmt.Fprintln(errout, "Usage: webaudit INPUT... [-o REPORT] [--format html|json|csv] [--lang ja|en] [--verbose]\nInputs: files, gzip files, or directories. No output file without -o.\nRealtime monitoring: webaudit watch INPUT... [--help]\nGeoIP management: webaudit geoip download|update|status|rollback")
 		fs.PrintDefaults()
 	}
 	ordered, err := interspersed(args, fs)
