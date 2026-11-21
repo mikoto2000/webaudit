@@ -69,6 +69,16 @@ func TestStateRestartPartialAndRotation(t *testing.T) {
 		t.Fatal(got)
 	}
 }
+
+func TestStateRestoresPendingDetection(t *testing.T){
+ t.Setenv("XDG_STATE_HOME",t.TempDir());p:=filepath.Join(t.TempDir(),"access.log");put(t,p,"");r,_:=NewReader([]string{p},ReaderOptions{});defer r.Close();e:=NewEngine(EngineOptions{});now:=time.Now();e.Observe(event(t,0,404,"/.env"),now)
+ s,err:=OpenStore(r.Targets,"pending",false);if err!=nil{t.Fatal(err)};defer s.Close();if err=s.Save(Capture(r,e,nil));err!=nil{t.Fatal(err)};v,err:=s.Load();if err!=nil{t.Fatal(err)}
+ restored:=NewEngine(EngineOptions{});if err=Restore(r,restored,v);err!=nil{t.Fatal(err)};if got:=restored.Flush(now);len(got)!=1{t.Fatal("pending event lost",got)}
+}
+func TestStateRejectsCursorOutsideTargets(t *testing.T){
+ t.Setenv("XDG_STATE_HOME",t.TempDir());p:=filepath.Join(t.TempDir(),"access.log");r,_:=NewReader([]string{p},ReaderOptions{});defer r.Close();s,err:=OpenStore(r.Targets,"scope",false);if err!=nil{t.Fatal(err)};defer s.Close();v:=Capture(r,NewEngine(EngineOptions{}),nil)
+ v.Cursors=[]Cursor{{Path:filepath.Join(t.TempDir(),"private.log"),ID:"arbitrary"}};if err=s.Save(v);err==nil{t.Fatal("out-of-scope cursor accepted")}
+}
 func TestStateCorruptionResetAndAtomic(t *testing.T) {
 	t.Setenv("XDG_STATE_HOME", t.TempDir())
 	targets := []string{filepath.Join(t.TempDir(), "access.log")}
