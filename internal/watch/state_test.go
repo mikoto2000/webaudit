@@ -115,6 +115,11 @@ func TestStateRejectsCursorOutsideTargets(t *testing.T) {
 		t.Fatal("out-of-scope cursor accepted")
 	}
 }
+
+func TestRestoreRespectsFileLimit(t *testing.T){
+ d:=t.TempDir();p:=filepath.Join(d,"access.log");put(t,p,"");r,_:=NewReader([]string{p},ReaderOptions{Beginning:true,MaxFiles:1});poll(t,r);e:=NewEngine(EngineOptions{});v:=Capture(r,e,nil);r.Close();if err:=os.Rename(p,p+".1");err!=nil{t.Fatal(err)};put(t,p,"new\n");r,_=NewReader([]string{p},ReaderOptions{MaxFiles:1});defer r.Close()
+ if err:=Restore(r,e,v);err!=nil{t.Fatal(err)};if len(r.files)>1{t.Fatal("restored handle limit exceeded",len(r.files))}
+}
 func TestStateCorruptionResetAndAtomic(t *testing.T) {
 	t.Setenv("XDG_STATE_HOME", t.TempDir())
 	targets := []string{filepath.Join(t.TempDir(), "access.log")}
