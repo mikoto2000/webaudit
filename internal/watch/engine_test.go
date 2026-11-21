@@ -107,3 +107,15 @@ func TestEngineOutOfOrderAndBatchParity(t *testing.T) {
 		t.Fatal(got, want)
 	}
 }
+
+func TestEngineSeverityEscalationAndCountOnly(t *testing.T){
+ now:=time.Now();e:=NewEngine(EngineOptions{})
+ e.Observe(event(t,0,200,"/?q=%3Cscript%3E"),now);got:=e.Flush(now);if len(got)!=1||got[0].Severity!="medium"{t.Fatal(got)}
+ e.Observe(event(t,1,200,"/?q=%3Cscript%3E"),now);got=e.Flush(now);if len(got)!=1||got[0].Notify{t.Fatal("count-only notification",got)}
+ e.Observe(event(t,2,200,"/?q=UNION%20SELECT%20password%20FROM%20users"),now);got=e.Flush(now);if len(got)!=1||got[0].Severity!="high"||!got[0].Notify{t.Fatal(got)}
+}
+
+func TestEngineClosedIncidentDoesNotReopen(t *testing.T){
+ now:=time.Now();e:=NewEngine(EngineOptions{Retention:6*time.Minute});e.Observe(event(t,0,404,"/.env"),now);e.Flush(now);e.Flush(now.Add(6*time.Minute));e.Flush(now.Add(13*time.Minute));
+ e.Observe(event(t,1,404,"/.env"),now.Add(14*time.Minute));if got:=e.Flush(now.Add(14*time.Minute));len(got)!=0{t.Fatal("closed incident reopened",got)}
+}
