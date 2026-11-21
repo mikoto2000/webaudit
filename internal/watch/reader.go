@@ -236,15 +236,16 @@ func (r *Reader) Poll(ctx context.Context, consume func(Line) error) error {
 	if e := r.discover(); e != nil {
 		return e
 	}
-	kept := r.files[:0]
+	kept := make([]*trackedFile, 0, len(r.files))
 	blocked := map[string]bool{}
 	// Existing handles precede newly discovered replacements, draining old data first.
-	for _, v := range r.files {
+	for i, v := range r.files {
 		if blocked[v.Path] {
 			kept = append(kept, v)
 			continue
 		}
 		if e := r.read(ctx, v, consume); e != nil {
+			r.files = append(kept, r.files[i:]...)
 			return e
 		}
 		st, e := v.file.Stat()

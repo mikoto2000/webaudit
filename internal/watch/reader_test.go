@@ -192,9 +192,37 @@ func TestReaderRepeatedRotationAndIncludes(t *testing.T) {
 	}
 }
 
-func TestReaderCancellationDuringHandleCleanupPreservesUniqueCursors(t *testing.T){
- d:=t.TempDir();var paths []string;for _,name:=range []string{"a_access.log","b_access.log","c_access.log"}{p:=filepath.Join(d,name);put(t,p,"");paths=append(paths,p)}
- r,e:=NewReader(paths,ReaderOptions{Beginning:true});if e!=nil{t.Fatal(e)};defer r.Close();os.Remove(paths[0]);r.files[0].detached=time.Now().Add(-3*time.Second);appendLog(t,paths[1],"b\n");appendLog(t,paths[2],"c\n")
- _=r.Poll(context.Background(),func(l Line)error{if l.File==paths[2]{return context.Canceled};return nil})
- seen:=map[string]bool{};for _,f:=range r.files{if seen[f.ID]{t.Fatal("cleanup cancellation duplicated cursor")};seen[f.ID]=true};if len(r.files)!=2{t.Fatal("closed handle retained",len(r.files))}
+func TestReaderCancellationDuringHandleCleanupPreservesUniqueCursors(t *testing.T) {
+	d := t.TempDir()
+	var paths []string
+	for _, name := range []string{"a_access.log", "b_access.log", "c_access.log"} {
+		p := filepath.Join(d, name)
+		put(t, p, "")
+		paths = append(paths, p)
+	}
+	r, e := NewReader(paths, ReaderOptions{Beginning: true})
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer r.Close()
+	os.Remove(paths[0])
+	r.files[0].detached = time.Now().Add(-3 * time.Second)
+	appendLog(t, paths[1], "b\n")
+	appendLog(t, paths[2], "c\n")
+	_ = r.Poll(context.Background(), func(l Line) error {
+		if l.File == paths[2] {
+			return context.Canceled
+		}
+		return nil
+	})
+	seen := map[string]bool{}
+	for _, f := range r.files {
+		if seen[f.ID] {
+			t.Fatal("cleanup cancellation duplicated cursor")
+		}
+		seen[f.ID] = true
+	}
+	if len(r.files) != 2 {
+		t.Fatal("closed handle retained", len(r.files))
+	}
 }
