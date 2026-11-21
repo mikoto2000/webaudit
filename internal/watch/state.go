@@ -135,6 +135,16 @@ func (s *Store) validate(v *Snapshot) error {
 		return fmt.Errorf("state collections exceed limits")
 	}
 	for _, c := range v.Cursors {
+		allowed := false
+		for _, target := range s.targets {
+			if c.Path == target || filepath.Dir(c.Path) == target {
+				allowed = true
+				break
+			}
+		}
+		if !allowed {
+			return fmt.Errorf("cursor is outside watch targets")
+		}
 		if c.Offset < 0 || c.Number < 0 || len(c.Partial) > 16<<20 || !filepath.IsAbs(c.Path) || c.ID == "" {
 			return fmt.Errorf("invalid file cursor")
 		}
@@ -294,7 +304,7 @@ func Restore(r *Reader, e *Engine, v *Snapshot) error {
 	e.MaxTime = v.Engine.MaxTime
 	e.FinalizedUntil = v.Engine.FinalizedUntil
 	e.Sequence = v.Engine.Sequence
-	e.dirty = false
+	e.dirty = true // Re-evaluate pending records; existing fingerprints suppress duplicates.
 	return nil
 }
 func (r *Reader) findRotated(c Cursor) *trackedFile {
