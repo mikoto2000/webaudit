@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
-"time"
+	"time"
 )
 
 func put(t *testing.T, p, s string) {
@@ -144,15 +144,50 @@ func TestReaderDrainsOldBeforeReplacement(t *testing.T) {
 	}
 }
 
-func TestReaderEndSkipsExistingPartialLine(t *testing.T){
- p:=filepath.Join(t.TempDir(),"access.log");put(t,p,"existing unfinished")
- r,e:=NewReader([]string{p},ReaderOptions{});if e!=nil{t.Fatal(e)};defer r.Close();appendLog(t,p," tail\nnew\n");if got:=poll(t,r);!reflect.DeepEqual(got,[]string{"new"}){t.Fatal(got)}
+func TestReaderEndSkipsExistingPartialLine(t *testing.T) {
+	p := filepath.Join(t.TempDir(), "access.log")
+	put(t, p, "existing unfinished")
+	r, e := NewReader([]string{p}, ReaderOptions{})
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer r.Close()
+	appendLog(t, p, " tail\nnew\n")
+	if got := poll(t, r); !reflect.DeepEqual(got, []string{"new"}) {
+		t.Fatal(got)
+	}
 }
 
-func TestReaderRepeatedRotationAndIncludes(t *testing.T){
- d:=t.TempDir();p:=filepath.Join(d,"custom.txt");put(t,p,"");put(t,filepath.Join(d,"skip.txt"),"skip\n")
- r,e:=NewReader([]string{d},ReaderOptions{Beginning:true,Include:"*.txt",Exclude:"skip*",MaxFiles:4});if e!=nil{t.Fatal(e)};defer r.Close()
- for i:=0;i<10;i++{appendLog(t,p,"old\n");rot:=filepath.Join(d,"rotated");if e=os.Rename(p,rot);e!=nil{t.Fatal(e)};put(t,p,"new\n");got:=poll(t,r);if !reflect.DeepEqual(got,[]string{"old","new"}){t.Fatal(i,got)};os.Remove(rot);for _,f:=range r.files{if !f.detached.IsZero(){f.detached=f.detached.Add(-3*time.Second)}};poll(t,r)}
- if len(r.files)>4{t.Fatal("handles exceeded limit")}
+func TestReaderRepeatedRotationAndIncludes(t *testing.T) {
+	d := t.TempDir()
+	p := filepath.Join(d, "custom.txt")
+	put(t, p, "")
+	put(t, filepath.Join(d, "skip.txt"), "skip\n")
+	r, e := NewReader([]string{d}, ReaderOptions{Beginning: true, Include: "*.txt", Exclude: "skip*", MaxFiles: 4})
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer r.Close()
+	for i := 0; i < 10; i++ {
+		appendLog(t, p, "old\n")
+		rot := filepath.Join(d, "rotated")
+		if e = os.Rename(p, rot); e != nil {
+			t.Fatal(e)
+		}
+		put(t, p, "new\n")
+		got := poll(t, r)
+		if !reflect.DeepEqual(got, []string{"old", "new"}) {
+			t.Fatal(i, got)
+		}
+		os.Remove(rot)
+		for _, f := range r.files {
+			if !f.detached.IsZero() {
+				f.detached = f.detached.Add(-3 * time.Second)
+			}
+		}
+		poll(t, r)
+	}
+	if len(r.files) > 4 {
+		t.Fatal("handles exceeded limit")
+	}
 }
-

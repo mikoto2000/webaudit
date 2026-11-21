@@ -200,6 +200,12 @@ func (r *Reader) discover() error {
 		if !r.initialized && !r.o.Beginning {
 			v.Offset = st.Size()
 			v.Anchor = anchor(f, v.Offset)
+			if v.Offset > 0 {
+				var last [1]byte
+				if _, e := f.ReadAt(last[:], v.Offset-1); e == nil && last[0] != '\n' {
+					v.Discard = true
+				}
+			}
 		}
 		r.files = append(r.files, v)
 	}

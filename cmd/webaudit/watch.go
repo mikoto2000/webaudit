@@ -8,14 +8,22 @@ import (
 	"io"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 	"webaudit/audit"
+	"webaudit/internal/geoipdb"
 	"webaudit/internal/watch"
 )
 
 func runWatch(args []string, out, errout io.Writer) int {
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
+	return runWatchContext(ctx, args, out, errout)
+}
+
+func runWatchContext(ctx context.Context, args []string, out, errout io.Writer) int {
 	fs := flag.NewFlagSet("webaudit watch", flag.ContinueOnError)
 	fs.SetOutput(errout)
 	from := fs.String("from", "end", "beginning or end (saved checkpoint takes precedence)")
@@ -55,6 +63,8 @@ func runWatch(args []string, out, errout io.Writer) int {
 	hookTimeout := fs.Duration("hook-timeout", 10*time.Second, "Timeout per hook")
 	hookConcurrency := fs.Int("hook-concurrency", 1, "Concurrent hooks (1..32)")
 	hookQueue := fs.Int("hook-queue-size", 128, "Maximum queued hook notifications")
+	country := fs.String("geoip-country", "", "Local Country MMDB override")
+	asn := fs.String("geoip-asn", "", "Local ASN MMDB override")
 	fs.Usage = func() {
 		fmt.Fprintln(errout, "Usage: webaudit watch INPUT... [--from beginning|end]")
 		fs.PrintDefaults()
@@ -88,15 +98,31 @@ func runWatch(args []string, out, errout io.Writer) int {
 		defer diagnosticMu.Unlock()
 		fmt.Fprintln(errout, audit.TerminalSafe(s))
 	}
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
-	defer stop()
+	executable, er := os.Executable()
+	if er != nil {
+		warn(er.Error())
+		return 2
+	}
+	geoDir, pathErr := geoipdb.DefaultDir()
+	if pathErr != nil {
+		warn(pathErr.Error())
+	}
+	geo, warnings, er := audit.OpenManagedGeoIP(*country, *asn, geoDir, filepath.Join(filepath.Dir(executable), "geoip"), 4096)
+	if er != nil {
+		warn(er.Error())
+		return 2
+	}
+	defer geo.Close()
+	for _, w := range warnings {
+		warn(w)
+	}
 	r, e := watch.NewReader(fs.Args(), watch.ReaderOptions{Beginning: *from == "beginning", MaxFiles: *maxFiles, MaxLineBytes: *maxLine, Include: *include, Exclude: *exclude, Warn: warn})
 	if e != nil {
 		warn(e.Error())
 		return 2
 	}
 	defer r.Close()
-	engine := watch.NewEngine(watch.EngineOptions{AllowedLateness: *lateness, Retention: *retention, MaxEvents: *maxEvents, Warn: warn})
+	engine := watch.NewEngine(watch.EngineOptions{AllowedLateness: *lateness, Retention: *retention, MaxEvents: *maxEvents, Warn: warn, GeoIP: geo})
 	var store *watch.Store
 	var history map[string]uint64
 	if !*noState {
