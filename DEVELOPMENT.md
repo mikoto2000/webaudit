@@ -46,9 +46,15 @@ git push origin v1.2.3
 go run ./tools/evaluate
 go run ./tools/benchmark -lines 1000000
 go run ./tools/benchmark -lines 1000000 -padding 3000
+go run ./tools/watch-benchmark -mode engine -lines 10000
+go run ./tools/watch-benchmark -mode simulated -lines 86400
 go test ./audit -run='^$' -fuzz=FuzzParse -fuzztime=10s -parallel=4
 ```
 
 ## 調査・設計資料
 
 [競合調査](docs/competitor-analysis.md)、[ルール台帳](docs/rule-inventory.md)、[検知設計](docs/detection-design.md) を参照してください。外部データリストは無条件に移植せず、未対応の理由を台帳に記録しています。
+
+監視・Hookは[watch設計](docs/watch-design.md)、[状態設計](docs/watch-state-design.md)、
+[Hook設計](docs/hook-design.md)、[検証・性能記録](docs/watch-validation.md)を参照してください。
+Linux CIは `CGO_ENABLED=1 go test -race ./...` と、seccompで通信を禁止したwatch/SIGINT試験も実行します。

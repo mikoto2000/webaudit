@@ -8,14 +8,22 @@ import (
 	"io"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 	"webaudit/audit"
+	"webaudit/internal/geoipdb"
 	"webaudit/internal/watch"
 )
 
 func runWatch(args []string, out, errout io.Writer) int {
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
+	return runWatchContext(ctx, args, out, errout)
+}
+
+func runWatchContext(ctx context.Context, args []string, out, errout io.Writer) int {
 	fs := flag.NewFlagSet("webaudit watch", flag.ContinueOnError)
 	fs.SetOutput(errout)
 	from := fs.String("from", "end", "beginning or end (saved checkpoint takes precedence)")
@@ -55,6 +63,8 @@ func runWatch(args []string, out, errout io.Writer) int {
 	hookTimeout := fs.Duration("hook-timeout", 10*time.Second, "Timeout per hook")
 	hookConcurrency := fs.Int("hook-concurrency", 1, "Concurrent hooks (1..32)")
 	hookQueue := fs.Int("hook-queue-size", 128, "Maximum queued hook notifications")
+	country := fs.String("geoip-country", "", "Local Country MMDB override")
+	asn := fs.String("geoip-asn", "", "Local ASN MMDB override")
 	fs.Usage = func() {
 		fmt.Fprintln(errout, "Usage: webaudit watch INPUT... [--from beginning|end]")
 		fs.PrintDefaults()
@@ -83,20 +93,62 @@ func runWatch(args []string, out, errout io.Writer) int {
 		return 2
 	}
 	var diagnosticMu sync.Mutex
+	diagnosticWindow := time.Now()
+	diagnosticCount := 0
+	diagnosticSeen := map[string]bool{}
+	suppressed := uint64(0)
 	warn := func(s string) {
 		diagnosticMu.Lock()
 		defer diagnosticMu.Unlock()
+		if time.Since(diagnosticWindow) >= 5*time.Second {
+			if suppressed > 0 {
+				fmt.Fprintf(errout, "%d repeated/excess diagnostics suppressed\n", suppressed)
+			}
+			diagnosticWindow = time.Now()
+			diagnosticCount = 0
+			clear(diagnosticSeen)
+			suppressed = 0
+		}
+		if diagnosticCount >= 10 || diagnosticSeen[s] {
+			suppressed++
+			return
+		}
+		diagnosticCount++
+		diagnosticSeen[s] = true
 		fmt.Fprintln(errout, audit.TerminalSafe(s))
 	}
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
-	defer stop()
+	defer func() {
+		diagnosticMu.Lock()
+		defer diagnosticMu.Unlock()
+		if suppressed > 0 {
+			fmt.Fprintf(errout, "%d repeated/excess diagnostics suppressed\n", suppressed)
+		}
+	}()
+	executable, er := os.Executable()
+	if er != nil {
+		warn(er.Error())
+		return 2
+	}
+	geoDir, pathErr := geoipdb.DefaultDir()
+	if pathErr != nil {
+		warn(pathErr.Error())
+	}
+	geo, warnings, er := audit.OpenManagedGeoIP(*country, *asn, geoDir, filepath.Join(filepath.Dir(executable), "geoip"), 4096)
+	if er != nil {
+		warn(er.Error())
+		return 2
+	}
+	defer geo.Close()
+	for _, w := range warnings {
+		warn(w)
+	}
 	r, e := watch.NewReader(fs.Args(), watch.ReaderOptions{Beginning: *from == "beginning", MaxFiles: *maxFiles, MaxLineBytes: *maxLine, Include: *include, Exclude: *exclude, Warn: warn})
 	if e != nil {
 		warn(e.Error())
 		return 2
 	}
 	defer r.Close()
-	engine := watch.NewEngine(watch.EngineOptions{AllowedLateness: *lateness, Retention: *retention, MaxEvents: *maxEvents, Warn: warn})
+	engine := watch.NewEngine(watch.EngineOptions{AllowedLateness: *lateness, Retention: *retention, MaxEvents: *maxEvents, Warn: warn, GeoIP: geo})
 	var store *watch.Store
 	var history map[string]uint64
 	if !*noState {
@@ -126,6 +178,11 @@ func runWatch(args []string, out, errout io.Writer) int {
 		return 2
 	}
 	defer dispatcher.Close()
+	defer func() {
+		if dropped := dispatcher.Dropped(); dropped > 0 {
+			warn(fmt.Sprintf("hook notifications dropped: %d", dropped))
+		}
+	}()
 	save := func() error {
 		if store != nil {
 			return store.Save(watch.Capture(r, engine, dispatcher.History()))
@@ -134,6 +191,22 @@ func runWatch(args []string, out, errout io.Writer) int {
 	}
 	lastSave := time.Now()
 	encode := json.NewEncoder(out)
+	emit := func() error {
+		for _, v := range engine.Flush(time.Now()) {
+			var er error
+			if *format == "jsonl" {
+				er = encode.Encode(v)
+			} else {
+				_, er = fmt.Fprintf(out, "[%s] %s %s %s revision=%d IP=%s outcome=%s count=%d\n", v.UpdatedAt.Format("15:04:05"), v.EventType, v.Severity, v.IncidentID, v.Revision, strings.Join(v.SourceIPs, ","), v.Outcome, v.Count)
+			}
+			if er != nil {
+				return er
+			}
+			dispatcher.Dispatch(v)
+		}
+		dispatcher.Prune(engine.Incidents)
+		return nil
+	}
 	ticker := time.NewTicker(*interval)
 	defer ticker.Stop()
 	fmt.Fprintln(errout, "WebAudit Watch: monitoring", audit.TerminalSafe(fmt.Sprint(r.Targets)))
@@ -149,6 +222,10 @@ func runWatch(args []string, out, errout io.Writer) int {
 		})
 		if e != nil {
 			if ctx.Err() != nil {
+				if er := emit(); er != nil {
+					warn(er.Error())
+					return 1
+				}
 				if er := save(); er != nil {
 					warn(er.Error())
 					return 1
@@ -158,19 +235,10 @@ func runWatch(args []string, out, errout io.Writer) int {
 			warn(e.Error())
 			return 1
 		}
-		for _, v := range engine.Flush(time.Now()) {
-			if *format == "jsonl" {
-				e = encode.Encode(v)
-			} else {
-				_, e = fmt.Fprintf(out, "[%s] %s %s %s revision=%d IP=%s outcome=%s count=%d\n", v.UpdatedAt.Format("15:04:05"), v.EventType, v.Severity, v.IncidentID, v.Revision, strings.Join(v.SourceIPs, ","), v.Outcome, v.Count)
-			}
-			if e != nil {
-				warn(e.Error())
-				return 1
-			}
-			dispatcher.Dispatch(v)
+		if er := emit(); er != nil {
+			warn(er.Error())
+			return 1
 		}
-		dispatcher.Prune(engine.Incidents)
 		if time.Since(lastSave) >= time.Second {
 			if er := save(); er != nil {
 				warn(er.Error())

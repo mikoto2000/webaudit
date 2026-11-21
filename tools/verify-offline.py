@@ -51,7 +51,35 @@ with tempfile.TemporaryDirectory() as tmp:
     assert "Not installed" in missing.stdout
     fixture = root / "audit/testdata/geoip"
     explicit = ["--geoip-country", str(fixture / "country.mmdb"), "--geoip-asn", str(fixture / "asn.mmdb")]
+    sample = subprocess.run([str(root / "examples/notify.sh")],
+                            input=json.dumps(dict(schema_version=1, incident_id="inc-sample",
+                                                  revision=1, severity="high", outcome="unknown",
+                                                  notification_id="notification-sample",
+                                                  source_ips=["$(touch NEVER_EXECUTE); & literal"])),
+                            env=env, preexec_fn=deny_network, capture_output=True, text=True, check=True)
+    assert json.loads(sample.stdout)["incident_id"] == "inc-sample"
     for extra in [[], explicit]:
+        # Real watch startup, parsing, detection, JSONL and SIGINT under seccomp.
+        import signal
+        child = subprocess.Popen([str(exe), "watch", str(log), "--from", "beginning",
+                                  "--no-state", "--format", "jsonl"] + extra,
+                                 env=env, preexec_fn=deny_network, stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE, text=True)
+        try:
+            import selectors
+            ready = selectors.DefaultSelector()
+            ready.register(child.stdout, selectors.EVENT_READ)
+            assert ready.select(10), "watch emitted no event"
+            event = json.loads(child.stdout.readline())
+            assert event["event_type"] == "incident_created" and event["schema_version"] == 1
+            assert ("geoip" in event) == bool(extra)
+            child.send_signal(signal.SIGINT)
+            _, diagnostics = child.communicate(timeout=10)
+            assert child.returncode == 0, diagnostics
+        finally:
+            if child.poll() is None:
+                child.kill()
+                child.wait()
         for fmt in ["json", "csv", "html"]:
             run = subprocess.run([str(exe), str(log), "--format", fmt] + extra,
                                  env=env, preexec_fn=deny_network, capture_output=True, text=True, check=True)
@@ -100,4 +128,4 @@ with tempfile.TemporaryDirectory() as tmp:
     run = subprocess.run([str(exe), str(log), "--format", "json"], env=env, preexec_fn=deny_network,
                          capture_output=True, text=True, check=True)
     assert "geoip" not in json.loads(run.stdout) and "Managed GeoIP unavailable" in run.stderr
-print("PASS: seccomp guard; disabled/explicit/legacy/managed analysis; status; existing download; corrupt DB fallback; JSON/CSV/HTML; no network syscalls")
+print("PASS: seccomp guard; offline watch JSONL/SIGINT with and without GeoIP; disabled/explicit/legacy/managed analysis; status; existing download; corrupt DB fallback; JSON/CSV/HTML; no network syscalls")

@@ -41,6 +41,14 @@ func TestHookChild(t *testing.T) {
 		os.Exit(7)
 	case "sleep":
 		time.Sleep(60 * time.Second)
+	case "gate":
+		os.WriteFile(args[1]+".ready", []byte("ready"), 0600)
+		for {
+			if _, e := os.Stat(args[1] + ".release"); e == nil {
+				break
+			}
+			time.Sleep(5 * time.Millisecond)
+		}
 	case "tree":
 		c := exec.Command(os.Args[0], "-test.run=^TestHookChild$", "--", "grandchild", args[1])
 		c.Stdout = os.Stdout
@@ -178,5 +186,103 @@ func TestHookCancellationKillsDescendants(t *testing.T) {
 	time.Sleep(1200 * time.Millisecond)
 	if _, e = os.Stat(marker); !os.IsNotExist(e) {
 		t.Fatal("descendant survived", e)
+	}
+}
+
+func TestHookHistoryPrunesRemovedHooks(t *testing.T) {
+	d, e := NewDispatcher(context.Background(), HookOptions{}, map[string]uint64{"inc-test/removed-hook": 1})
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer d.Close()
+	d.Prune(map[string]*IncidentState{"inc-test": {}})
+	if len(d.History()) != 0 {
+		t.Fatal("obsolete hook history retained")
+	}
+}
+
+func TestHookConcurrencyLimit(t *testing.T) {
+	t.Setenv("WEBAUDIT_HOOK_TEST", "1")
+	for _, workers := range []int{1, 2} {
+		t.Run(fmt.Sprint(workers), func(t *testing.T) {
+			d := t.TempDir()
+			a, b := filepath.Join(d, "a"), filepath.Join(d, "b")
+			ch := make(chan HookResult, 2)
+			dispatcher, e := NewDispatcher(context.Background(), HookOptions{Hooks: []Hook{hook("gate", a), hook("gate", b)}, Concurrency: workers, Result: func(r HookResult) { ch <- r }}, nil)
+			if e != nil {
+				t.Fatal(e)
+			}
+			defer dispatcher.Close()
+			dispatcher.Dispatch(hookEvent())
+			wait := func(p string) {
+				t.Helper()
+				deadline := time.Now().Add(5 * time.Second)
+				for {
+					if _, e := os.Stat(p + ".ready"); e == nil {
+						return
+					}
+					if time.Now().After(deadline) {
+						t.Fatal("hook did not start", p)
+					}
+					time.Sleep(5 * time.Millisecond)
+				}
+			}
+			if workers == 1 {
+				wait(a)
+				time.Sleep(30 * time.Millisecond)
+				if _, e := os.Stat(b + ".ready"); !os.IsNotExist(e) {
+					t.Fatal("concurrency exceeded")
+				}
+				put(t, a+".release", "")
+				wait(b)
+			} else {
+				wait(a)
+				wait(b)
+				put(t, a+".release", "")
+			}
+			put(t, b+".release", "")
+			for i := 0; i < 2; i++ {
+				if r := result(t, ch); r.Error != "" {
+					t.Fatal(r)
+				}
+			}
+		})
+	}
+}
+
+func TestHookExecutableWithSpaces(t *testing.T) {
+	t.Setenv("WEBAUDIT_HOOK_TEST", "1")
+	d := t.TempDir()
+	path := filepath.Join(d, "hook executable with spaces.exe")
+	src, e := os.Open(os.Args[0])
+	if e != nil {
+		t.Fatal(e)
+	}
+	dst, e := os.OpenFile(path, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0700)
+	if e != nil {
+		src.Close()
+		t.Fatal(e)
+	}
+	_, e = io.Copy(dst, src)
+	src.Close()
+	dst.Close()
+	if e != nil {
+		t.Fatal(e)
+	}
+	output := filepath.Join(d, "payload.json")
+	h := hook("echo", output, "literal value")
+	h.Executable = path
+	ch := make(chan HookResult, 1)
+	dispatcher, e := NewDispatcher(context.Background(), HookOptions{Hooks: []Hook{h}, Result: func(r HookResult) { ch <- r }}, nil)
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer dispatcher.Close()
+	dispatcher.Dispatch(hookEvent())
+	if r := result(t, ch); r.Error != "" {
+		t.Fatal(r)
+	}
+	if _, e = os.Stat(output); e != nil {
+		t.Fatal(e)
 	}
 }

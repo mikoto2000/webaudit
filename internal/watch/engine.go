@@ -102,9 +102,23 @@ func sanitized(v audit.Event) audit.Event {
 		s := hash(*v.Host)
 		r.Host = &s
 	}
+	if v.Method != nil {
+		m := *v.Method
+		switch m {
+		case "GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS", "PATCH", "CONNECT", "TRACE":
+			m = strings.Clone(m)
+		default:
+			m = hash(m)
+		}
+		r.Method = &m
+	}
 	return r
 }
 func (e *Engine) Observe(v audit.Event, received time.Time) bool {
+	if v.Time.After(received.Add(5 * time.Minute)) {
+		e.warn("event more than five minutes in future discarded")
+		return false
+	}
 	if v.Time.Before(e.FinalizedUntil) {
 		e.warn("event in finalized partition discarded")
 		return false
@@ -126,8 +140,8 @@ func (e *Engine) Observe(v audit.Event, received time.Time) bool {
 		r.RuleIDs = append(r.RuleIDs, x.ID)
 	}
 	if len(e.Records) >= e.o.MaxEvents {
-		copy(e.Records, e.Records[1:])
-		e.Records = e.Records[:len(e.Records)-1]
+		clear(e.Records[:1])
+		e.Records = e.Records[1:]
 		e.warn("event retention count limit reached; detection coverage reduced")
 	}
 	e.Records = append(e.Records, r)

@@ -27,6 +27,7 @@ type ReaderOptions struct {
 type Cursor struct {
 	Path, ID       string
 	Offset, Number int64
+	LineKnown      bool
 	Partial        []byte
 	Discard        bool
 	Anchor         string
@@ -37,10 +38,12 @@ type trackedFile struct {
 	detached time.Time
 }
 type Reader struct {
-	Targets     []string
-	o           ReaderOptions
-	files       []*trackedFile
-	initialized bool
+	Targets        []string
+	o              ReaderOptions
+	files          []*trackedFile
+	initialized    bool
+	open           func(string) (*os.File, error)
+	scanIncomplete bool
 }
 
 func NewReader(paths []string, o ReaderOptions) (*Reader, error) {
@@ -61,7 +64,7 @@ func NewReader(paths []string, o ReaderOptions) (*Reader, error) {
 			return nil, e
 		}
 	}
-	r := &Reader{o: o}
+	r := &Reader{o: o, open: openLog}
 	for _, p := range paths {
 		a, e := filepath.Abs(p)
 		if e != nil {
@@ -105,6 +108,7 @@ func (r *Reader) candidates() ([]string, error) {
 		}
 		if e != nil {
 			r.warn("input unavailable: " + p)
+			r.scanIncomplete = true
 			continue
 		}
 		if st.Mode()&os.ModeSymlink != 0 {
@@ -114,6 +118,7 @@ func (r *Reader) candidates() ([]string, error) {
 			d, e := os.Open(p)
 			if e != nil {
 				r.warn("directory unavailable: " + p)
+				r.scanIncomplete = true
 				continue
 			}
 			for {
@@ -136,6 +141,10 @@ func (r *Reader) candidates() ([]string, error) {
 						}
 					}
 				}
+				if er != nil && er != io.EOF {
+					r.scanIncomplete = true
+					r.warn("directory enumeration failed: " + p)
+				}
 				if er != nil || len(paths) >= r.o.MaxFiles {
 					break
 				}
@@ -154,15 +163,17 @@ func (r *Reader) candidates() ([]string, error) {
 	return unique(paths), nil
 }
 func (r *Reader) discover() error {
+	r.scanIncomplete = false
 	paths, e := r.candidates()
 	if e != nil {
 		return e
 	}
 	active := map[string]bool{}
 	for _, p := range paths {
-		f, e := openLog(p)
+		f, e := r.open(p)
 		if e != nil {
 			r.warn("cannot open input: " + p)
+			r.scanIncomplete = true
 			continue
 		}
 		st, e := f.Stat()
@@ -170,12 +181,14 @@ func (r *Reader) discover() error {
 		if e != nil || le != nil || !st.Mode().IsRegular() || ls.Mode()&os.ModeSymlink != 0 || !os.SameFile(st, ls) {
 			f.Close()
 			r.warn("input changed during open: " + p)
+			r.scanIncomplete = true
 			continue
 		}
 		id, e := fileID(f)
 		if e != nil {
 			f.Close()
 			r.warn("file identity unavailable: " + p)
+			r.scanIncomplete = true
 			continue
 		}
 		active[id] = true
@@ -196,13 +209,23 @@ func (r *Reader) discover() error {
 			r.warn("open file limit reached")
 			continue
 		}
-		v := &trackedFile{Cursor: Cursor{Path: p, ID: id}, file: f}
+		v := &trackedFile{Cursor: Cursor{Path: p, ID: id, LineKnown: true}, file: f}
 		if !r.initialized && !r.o.Beginning {
 			v.Offset = st.Size()
+			v.LineKnown = v.Offset == 0
 			v.Anchor = anchor(f, v.Offset)
+			if v.Offset > 0 {
+				var last [1]byte
+				if _, e := f.ReadAt(last[:], v.Offset-1); e == nil && last[0] != '\n' {
+					v.Discard = true
+				}
+			}
 		}
 		r.files = append(r.files, v)
 	}
+	if r.scanIncomplete {
+		return nil
+	} // Unknown availability is not deletion/rotation.
 	now := time.Now()
 	for _, v := range r.files {
 		if !active[v.ID] && v.detached.IsZero() {
@@ -230,15 +253,16 @@ func (r *Reader) Poll(ctx context.Context, consume func(Line) error) error {
 	if e := r.discover(); e != nil {
 		return e
 	}
-	kept := r.files[:0]
+	kept := make([]*trackedFile, 0, len(r.files))
 	blocked := map[string]bool{}
 	// Existing handles precede newly discovered replacements, draining old data first.
-	for _, v := range r.files {
+	for i, v := range r.files {
 		if blocked[v.Path] {
 			kept = append(kept, v)
 			continue
 		}
 		if e := r.read(ctx, v, consume); e != nil {
+			r.files = append(kept, r.files[i:]...)
 			return e
 		}
 		st, e := v.file.Stat()
@@ -267,6 +291,7 @@ func (r *Reader) read(ctx context.Context, v *trackedFile, consume func(Line) er
 		r.warn("copytruncate or rewritten content detected; producer race can lose data: " + v.Path)
 		v.Offset = 0
 		v.Number = 0
+		v.LineKnown = true
 		v.Partial = nil
 		v.Discard = false
 	}
@@ -290,7 +315,11 @@ func (r *Reader) read(ctx context.Context, v *trackedFile, consume func(Line) er
 				v.Number++
 				if !v.Discard {
 					text := strings.TrimSuffix(string(v.Partial), "\r")
-					if e = consume(Line{text, v.Path, v.Number}); e != nil {
+					number := v.Number
+					if !v.LineKnown {
+						number = 0
+					}
+					if e = consume(Line{text, v.Path, number}); e != nil {
 						return e
 					}
 				}

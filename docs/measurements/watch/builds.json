@@ -1,0 +1,47 @@
+{
+  "source_commit": "bb70c53ad28608552808b3ee4a436c1d4ad2e92c",
+  "targets": [
+    {
+      "os": "windows",
+      "arch": "amd64",
+      "file": "webaudit-watch-windows-amd64.exe",
+      "bytes": 15431168,
+      "sha256": "64F1C3DADCB45AB13E79FA644384128E7D13DE8B6378A8CD286872B16D29DCE8"
+    },
+    {
+      "os": "windows",
+      "arch": "arm64",
+      "file": "webaudit-watch-windows-arm64.exe",
+      "bytes": 14203904,
+      "sha256": "C4C8E0458028008B1633F64C40CCE5287018D173586E70B755534F062A8520B7"
+    },
+    {
+      "os": "linux",
+      "arch": "amd64",
+      "file": "webaudit-watch-linux-amd64",
+      "bytes": 15032202,
+      "sha256": "62296082849D917E520AC87874A9021FE2F9903497901B5D78B04C1CB8E39452"
+    },
+    {
+      "os": "linux",
+      "arch": "arm64",
+      "file": "webaudit-watch-linux-arm64",
+      "bytes": 14009335,
+      "sha256": "45E8C99D09940B789860BE03A565DE8CD0BAA843BD0D0981F5E966C9CAB99AAF"
+    },
+    {
+      "os": "darwin",
+      "arch": "amd64",
+      "file": "webaudit-watch-darwin-amd64",
+      "bytes": 15269120,
+      "sha256": "0A91A4E0E4386F594ECD8F135F45136CA6ADF99FF863D72771362381824BD363"
+    },
+    {
+      "os": "darwin",
+      "arch": "arm64",
+      "file": "webaudit-watch-darwin-arm64",
+      "bytes": 14348754,
+      "sha256": "FEE50214924B01AC3A1F01D636DF78775CC9C6F1CB1B39F52244FEE85999C831"
+    }
+  ]
+}

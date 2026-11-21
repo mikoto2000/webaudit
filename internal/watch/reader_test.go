@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 )
 
 func put(t *testing.T, p, s string) {
@@ -140,5 +141,130 @@ func TestReaderDrainsOldBeforeReplacement(t *testing.T) {
 	got = poll(t, r)
 	if len(got) == 0 || got[len(got)-1] != "new" {
 		t.Fatal("replacement not consumed after drain")
+	}
+}
+
+func TestReaderEndSkipsExistingPartialLine(t *testing.T) {
+	p := filepath.Join(t.TempDir(), "access.log")
+	put(t, p, "existing unfinished")
+	r, e := NewReader([]string{p}, ReaderOptions{})
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer r.Close()
+	appendLog(t, p, " tail\nnew\n")
+	if got := poll(t, r); !reflect.DeepEqual(got, []string{"new"}) {
+		t.Fatal(got)
+	}
+}
+
+func TestReaderEOFDoesNotInventOriginalLineNumbers(t *testing.T) {
+	p := filepath.Join(t.TempDir(), "access.log")
+	put(t, p, "one\ntwo\n")
+	r, e := NewReader([]string{p}, ReaderOptions{})
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer r.Close()
+	appendLog(t, p, "three\n")
+	var line Line
+	if e = r.Poll(context.Background(), func(l Line) error { line = l; return nil }); e != nil {
+		t.Fatal(e)
+	}
+	if line.Number != 0 {
+		t.Fatal("unknown original line number must be zero", line.Number)
+	}
+}
+
+func TestReaderTransientOpenFailureKeepsCheckpoint(t *testing.T) {
+	p := filepath.Join(t.TempDir(), "access.log")
+	put(t, p, "one\n")
+	r, e := NewReader([]string{p}, ReaderOptions{Beginning: true})
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer r.Close()
+	poll(t, r)
+	original := r.open
+	r.open = func(string) (*os.File, error) { return nil, os.ErrPermission }
+	if got := poll(t, r); len(got) != 0 {
+		t.Fatal(got)
+	}
+	if !r.files[0].detached.IsZero() {
+		t.Fatal("temporary open failure detached live file")
+	}
+	r.open = original
+	appendLog(t, p, "two\n")
+	if got := poll(t, r); !reflect.DeepEqual(got, []string{"two"}) {
+		t.Fatal("checkpoint lost", got)
+	}
+}
+
+func TestReaderRepeatedRotationAndIncludes(t *testing.T) {
+	d := t.TempDir()
+	p := filepath.Join(d, "custom.txt")
+	put(t, p, "")
+	put(t, filepath.Join(d, "skip.txt"), "skip\n")
+	r, e := NewReader([]string{d}, ReaderOptions{Beginning: true, Include: "*.txt", Exclude: "skip*", MaxFiles: 4})
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer r.Close()
+	for i := 0; i < 10; i++ {
+		appendLog(t, p, "old\n")
+		rot := filepath.Join(d, "rotated")
+		if e = os.Rename(p, rot); e != nil {
+			t.Fatal(e)
+		}
+		put(t, p, "new\n")
+		got := poll(t, r)
+		if !reflect.DeepEqual(got, []string{"old", "new"}) {
+			t.Fatal(i, got)
+		}
+		os.Remove(rot)
+		for _, f := range r.files {
+			if !f.detached.IsZero() {
+				f.detached = f.detached.Add(-3 * time.Second)
+			}
+		}
+		poll(t, r)
+	}
+	if len(r.files) > 4 {
+		t.Fatal("handles exceeded limit")
+	}
+}
+
+func TestReaderCancellationDuringHandleCleanupPreservesUniqueCursors(t *testing.T) {
+	d := t.TempDir()
+	var paths []string
+	for _, name := range []string{"a_access.log", "b_access.log", "c_access.log"} {
+		p := filepath.Join(d, name)
+		put(t, p, "")
+		paths = append(paths, p)
+	}
+	r, e := NewReader(paths, ReaderOptions{Beginning: true})
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer r.Close()
+	os.Remove(paths[0])
+	r.files[0].detached = time.Now().Add(-3 * time.Second)
+	appendLog(t, paths[1], "b\n")
+	appendLog(t, paths[2], "c\n")
+	_ = r.Poll(context.Background(), func(l Line) error {
+		if l.File == paths[2] {
+			return context.Canceled
+		}
+		return nil
+	})
+	seen := map[string]bool{}
+	for _, f := range r.files {
+		if seen[f.ID] {
+			t.Fatal("cleanup cancellation duplicated cursor")
+		}
+		seen[f.ID] = true
+	}
+	if len(r.files) != 2 {
+		t.Fatal("closed handle retained", len(r.files))
 	}
 }

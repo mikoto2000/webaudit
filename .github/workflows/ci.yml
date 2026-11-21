@@ -25,6 +25,10 @@ jobs:
           cache: false
       - run: go test ./...
       - run: go vet ./...
+      - if: runner.os == 'Linux'
+        env:
+          CGO_ENABLED: "1"
+        run: go test -race ./...
       - run: go run ./tools/evaluate
       - run: go run ./cmd/webaudit --version
       - run: go run ./cmd/webaudit examples/sample.log --format json

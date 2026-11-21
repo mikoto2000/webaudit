@@ -282,7 +282,7 @@ func Restore(r *Reader, e *Engine, v *Snapshot) error {
 		st, err := f.file.Stat()
 		if err != nil || st.Size() < c.Offset || anchor(f.file, c.Offset) != c.Anchor {
 			r.warn("checkpoint content changed; restarting file from beginning")
-			f.Cursor = Cursor{Path: f.Path, ID: f.ID}
+			f.Cursor = Cursor{Path: f.Path, ID: f.ID, LineKnown: true}
 		} else {
 			f.Cursor = c
 		}
@@ -291,8 +291,14 @@ func Restore(r *Reader, e *Engine, v *Snapshot) error {
 	// Files that appeared during downtime start at the beginning, not at EOF.
 	for _, f := range old {
 		if f != nil {
+			if len(r.files) >= r.o.MaxFiles {
+				f.file.Close()
+				r.warn("restored handle limit reached; new file discovery deferred")
+				continue
+			}
 			f.Offset = 0
 			f.Number = 0
+			f.LineKnown = true
 			f.Partial = nil
 			f.Anchor = ""
 			f.Discard = false
