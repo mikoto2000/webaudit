@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 	"webaudit/audit"
 	"webaudit/internal/watch"
@@ -22,6 +24,10 @@ func runWatch(args []string, out, errout io.Writer) int {
 	maxLine := fs.Int("max-line-bytes", 64<<10, "Maximum partial line bytes")
 	interval := fs.Duration("poll-interval", 250*time.Millisecond, "Polling interval")
 	help := fs.Bool("help", false, "Show help")
+	format := fs.String("format", "text", "text or jsonl")
+	lateness := fs.Duration("allowed-lateness", 30*time.Second, "Maximum out-of-order event delay")
+	retention := fs.Duration("retention", 15*time.Minute, "Detection retention horizon")
+	maxEvents := fs.Int("max-events", 8192, "Maximum retained normalized events")
 	fs.Usage = func() {
 		fmt.Fprintln(errout, "Usage: webaudit watch INPUT... [--from beginning|end]")
 		fs.PrintDefaults()
@@ -45,6 +51,10 @@ func runWatch(args []string, out, errout io.Writer) int {
 		fmt.Fprintln(errout, "invalid watch options")
 		return 2
 	}
+	if (*format != "text" && *format != "jsonl") || *lateness < time.Nanosecond || *lateness > time.Hour || *retention < 5*time.Minute+*lateness || *retention > 24*time.Hour || *maxEvents < 1 || *maxEvents > 100000 {
+		fmt.Fprintln(errout, "invalid watch detection options")
+		return 2
+	}
 	warn := func(s string) { fmt.Fprintln(errout, audit.TerminalSafe(s)) }
 	r, e := watch.NewReader(fs.Args(), watch.ReaderOptions{Beginning: *from == "beginning", MaxFiles: *maxFiles, MaxLineBytes: *maxLine, Include: *include, Exclude: *exclude, Warn: warn})
 	if e != nil {
@@ -52,6 +62,8 @@ func runWatch(args []string, out, errout io.Writer) int {
 		return 2
 	}
 	defer r.Close()
+	engine := watch.NewEngine(watch.EngineOptions{AllowedLateness: *lateness, Retention: *retention, MaxEvents: *maxEvents, Warn: warn})
+	encode := json.NewEncoder(out)
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 	ticker := time.NewTicker(*interval)
@@ -59,9 +71,11 @@ func runWatch(args []string, out, errout io.Writer) int {
 	fmt.Fprintln(errout, "WebAudit Watch: monitoring", audit.TerminalSafe(fmt.Sprint(r.Targets)))
 	for {
 		e = r.Poll(ctx, func(l watch.Line) error {
-			_, er := audit.Parse(l.Text, l.File, l.Number, "")
+			v, er := audit.Parse(l.Text, l.File, l.Number, "")
 			if er != nil {
 				warn("unparsed access log line")
+			} else {
+				engine.Observe(v, time.Now())
 			}
 			return nil
 		})
@@ -71,6 +85,17 @@ func runWatch(args []string, out, errout io.Writer) int {
 			}
 			warn(e.Error())
 			return 1
+		}
+		for _, v := range engine.Flush(time.Now()) {
+			if *format == "jsonl" {
+				e = encode.Encode(v)
+			} else {
+				_, e = fmt.Fprintf(out, "[%s] %s %s %s revision=%d IP=%s outcome=%s count=%d\n", v.UpdatedAt.Format("15:04:05"), v.EventType, v.Severity, v.IncidentID, v.Revision, strings.Join(v.SourceIPs, ","), v.Outcome, v.Count)
+			}
+			if e != nil {
+				warn(e.Error())
+				return 1
+			}
 		}
 		select {
 		case <-ctx.Done():
