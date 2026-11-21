@@ -181,6 +181,14 @@ func TestHookCancellationKillsDescendants(t *testing.T) {
 	}
 }
 
-func TestHookHistoryPrunesRemovedHooks(t *testing.T){
- d,e:=NewDispatcher(context.Background(),HookOptions{},map[string]uint64{"inc-test/removed-hook":1});if e!=nil{t.Fatal(e)};defer d.Close();d.Prune(map[string]*IncidentState{"inc-test":{}});if len(d.History())!=0{t.Fatal("obsolete hook history retained")}
+func TestHookHistoryPrunesRemovedHooks(t *testing.T) {
+	d, e := NewDispatcher(context.Background(), HookOptions{}, map[string]uint64{"inc-test/removed-hook": 1})
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer d.Close()
+	d.Prune(map[string]*IncidentState{"inc-test": {}})
+	if len(d.History()) != 0 {
+		t.Fatal("obsolete hook history retained")
+	}
 }

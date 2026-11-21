@@ -151,9 +151,13 @@ func (d *Dispatcher) History() map[string]uint64 {
 func (d *Dispatcher) Prune(incidents map[string]*IncidentState) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
+	current := map[string]bool{}
+	for _, h := range d.o.Hooks {
+		current[h.ID] = true
+	}
 	for k := range d.history {
-		id, _, _ := strings.Cut(k, "/")
-		if _, ok := incidents[id]; !ok {
+		id, hookID, _ := strings.Cut(k, "/")
+		if _, ok := incidents[id]; !ok || !current[hookID] {
 			delete(d.history, k)
 		}
 	}

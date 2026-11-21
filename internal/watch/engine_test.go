@@ -141,7 +141,20 @@ func TestEngineClosedIncidentDoesNotReopen(t *testing.T) {
 	}
 }
 
-func TestEngineRejectsFutureAndBoundsMethod(t *testing.T){
- now:=time.Now();e:=NewEngine(EngineOptions{});v:=event(t,0,200,"/ordinary");v.Time=now.Add(24*time.Hour);if e.Observe(v,now){t.Fatal("future timestamp poisoned watermark")}
- v.Time=now;secret:="METHOD_SECRET";v.Method=&secret;e.Observe(v,now);b,_:=json.Marshal(e);if strings.Contains(string(b),secret){t.Fatal("untrusted method retained")}
+func TestEngineRejectsFutureAndBoundsMethod(t *testing.T) {
+	now := time.Now()
+	e := NewEngine(EngineOptions{})
+	v := event(t, 0, 200, "/ordinary")
+	v.Time = now.Add(24 * time.Hour)
+	if e.Observe(v, now) {
+		t.Fatal("future timestamp poisoned watermark")
+	}
+	v.Time = now
+	secret := "METHOD_SECRET"
+	v.Method = &secret
+	e.Observe(v, now)
+	b, _ := json.Marshal(e)
+	if strings.Contains(string(b), secret) {
+		t.Fatal("untrusted method retained")
+	}
 }
