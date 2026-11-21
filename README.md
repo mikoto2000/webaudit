@@ -184,6 +184,8 @@ webaudit custom.log --log-regex '^(?P<ip>\S+) (?P<time>\S+) (?P<target>\S+)$'
 
 X-Forwarded-Forを実クライアントIPとして採用しません。記録された接続元がプロキシの場合、利用者の特定はできません。ホスト名だけのクライアント欄、必須IP・時刻がない行、任意のWAF形式は解析対象外です。壊れたHTTP要求は生の要求欄を保持し、正常なmethod/URL/protocolを捏造しません。
 
+LB配下では、Apache／Nginx側で信頼するLBから実クライアントIPを復元し、解析対象のIP欄に記録してください。[LB配下での設定・動作確認・IP集計への影響](docs/load-balancer.md)に、XFFとPROXY protocolの設定例を掲載しています。WebAudit自身がLB構成を推定したり、転送ヘッダーを検証してIPを置き換えたりする機能はありません。
+
 ## 解析できない・結果が一部しか出ない場合
 
 まず `--verbose` を付けて、ファイルごとの解析件数とエラーを確認してください。
