@@ -16,6 +16,9 @@ import (
 
 func main() { os.Exit(run(os.Args[1:], os.Stdout, os.Stderr)) }
 func run(args []string, out, errout io.Writer) int {
+	if len(args) > 0 && args[0] == "watch" {
+		return runWatch(args[1:], out, errout)
+	}
 	if len(args) > 0 && args[0] == "geoip" {
 		return runGeoIP(args[1:], out, errout)
 	}
