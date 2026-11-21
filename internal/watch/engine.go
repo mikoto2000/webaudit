@@ -52,13 +52,14 @@ type IncidentState struct {
 	Closed      bool
 }
 type Engine struct {
-	Records   []Record
-	Incidents map[string]*IncidentState
-	MaxTime   time.Time
-	Sequence  uint64
-	o         EngineOptions
-	rules     map[string]audit.Rule
-	dirty     bool
+	Records        []Record
+	Incidents      map[string]*IncidentState
+	MaxTime        time.Time
+	FinalizedUntil time.Time
+	Sequence       uint64
+	o              EngineOptions
+	rules          map[string]audit.Rule
+	dirty          bool
 }
 
 func NewEngine(o EngineOptions) *Engine {
@@ -104,6 +105,10 @@ func sanitized(v audit.Event) audit.Event {
 	return r
 }
 func (e *Engine) Observe(v audit.Event, received time.Time) bool {
+	if v.Time.Before(e.FinalizedUntil) {
+		e.warn("event in finalized partition discarded")
+		return false
+	}
 	if v.TimezoneUnknown || v.LogType != "http_access-log" {
 		e.warn("watch accepts timestamped access logs only")
 		return false
@@ -225,6 +230,10 @@ func (e *Engine) Flush(now time.Time) []IncidentEvent {
 		s := e.Incidents[id]
 		end := s.Event.Last.Truncate(5 * time.Minute).Add(5*time.Minute + e.o.AllowedLateness)
 		if !s.Closed && (e.MaxTime.After(end) || now.Sub(s.Event.UpdatedAt) > 5*time.Minute+e.o.AllowedLateness) {
+			final := s.Event.Last.Truncate(5 * time.Minute).Add(5 * time.Minute)
+			if final.After(e.FinalizedUntil) {
+				e.FinalizedUntil = final
+			}
 			v := s.Event
 			v.Revision++
 			v.Notify = false
