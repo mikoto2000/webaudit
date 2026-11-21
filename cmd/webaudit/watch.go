@@ -93,11 +93,37 @@ func runWatchContext(ctx context.Context, args []string, out, errout io.Writer) 
 		return 2
 	}
 	var diagnosticMu sync.Mutex
+	diagnosticWindow := time.Now()
+	diagnosticCount := 0
+	diagnosticSeen := map[string]bool{}
+	suppressed := uint64(0)
 	warn := func(s string) {
 		diagnosticMu.Lock()
 		defer diagnosticMu.Unlock()
+		if time.Since(diagnosticWindow) >= 5*time.Second {
+			if suppressed > 0 {
+				fmt.Fprintf(errout, "%d repeated/excess diagnostics suppressed\n", suppressed)
+			}
+			diagnosticWindow = time.Now()
+			diagnosticCount = 0
+			clear(diagnosticSeen)
+			suppressed = 0
+		}
+		if diagnosticCount >= 10 || diagnosticSeen[s] {
+			suppressed++
+			return
+		}
+		diagnosticCount++
+		diagnosticSeen[s] = true
 		fmt.Fprintln(errout, audit.TerminalSafe(s))
 	}
+	defer func() {
+		diagnosticMu.Lock()
+		defer diagnosticMu.Unlock()
+		if suppressed > 0 {
+			fmt.Fprintf(errout, "%d repeated/excess diagnostics suppressed\n", suppressed)
+		}
+	}()
 	executable, er := os.Executable()
 	if er != nil {
 		warn(er.Error())
@@ -152,6 +178,11 @@ func runWatchContext(ctx context.Context, args []string, out, errout io.Writer) 
 		return 2
 	}
 	defer dispatcher.Close()
+	defer func() {
+		if dropped := dispatcher.Dropped(); dropped > 0 {
+			warn(fmt.Sprintf("hook notifications dropped: %d", dropped))
+		}
+	}()
 	save := func() error {
 		if store != nil {
 			return store.Save(watch.Capture(r, engine, dispatcher.History()))

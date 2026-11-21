@@ -94,11 +94,22 @@ func TestWatchCLINoState(t *testing.T) {
 	}
 }
 
-func TestWatchCLIDeduplicatesDiagnostics(t *testing.T){
- t.Setenv("XDG_DATA_HOME",t.TempDir());p:=filepath.Join(t.TempDir(),"access.log");os.WriteFile(p,[]byte(strings.Repeat("unparseable\n",1000)),0600)
- ctx,cancel:=context.WithTimeout(context.Background(),50*time.Millisecond);defer cancel();var out,errout bytes.Buffer
- if code:=runWatchContext(ctx,[]string{p,"--no-state","--from","beginning"},&out,&errout);code!=0{t.Fatal(code,errout.String())}
- if count:=strings.Count(errout.String(),"unparsed access log line");count!=1{t.Fatal("diagnostic flood",count)};if !strings.Contains(errout.String(),"999 repeated/excess diagnostics suppressed"){t.Fatal(errout.String())}
+func TestWatchCLIDeduplicatesDiagnostics(t *testing.T) {
+	t.Setenv("XDG_DATA_HOME", t.TempDir())
+	p := filepath.Join(t.TempDir(), "access.log")
+	os.WriteFile(p, []byte(strings.Repeat("unparseable\n", 1000)), 0600)
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
+	defer cancel()
+	var out, errout bytes.Buffer
+	if code := runWatchContext(ctx, []string{p, "--no-state", "--from", "beginning"}, &out, &errout); code != 0 {
+		t.Fatal(code, errout.String())
+	}
+	if count := strings.Count(errout.String(), "unparsed access log line"); count != 1 {
+		t.Fatal("diagnostic flood", count)
+	}
+	if !strings.Contains(errout.String(), "999 repeated/excess diagnostics suppressed") {
+		t.Fatal(errout.String())
+	}
 }
 
 func TestWatchHookArguments(t *testing.T) {
