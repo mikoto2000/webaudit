@@ -112,12 +112,34 @@ func TestWatchCLIDeduplicatesDiagnostics(t *testing.T) {
 	}
 }
 
-type diagnosticCancelWriter struct{ bytes.Buffer; cancel context.CancelFunc }
-func(w *diagnosticCancelWriter)Write(b []byte)(int,error){n,e:=w.Buffer.Write(b);if bytes.Contains(b,[]byte("unparsed access log line")){w.cancel()};return n,e}
-func TestWatchCLICancelFlushesConsumedEvents(t *testing.T){
- t.Setenv("XDG_DATA_HOME",t.TempDir());p:=filepath.Join(t.TempDir(),"access.log");line:="8.8.8.8 - - [01/Nov/2026:00:00:00 +0000] \"GET /.env HTTP/1.1\" 404 0\n";os.WriteFile(p,[]byte(line+strings.Repeat("bad\n",10000)),0600)
- ctx,cancel:=context.WithTimeout(context.Background(),5*time.Second);defer cancel();errout:=&diagnosticCancelWriter{cancel:cancel};var out bytes.Buffer
- if code:=runWatchContext(ctx,[]string{p,"--no-state","--from","beginning","--format","jsonl"},&out,errout);code!=0{t.Fatal(code,errout.String())};var v watch.IncidentEvent;if e:=json.Unmarshal(out.Bytes(),&v);e!=nil||v.EventType!="incident_created"{t.Fatal("consumed detection lost on cancel",out.String(),e)}
+type diagnosticCancelWriter struct {
+	bytes.Buffer
+	cancel context.CancelFunc
+}
+
+func (w *diagnosticCancelWriter) Write(b []byte) (int, error) {
+	n, e := w.Buffer.Write(b)
+	if bytes.Contains(b, []byte("unparsed access log line")) {
+		w.cancel()
+	}
+	return n, e
+}
+func TestWatchCLICancelFlushesConsumedEvents(t *testing.T) {
+	t.Setenv("XDG_DATA_HOME", t.TempDir())
+	p := filepath.Join(t.TempDir(), "access.log")
+	line := "8.8.8.8 - - [01/Nov/2026:00:00:00 +0000] \"GET /.env HTTP/1.1\" 404 0\n"
+	os.WriteFile(p, []byte(line+strings.Repeat("bad\n", 10000)), 0600)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	errout := &diagnosticCancelWriter{cancel: cancel}
+	var out bytes.Buffer
+	if code := runWatchContext(ctx, []string{p, "--no-state", "--from", "beginning", "--format", "jsonl"}, &out, errout); code != 0 {
+		t.Fatal(code, errout.String())
+	}
+	var v watch.IncidentEvent
+	if e := json.Unmarshal(out.Bytes(), &v); e != nil || v.EventType != "incident_created" {
+		t.Fatal("consumed detection lost on cancel", out.String(), e)
+	}
 }
 
 func TestWatchHookArguments(t *testing.T) {

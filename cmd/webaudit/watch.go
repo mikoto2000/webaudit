@@ -191,6 +191,22 @@ func runWatchContext(ctx context.Context, args []string, out, errout io.Writer) 
 	}
 	lastSave := time.Now()
 	encode := json.NewEncoder(out)
+	emit := func() error {
+		for _, v := range engine.Flush(time.Now()) {
+			var er error
+			if *format == "jsonl" {
+				er = encode.Encode(v)
+			} else {
+				_, er = fmt.Fprintf(out, "[%s] %s %s %s revision=%d IP=%s outcome=%s count=%d\n", v.UpdatedAt.Format("15:04:05"), v.EventType, v.Severity, v.IncidentID, v.Revision, strings.Join(v.SourceIPs, ","), v.Outcome, v.Count)
+			}
+			if er != nil {
+				return er
+			}
+			dispatcher.Dispatch(v)
+		}
+		dispatcher.Prune(engine.Incidents)
+		return nil
+	}
 	ticker := time.NewTicker(*interval)
 	defer ticker.Stop()
 	fmt.Fprintln(errout, "WebAudit Watch: monitoring", audit.TerminalSafe(fmt.Sprint(r.Targets)))
@@ -206,6 +222,10 @@ func runWatchContext(ctx context.Context, args []string, out, errout io.Writer) 
 		})
 		if e != nil {
 			if ctx.Err() != nil {
+				if er := emit(); er != nil {
+					warn(er.Error())
+					return 1
+				}
 				if er := save(); er != nil {
 					warn(er.Error())
 					return 1
@@ -215,19 +235,10 @@ func runWatchContext(ctx context.Context, args []string, out, errout io.Writer) 
 			warn(e.Error())
 			return 1
 		}
-		for _, v := range engine.Flush(time.Now()) {
-			if *format == "jsonl" {
-				e = encode.Encode(v)
-			} else {
-				_, e = fmt.Fprintf(out, "[%s] %s %s %s revision=%d IP=%s outcome=%s count=%d\n", v.UpdatedAt.Format("15:04:05"), v.EventType, v.Severity, v.IncidentID, v.Revision, strings.Join(v.SourceIPs, ","), v.Outcome, v.Count)
-			}
-			if e != nil {
-				warn(e.Error())
-				return 1
-			}
-			dispatcher.Dispatch(v)
+		if er := emit(); er != nil {
+			warn(er.Error())
+			return 1
 		}
-		dispatcher.Prune(engine.Incidents)
 		if time.Since(lastSave) >= time.Second {
 			if er := save(); er != nil {
 				warn(er.Error())
