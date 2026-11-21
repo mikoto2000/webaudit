@@ -27,6 +27,7 @@ type ReaderOptions struct {
 type Cursor struct {
 	Path, ID       string
 	Offset, Number int64
+	LineKnown      bool
 	Partial        []byte
 	Discard        bool
 	Anchor         string
@@ -196,9 +197,10 @@ func (r *Reader) discover() error {
 			r.warn("open file limit reached")
 			continue
 		}
-		v := &trackedFile{Cursor: Cursor{Path: p, ID: id}, file: f}
+		v := &trackedFile{Cursor: Cursor{Path: p, ID: id, LineKnown: true}, file: f}
 		if !r.initialized && !r.o.Beginning {
 			v.Offset = st.Size()
+			v.LineKnown = v.Offset == 0
 			v.Anchor = anchor(f, v.Offset)
 			if v.Offset > 0 {
 				var last [1]byte
@@ -274,6 +276,7 @@ func (r *Reader) read(ctx context.Context, v *trackedFile, consume func(Line) er
 		r.warn("copytruncate or rewritten content detected; producer race can lose data: " + v.Path)
 		v.Offset = 0
 		v.Number = 0
+		v.LineKnown = true
 		v.Partial = nil
 		v.Discard = false
 	}
@@ -297,7 +300,11 @@ func (r *Reader) read(ctx context.Context, v *trackedFile, consume func(Line) er
 				v.Number++
 				if !v.Discard {
 					text := strings.TrimSuffix(string(v.Partial), "\r")
-					if e = consume(Line{text, v.Path, v.Number}); e != nil {
+					number := v.Number
+					if !v.LineKnown {
+						number = 0
+					}
+					if e = consume(Line{text, v.Path, number}); e != nil {
 						return e
 					}
 				}

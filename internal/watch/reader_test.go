@@ -158,9 +158,22 @@ func TestReaderEndSkipsExistingPartialLine(t *testing.T) {
 	}
 }
 
-func TestReaderEOFDoesNotInventOriginalLineNumbers(t *testing.T){
- p:=filepath.Join(t.TempDir(),"access.log");put(t,p,"one\ntwo\n");r,e:=NewReader([]string{p},ReaderOptions{});if e!=nil{t.Fatal(e)};defer r.Close();appendLog(t,p,"three\n");var line Line
- if e=r.Poll(context.Background(),func(l Line)error{line=l;return nil});e!=nil{t.Fatal(e)};if line.Number!=0{t.Fatal("unknown original line number must be zero",line.Number)}
+func TestReaderEOFDoesNotInventOriginalLineNumbers(t *testing.T) {
+	p := filepath.Join(t.TempDir(), "access.log")
+	put(t, p, "one\ntwo\n")
+	r, e := NewReader([]string{p}, ReaderOptions{})
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer r.Close()
+	appendLog(t, p, "three\n")
+	var line Line
+	if e = r.Poll(context.Background(), func(l Line) error { line = l; return nil }); e != nil {
+		t.Fatal(e)
+	}
+	if line.Number != 0 {
+		t.Fatal("unknown original line number must be zero", line.Number)
+	}
 }
 
 func TestReaderRepeatedRotationAndIncludes(t *testing.T) {
