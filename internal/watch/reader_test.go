@@ -176,6 +176,12 @@ func TestReaderEOFDoesNotInventOriginalLineNumbers(t *testing.T) {
 	}
 }
 
+func TestReaderTransientOpenFailureKeepsCheckpoint(t *testing.T){
+ p:=filepath.Join(t.TempDir(),"access.log");put(t,p,"one\n");r,e:=NewReader([]string{p},ReaderOptions{Beginning:true});if e!=nil{t.Fatal(e)};defer r.Close();poll(t,r)
+ original:=r.open;r.open=func(string)(*os.File,error){return nil,os.ErrPermission};if got:=poll(t,r);len(got)!=0{t.Fatal(got)};if !r.files[0].detached.IsZero(){t.Fatal("temporary open failure detached live file")}
+ r.open=original;appendLog(t,p,"two\n");if got:=poll(t,r);!reflect.DeepEqual(got,[]string{"two"}){t.Fatal("checkpoint lost",got)}
+}
+
 func TestReaderRepeatedRotationAndIncludes(t *testing.T) {
 	d := t.TempDir()
 	p := filepath.Join(d, "custom.txt")

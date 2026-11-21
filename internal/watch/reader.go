@@ -42,6 +42,7 @@ type Reader struct {
 	o           ReaderOptions
 	files       []*trackedFile
 	initialized bool
+	open func(string)(*os.File,error)
 }
 
 func NewReader(paths []string, o ReaderOptions) (*Reader, error) {
@@ -62,7 +63,7 @@ func NewReader(paths []string, o ReaderOptions) (*Reader, error) {
 			return nil, e
 		}
 	}
-	r := &Reader{o: o}
+	r := &Reader{o: o,open:openLog}
 	for _, p := range paths {
 		a, e := filepath.Abs(p)
 		if e != nil {
@@ -161,7 +162,7 @@ func (r *Reader) discover() error {
 	}
 	active := map[string]bool{}
 	for _, p := range paths {
-		f, e := openLog(p)
+		f, e := r.open(p)
 		if e != nil {
 			r.warn("cannot open input: " + p)
 			continue
