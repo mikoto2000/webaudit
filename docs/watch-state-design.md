@@ -1,7 +1,7 @@
 # Watch state design
 
 Schema 1 snapshot contains canonical targets, file identity and offset, partial line,
-discard status, content anchor, bounded normalized event horizon, incident snapshots,
+discard status, whether original line numbering is known, content anchor, bounded normalized event horizon, incident snapshots,
 watermark, sequence and per-hook notification revision. Store under absolute
 XDG_STATE_HOME/webaudit/watch, otherwise ~/.local/state/webaudit/watch on Unix or
 LOCALAPPDATA/webaudit/watch on Windows. Target-set hash selects the snapshot.

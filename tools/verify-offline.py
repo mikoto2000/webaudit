@@ -51,6 +51,13 @@ with tempfile.TemporaryDirectory() as tmp:
     assert "Not installed" in missing.stdout
     fixture = root / "audit/testdata/geoip"
     explicit = ["--geoip-country", str(fixture / "country.mmdb"), "--geoip-asn", str(fixture / "asn.mmdb")]
+    sample = subprocess.run([str(root / "examples/notify.sh")],
+                            input=json.dumps(dict(schema_version=1, incident_id="inc-sample",
+                                                  revision=1, severity="high", outcome="unknown",
+                                                  notification_id="notification-sample",
+                                                  source_ips=["$(touch NEVER_EXECUTE); & literal"])),
+                            env=env, preexec_fn=deny_network, capture_output=True, text=True, check=True)
+    assert json.loads(sample.stdout)["incident_id"] == "inc-sample"
     for extra in [[], explicit]:
         # Real watch startup, parsing, detection, JSONL and SIGINT under seccomp.
         import signal

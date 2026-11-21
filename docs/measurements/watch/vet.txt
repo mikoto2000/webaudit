@@ -1,0 +1,1 @@
+go vet ./... passed on Windows Go 1.27.4

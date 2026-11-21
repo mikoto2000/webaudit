@@ -1,5 +1,19 @@
 # CLI contract
 
+## Explicit realtime monitoring
+
+`webaudit watch INPUT...` starts foreground monitoring only when explicitly selected.
+Flags may precede/follow paths. The watch-specific `--format text|jsonl` is separate
+from batch report formats. Initial position is EOF; `--from beginning` replays old
+content; a valid checkpoint takes precedence. `--reset-state` resets that session,
+and `--no-state` disables checkpoint files. Exit 0 means graceful cancellation,
+1 means fatal output/checkpoint/reader error, 2 means invalid invocation/startup.
+Recoverable reader/Hook/coverage warnings do not stop the loop. Watch writes state
+by default but no report file. See [watch guide](watch.md) for the full CLI, safety,
+schema, file-selection and crash-delivery contract.
+
+## Batch analysis
+
 `webaudit INPUT... [-o PATH] [--format html|json|csv] [--lang ja|en] [--verbose]`. Flags may precede or follow inputs. Default console summary; --format json/csv without -o writes machine report to stdout. -o defaults to HTML, creates a new file exclusively with mode 0600 and refuses overwrite/input collision. --format html without -o writes HTML to stdout. --log-regex accepts Go named groups ip,time,method,target,protocol,status,bytes,ua,referer,host. time is Apache time or RFC3339. No implicit XFF trust. Limits configurable via --max-line-bytes, --max-file-bytes, --max-keys, --max-findings. Exit 0 complete (findings allowed), 1 partial/failed read or exhausted analysis limits, 2 invocation error. Directory recursion ignores symlinks and selects .log/.log.N/.gz files. JSON has versioned schema and explicit nulls for unavailable fields; CSV includes metadata, incident and separate source detection records with details JSON. Schema is webaudit/2. --dedup-files explicitly excludes byte-identical complete files; repeated records remain. --error-timezone accepts a known IANA location for timezone-free HTTP error timestamps. No report files unless -o requested.
 
 ## HTML report language

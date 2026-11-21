@@ -1,0 +1,31 @@
+{
+  "arch": "amd64",
+  "elapsed_seconds": 60.5193333,
+  "geoip": false,
+  "go": "go1.27.4",
+  "heap_after_gc_bytes": 8161304,
+  "incident_events_or_hook_completions": 436,
+  "logical_cpus": 24,
+  "max_events": 8192,
+  "mode": "soak",
+  "os": "windows",
+  "processed": 11100,
+  "processed_per_second": 183.41246333591053,
+  "retained_incidents": 4,
+  "retained_records": 8192,
+  "rotations": 11,
+  "runtime_sys_bytes": 44593152,
+  "sampled_peak_heap_bytes": 22315168,
+  "warnings": 2908,
+  "source_commit": "fd57bae7c28269c8afd2f51b02a7d6394e009493",
+  "scenario": {
+    "lines": 10000,
+    "files": 64,
+    "duration": "60s"
+  },
+  "process_cpu_seconds": 9.484375,
+  "sampled_peak_working_set_bytes": 45174784,
+  "process_wall_seconds": 60.5728674,
+  "cpu_one_core_percent": 15.657794334497693,
+  "diagnostics": ""
+}

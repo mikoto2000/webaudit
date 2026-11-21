@@ -1,0 +1,10 @@
+{
+  "source_commit": "bb70c53ad28608552808b3ee4a436c1d4ad2e92c",
+  "passed_top_level": 143,
+  "passed_including_subtests": 333,
+  "failed": 0,
+  "skipped": 11,
+  "os": "windows",
+  "go": "go1.27.4",
+  "temporary_directory": "workspace TEMP"
+}

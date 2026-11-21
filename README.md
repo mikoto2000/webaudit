@@ -10,6 +10,25 @@ v1.2.0ではHTMLレポートの日本語・英語切り替えと、攻撃の種�
 
 ## はじめに：ログを解析してHTMLレポートを開く
 
+継続監視には明示的に `watch` を指定します。従来の一括解析はそのまま利用できます。
+
+```sh
+webaudit watch /var/log/nginx/access.log
+webaudit watch /var/log/nginx/ --from beginning --format jsonl
+webaudit watch access.log --on-detect ./examples/notify.sh
+webaudit watch access.log --on-detect ./examples/notify.sh --on-detect-event all
+webaudit watch access.log --no-state
+```
+
+初回は末尾から開始し、`--from beginning` で既存内容も読み取ります。保存済み状態があれば
+`--from` より優先します。`--reset-state --from beginning` で明示的に読み直せます。
+`Ctrl+C` で状態を保存して終了します。通常監視に設定ファイル、外部DB、デーモン、ネットワークは不要です。
+Hookは指定時だけ、同じOSユーザーで実行します。
+
+対応ログ、ファイル選択、ローテーション、JSONLスキーマ、状態管理、Hook設定と制限事項は
+[監視・Hookガイド](docs/watch.md)、実行例は[watch examples](examples/watch-examples.md)、
+試験と実測値は[検証記録](docs/watch-validation.md)を参照してください。
+
 ### 1. 実行ファイルをダウンロードする
 
 [GitHub Releases](https://github.com/mikoto2000/webaudit/releases)から、お使いのOSとCPUに合うファイルを取得してください。配布対象はWindows / Linux / macOSのamd64（x86-64）・arm64（ARM64）です。リリースごとの添付ファイルを確認してください。
