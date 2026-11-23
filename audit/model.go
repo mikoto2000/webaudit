@@ -3,7 +3,7 @@ package audit
 
 import "time"
 
-const Version = "2.0.0"
+const Version = "2.0.1"
 const RulesVersion = "2026.11.20.2"
 
 type Event struct {

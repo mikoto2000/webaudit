@@ -246,16 +246,30 @@ func median(v []float64) float64 {
 	return x[i]
 }
 func isOutlier(v float64, base []float64, floor, ratio float64) bool {
+	return newOutlierBaseline(base).isOutlier(v, floor, ratio)
+}
+
+// A fixed peer population shares one median/MAD calculation. Online size
+// populations change per observation and continue to use isOutlier above.
+type outlierBaseline struct {
+	count       int
+	median, mad float64
+}
+
+func newOutlierBaseline(base []float64) outlierBaseline {
 	if len(base) < 20 {
-		return false
+		return outlierBaseline{count: len(base)}
 	}
 	m := median(base)
 	d := make([]float64, len(base))
 	for i, x := range base {
 		d[i] = math.Abs(x - m)
 	}
-	mad := median(d)
-	return v > m+math.Max(floor, 6*1.4826*mad) && v > m*ratio
+	return outlierBaseline{count: len(base), median: m, mad: median(d)}
+}
+
+func (b outlierBaseline) isOutlier(v, floor, ratio float64) bool {
+	return b.count >= 20 && v > b.median+math.Max(floor, 6*1.4826*b.mad) && v > b.median*ratio
 }
 func (a *Analysis) Finish() []Signal {
 	keys := make([]string, 0, len(a.windows))
@@ -306,6 +320,9 @@ func (a *Analysis) Finish() []Signal {
 			rates = append(rates, float64(p.errors)/float64(p.statusN))
 		}
 	}
+	countBaseline := newOutlierBaseline(counts)
+	byteBaseline := newOutlierBaseline(bytes)
+	rateBaseline := newOutlierBaseline(rates)
 	keys = keys[:0]
 	for k := range a.ips {
 		keys = append(keys, k)
@@ -313,10 +330,10 @@ func (a *Analysis) Finish() []Signal {
 	sort.Strings(keys)
 	for _, k := range keys {
 		p := a.ips[k]
-		if isOutlier(float64(p.n), counts, 100, 5) || (p.bytesN == p.n && isOutlier(p.bytes, bytes, 1<<20, 10)) {
+		if countBaseline.isOutlier(float64(p.n), 100, 5) || (p.bytesN == p.n && byteBaseline.isOutlier(p.bytes, 1<<20, 10)) {
 			a.emit("WS-ip", "IP request/byte volume peer outlier", p.sample, p.n, "At least 20 peer groups; robust median/MAD and minimum effect size; not proof of exfiltration", p.first, p.last)
 		}
-		if p.statusN >= 20 && isOutlier(float64(p.errors)/float64(p.statusN), rates, 0.5, 3) {
+		if p.statusN >= 20 && rateBaseline.isOutlier(float64(p.errors)/float64(p.statusN), 0.5, 3) {
 			a.emit("WS-errors", "IP HTTP-error-rate peer outlier", p.sample, p.n, "At least 20 requests per peer and 20 peers; >0.5 rate difference plus robust threshold", p.first, p.last)
 		}
 	}
@@ -339,9 +356,10 @@ func (a *Analysis) Finish() []Signal {
 				}
 				baseline = append(baseline, float64(n))
 			}
+			hourBaseline := newOutlierBaseline(baseline)
 			for h := lo; h <= hi; h++ {
 				p := a.hours[h]
-				if p != nil && isOutlier(float64(p.n), baseline, 100, 5) {
+				if p != nil && hourBaseline.isOutlier(float64(p.n), 100, 5) {
 					a.emit("WS-hour", "Hourly traffic peer outlier", p.sample, p.n, "Observed hours including zero bins; >=20 bins; robust threshold, +100 requests and 5x median", p.first, p.last)
 				}
 			}
