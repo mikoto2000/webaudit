@@ -15,6 +15,43 @@ import (
 
 const logLine = `192.0.2.1 - - [01/Nov/2026:00:00:00 +0000] "GET /.env HTTP/1.1" 200 42`
 
+func TestOutputCreatesMissingParents(t *testing.T) {
+	for _, verbose := range []bool{false, true} {
+		d := t.TempDir()
+		input := filepath.Join(d, "access.log")
+		if err := os.WriteFile(input, []byte(logLine+"\n"), 0600); err != nil {
+			t.Fatal(err)
+		}
+		output := filepath.Join(d, "output", "nested", "index.html")
+		args := []string{"-o", output, input}
+		if verbose {
+			args = append(args, "--verbose")
+		}
+		var out, stderr bytes.Buffer
+		if code := run(args, &out, &stderr); code != 0 {
+			t.Fatalf("verbose=%v: code %d: %s", verbose, code, stderr.String())
+		}
+		data, err := os.ReadFile(output)
+		if err != nil || !strings.Contains(string(data), "</html>") {
+			t.Fatalf("missing complete HTML: %v", err)
+		}
+		if code := run(args, &out, &stderr); code != 2 {
+			t.Fatalf("overwrite accepted: %d", code)
+		}
+		after, err := os.ReadFile(output)
+		if err != nil || !bytes.Equal(data, after) {
+			t.Fatal("existing report changed", err)
+		}
+		if code := run([]string{input, "-o", filepath.Join(input, "nested", "report.html")}, &out, &stderr); code != 2 {
+			t.Fatalf("file parent accepted: %d", code)
+		}
+		original, err := os.ReadFile(input)
+		if err != nil || string(original) != logLine+"\n" {
+			t.Fatal("input changed", err)
+		}
+	}
+}
+
 func TestCLI(t *testing.T) {
 	d := t.TempDir()
 	p := filepath.Join(d, "access.log")
