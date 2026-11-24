@@ -604,6 +604,7 @@
     "dimensions": {
       "host": [
         {
+          "suspicious_count_quality": "exact",
           "key": "missing",
           "value": null,
           "name": null,
@@ -621,6 +622,7 @@
       ],
       "ip": [
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-6d99cbd08fc6c99cdb2d942a4cbb097c",
           "value": "192.0.2.10",
           "name": null,
@@ -636,6 +638,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-a0c2b533f88e9b435c7e5f9ca99ec967",
           "value": "192.0.2.30",
           "name": null,
@@ -651,6 +654,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-2d459f9e8eb3f880e28a2b04c5749f48",
           "value": "192.0.2.20",
           "name": null,
@@ -666,6 +670,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-37fcff24bf62035b2b08020afc08b4fe",
           "value": "192.0.2.1",
           "name": null,
@@ -681,6 +686,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-54b9789ef2e3d61ee43bd2f32942ff3e",
           "value": "192.0.2.40",
           "name": null,
@@ -698,6 +704,7 @@
       ],
       "log_type": [
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-aaa81fa3b38de972e9c3f0493615d8a4",
           "value": "http_access-log",
           "name": null,
@@ -715,6 +722,7 @@
       ],
       "method": [
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-14e30cd163c732912e048c4c837e15c4",
           "value": "GET",
           "name": null,
@@ -732,6 +740,7 @@
       ],
       "protocol": [
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-c7b7e1d08e579f897ed5222e28f251b4",
           "value": "HTTP/1.1",
           "name": null,
@@ -749,6 +758,7 @@
       ],
       "status": [
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-27badc983df1780b60c2b3fa9d3a19a0",
           "value": "200",
           "name": null,
@@ -764,6 +774,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-6b3c238ebcf1f3c07cf0e556faa82c6b",
           "value": "404",
           "name": null,
@@ -779,6 +790,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-0604cd3138feed202ef293e062da2f47",
           "value": "500",
           "name": null,
@@ -796,6 +808,7 @@
       ],
       "status_class": [
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-6b25661ed9217d9a9ecd87baaad980cc",
           "value": "2xx",
           "name": null,
@@ -811,6 +824,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-6f61ff95a774d78f465968e0a9a86eb6",
           "value": "4xx",
           "name": null,
@@ -826,6 +840,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-aa29d51b99b82004c0481f7243316fd9",
           "value": "5xx",
           "name": null,
@@ -843,6 +858,7 @@
       ],
       "uri": [
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-8a5edab282632443219e051e4ade2d1d",
           "value": "/",
           "name": null,
@@ -858,6 +874,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-aef81e7735de8f42b73e111497498c8b",
           "value": "/.env",
           "name": null,
@@ -873,6 +890,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-d1ab3772812ed1ea615682eebf8e3c9a",
           "value": "/a/../../etc/passwd",
           "name": null,
@@ -890,6 +908,7 @@
       ],
       "user_agent": [
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-8c908754dc26e39aff788a5a0c096830",
           "value": "BrowserA",
           "name": null,
@@ -905,6 +924,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-e996ffbdeb4684e15acff909c1e441ac",
           "value": "BrowserC",
           "name": null,
@@ -920,6 +940,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-1066b48224bb188ceb955605f4fcff98",
           "value": "Mozilla/5.0",
           "name": null,
@@ -935,6 +956,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-63e05366492399a5d37c39d74587ef3d",
           "value": "\u003cscript\u003ealert('untrusted')\u003c/script\u003e",
           "name": null,
@@ -950,6 +972,7 @@
           "count_quality": "exact"
         },
         {
+          "suspicious_count_quality": "exact",
           "key": "VALUE-944d29de9e6901ae266b9287997cbd98",
           "value": "BrowserB",
           "name": null,
@@ -8843,8 +8866,8 @@
     "max_spool_bytes": 1073741824,
     "max_output_bytes": 1073741824
   },
-  "started_at": "2026-11-24T07:04:32.6164018Z",
-  "finished_at": "2026-11-24T07:04:32.7519582Z",
+  "started_at": "2026-11-24T08:14:29.0876755Z",
+  "finished_at": "2026-11-24T08:14:29.2442984Z",
   "status": "completed",
   "complete": true,
   "count_quality": "exact",
@@ -10500,7 +10523,7 @@
     "schema": "webaudit/2",
     "version": "2.0.1",
     "rules_version": "2026.11.20.2",
-    "analyzed_at": "2026-11-24T07:04:32.6164018Z",
+    "analyzed_at": "2026-11-24T08:14:29.0876755Z",
     "files": [
       {
         "path": "F:\\project\\webaudit\\webaudit\\examples\\sample.log",

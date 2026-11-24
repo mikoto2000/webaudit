@@ -1,2 +1,2 @@
-key,value,name,organization,missing,other,requests,suspicious_requests,request_percent,suspicious_within_group_percent,unique_ips,unique_ip_quality,label_truncated,count_quality
-missing,,,,true,false,9,8,100.000000,88.888889,,unavailable,false,exact
+key,value,name,organization,missing,other,requests,suspicious_requests,suspicious_count_quality,request_percent,suspicious_within_group_percent,unique_ips,unique_ip_quality,label_truncated,count_quality
+missing,,,,true,false,9,8,exact,100.000000,88.888889,,unavailable,false,exact
