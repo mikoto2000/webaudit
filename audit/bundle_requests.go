@@ -32,6 +32,9 @@ type RequestSnapshot struct {
 	GeoIP            *GeoIPInfo   `json:"geoip"`
 }
 type BundleDetection struct {
+	URIStatistics       []StatisticsRow     `json:"uri_statistics"`
+	UniqueURIs          int64               `json:"retained_unique_uris"`
+	UniqueURIQuality    string              `json:"unique_uri_quality"`
 	SampleEvidenceRefs  []EvidenceReference `json:"sample_evidence_refs"`
 	EvidenceRefs        []EvidenceReference `json:"evidence_refs"`
 	SourceIndex         *int                `json:"source_index"`
@@ -63,13 +66,16 @@ type BundleDetection struct {
 	source              *SourceAlert
 }
 type FindingObservation struct {
-	Requests                  int64         `json:"requests"`
-	Detections                int64         `json:"detections"`
-	First                     *time.Time    `json:"first"`
-	Last                      *time.Time    `json:"last"`
-	RequestRatePerSecond      *float64      `json:"request_rate_per_second"`
-	Timeline                  []TimelineRow `json:"timeline"`
-	TimelineResolutionSeconds int64         `json:"timeline_resolution_seconds"`
+	URIStatistics             []StatisticsRow `json:"uri_statistics"`
+	UniqueURIs                int64           `json:"retained_unique_uris"`
+	UniqueURIQuality          string          `json:"unique_uri_quality"`
+	Requests                  int64           `json:"requests"`
+	Detections                int64           `json:"detections"`
+	First                     *time.Time      `json:"first"`
+	Last                      *time.Time      `json:"last"`
+	RequestRatePerSecond      *float64        `json:"request_rate_per_second"`
+	Timeline                  []TimelineRow   `json:"timeline"`
+	TimelineResolutionSeconds int64           `json:"timeline_resolution_seconds"`
 	timeline                  *statisticsRecorder
 	ID                        string           `json:"finding_id"`
 	DirectRequests            int64            `json:"direct_requests"`
@@ -254,6 +260,9 @@ func bundleDetections(r *InvestigationReport, c *bundleCapture) []BundleDetectio
 				if rule.Engine == d.Engine && rule.ID == d.RuleID {
 					d.Condition = rule.Condition
 					d.Category = rule.Category
+					if rule.Severity != "" {
+						d.Severity = rule.Severity
+					}
 					d.Reason = rule.Description
 					break
 				}
@@ -610,6 +619,7 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 					continue
 				}
 				m.Requests++
+				observeURI(&m.URIStatistics, snapshot.Event.Target)
 				m.timeline.observeTimeline(snapshot.Event)
 				if flags&1 != 0 {
 					m.DirectRequests++
@@ -708,10 +718,14 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 	}); err != nil {
 		return err
 	}
+	for i := range groups {
+		groups[i].UniqueURIs, groups[i].UniqueURIQuality = uriQuality(groups[i].URIStatistics)
+	}
 	r.Detections = groups
 	r.Evidence.AggregateDetections = int64(len(groups))
 	for _, f := range r.Analysis.Findings {
 		m := metrics[f.ID]
+		m.UniqueURIs, m.UniqueURIQuality = uriQuality(m.URIStatistics)
 		m.timeline.finalizeTimeline()
 		m.First = m.timeline.first
 		m.Last = m.timeline.last
@@ -780,6 +794,7 @@ func filterAssociationLimitation(in []string) []string {
 }
 
 func observeDetectionMetadata(d *BundleDetection, e Event) {
+	observeURI(&d.URIStatistics, e.Target)
 	if d.StatusCounts == nil {
 		d.StatusCounts = map[string]int64{}
 		d.Methods = map[string]int64{}
@@ -828,4 +843,57 @@ func observeDetectionMetadata(d *BundleDetection, e Event) {
 			d.ObservedLast = ptr(e.Time)
 		}
 	}
+}
+
+func observeURI(rows *[]StatisticsRow, uri string) {
+	var value *string
+	if uri != "" {
+		value = &uri
+	}
+	key := dimensionKey(value)
+	for i := range *rows {
+		if (*rows)[i].Key == key {
+			(*rows)[i].Requests++
+			return
+		}
+	}
+	known := 0
+	other := -1
+	for i, row := range *rows {
+		if row.Other {
+			other = i
+		} else if row.Value != nil {
+			known++
+		}
+	}
+	if value != nil && known >= 8 {
+		if other >= 0 {
+			(*rows)[other].Requests++
+		} else {
+			*rows = append(*rows, StatisticsRow{Key: "other", Other: true, Requests: 1, CountQuality: "exact"})
+		}
+		return
+	}
+	row := StatisticsRow{Key: key, Requests: 1, CountQuality: "exact"}
+	if value != nil {
+		v, cut := clipped(*value, 1024)
+		row.Value = &v
+		row.LabelTruncated = cut
+	}
+	*rows = append(*rows, row)
+}
+func uriQuality(rows []StatisticsRow) (int64, string) {
+	var known int64
+	quality := "exact"
+	for _, row := range rows {
+		if row.Other || row.Value == nil {
+			quality = "lower_bound"
+		} else {
+			known++
+		}
+	}
+	if known == 0 {
+		quality = "unavailable"
+	}
+	return known, quality
 }

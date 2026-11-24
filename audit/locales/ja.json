@@ -712,5 +712,7 @@
   "rare_user_agent": "少数のUser-Agent",
   "traffic_spike": "時間別通信量の急増",
   "Recorded timezone offsets": "記録されたタイムゾーンの時差",
-  "recorded_time": "記録時刻（時差未確認を含む）"
+  "recorded_time": "記録時刻（時差未確認を含む）",
+  "Retained unique URIs / quality": "保持された異なるURI数・品質",
+  "URI counts within the incident": "事案内のURI別リクエスト数"
 }
