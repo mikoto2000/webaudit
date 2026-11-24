@@ -234,13 +234,11 @@ func (b *bundleWriter) csv(name string, header []string, rows func(func(...strin
 		write := func(row ...string) error {
 			safe := make([]string, len(row))
 			for i, v := range row {
-				if b.maskSecrets {
-					headerName := ""
-					if i < len(header) {
-						headerName = header[i]
-					}
-					v = maskCSVValue(v, headerName)
+				headerName := ""
+				if i < len(header) {
+					headerName = header[i]
 				}
+				v = reportCSVValue(v, headerName, b.maskSecrets)
 				safe[i] = csvSafe(v)
 			}
 			return c.Write(safe)

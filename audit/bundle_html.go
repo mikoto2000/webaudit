@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
+	"strings"
+	"time"
 )
 
 //go:embed investigation.html
@@ -113,10 +115,13 @@ func buildReportHTMLView(r *InvestigationReport, tr reportTranslator) reportHTML
 				break
 			}
 		}
-		for _, sample := range item.Source.Evidence {
+		for sampleIndex, sample := range item.Source.Evidence {
 			ref := EvidenceReference{}
+			if sampleIndex < len(d.SampleEvidenceRefs) {
+				ref = d.SampleEvidenceRefs[sampleIndex]
+			}
 			for _, candidate := range d.EvidenceRefs {
-				if candidate.File == sample.File && candidate.Line == sample.Line {
+				if ref.FileID == "" && candidate.File == sample.File && candidate.Line == sample.Line {
 					ref = candidate
 					break
 				}
@@ -180,7 +185,11 @@ func buildReportHTMLView(r *InvestigationReport, tr reportTranslator) reportHTML
 	countChart := func(title string, values map[string]int64, annex string) {
 		chart := reportChart{Title: title, Maximum: 1, Annex: annex, TotalRows: len(values)}
 		for key, n := range values {
-			chart.Rows = append(chart.Rows, chartBar{tr.text(key), n})
+			label := tr.text(key)
+			if parts := strings.SplitN(key, ":", 2); len(parts) == 2 {
+				label = parts[0] + " / " + tr.text(parts[1])
+			}
+			chart.Rows = append(chart.Rows, chartBar{label, n})
 			if n > chart.Maximum {
 				chart.Maximum = n
 			}
@@ -227,27 +236,48 @@ func writeInvestigationHTML(w io.Writer, r *InvestigationReport) error {
 		}
 		return fmt.Sprint(rv.Interface())
 	}
-	functions := template.FuncMap{"t": tr.text, "outcome": tr.outcome, "diagnostic": tr.diagnostic, "lang": func() string { return r.Metadata.Language }, "n": numeric, "dt": func(value any) string { return numeric(value) }, "specified": func(value string) string {
-		if value == "" {
-			return tr.text("Not specified")
+	functions := template.FuncMap{"t": tr.text, "outcome": tr.outcome, "diagnostic": tr.diagnostic, "lang": func() string { return r.Metadata.Language }, "n": numeric, "analysisStatus": func(status string) string {
+		switch status {
+		case "completed":
+			return tr.text("Completed analysis")
+		case "failed":
+			return tr.text("Failed analysis")
+		default:
+			return tr.text("Partial analysis")
 		}
-		return value
-	}, "caseVisible": func(id string) bool { return v.CaseIDs[id] }, "sourceVisible": func(id string) bool { return v.SourceIDs[id] }, "coverageVisible": func(id string) bool { return v.CoverageIDs[id] }, "ruleAnchor": reportRuleAnchor, "ruleVisible": func(engine, id string) bool { return v.RuleIDs[reportRuleAnchor(engine, id)] }, "meanBytes": func(m FindingObservation) *float64 {
-		if m.BytesCount == 0 {
-			return nil
-		}
-		return ptr(m.BytesSum / float64(m.BytesCount))
-	}, "percent": func(value *float64) string {
-		if value == nil {
-			return tr.text("unknown")
-		}
-		return strconv.FormatFloat(*value, 'f', 2, 64) + "%"
-	}, "title": func() string {
-		if r.Metadata.Title != "" {
-			return r.Metadata.Title
-		}
-		return tr.text("Access log investigation report")
-	}}
+	},
+		"dt": func(value any) string {
+			switch v := value.(type) {
+			case time.Time:
+				return v.Format(time.RFC3339Nano)
+			case *time.Time:
+				if v == nil {
+					return tr.text("unknown")
+				}
+				return v.Format(time.RFC3339Nano)
+			}
+			return numeric(value)
+		}, "specified": func(value string) string {
+			if value == "" {
+				return tr.text("Not specified")
+			}
+			return value
+		}, "caseVisible": func(id string) bool { return v.CaseIDs[id] }, "sourceVisible": func(id string) bool { return v.SourceIDs[id] }, "coverageVisible": func(id string) bool { return v.CoverageIDs[id] }, "ruleAnchor": reportRuleAnchor, "ruleVisible": func(engine, id string) bool { return v.RuleIDs[reportRuleAnchor(engine, id)] }, "meanBytes": func(m FindingObservation) *float64 {
+			if m.BytesCount == 0 {
+				return nil
+			}
+			return ptr(m.BytesSum / float64(m.BytesCount))
+		}, "percent": func(value *float64) string {
+			if value == nil {
+				return tr.text("unknown")
+			}
+			return strconv.FormatFloat(*value, 'f', 2, 64) + "%"
+		}, "title": func() string {
+			if r.Metadata.Title != "" {
+				return r.Metadata.Title
+			}
+			return tr.text("Access log investigation report")
+		}}
 	parsed, err := template.New("investigation").Funcs(functions).Parse(investigationHTML)
 	if err != nil {
 		return err

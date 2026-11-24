@@ -3,10 +3,12 @@ package audit
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 )
 
 type InvestigationSummary struct {
@@ -173,6 +175,7 @@ func prepareInvestigationReport(r *InvestigationReport, max int) {
 		if len(guides) == 0 {
 			guides = investigationFor(f.Categories)
 		}
+		preventions := map[string]bool{}
 		for _, guide := range guides {
 			rec := Recommendation{ID: bundleID("REC-", f.ID+"\x00"+guide.Category), Type: "investigation", Title: tr.text("Collect corroborating evidence") + ": " + tr.text(guide.Category), Reason: tr.text(guide.WhyUnknown), FindingIDs: []string{f.ID}, Priority: priority, WhereToCheck: translate(guide.WhereToCheck), Method: tr.text("Correlate the recorded interval, host, URI and request identifiers; source IP alone is not verified identity."), SuccessEvidence: tr.text(guide.SuccessEvidence), FailureEvidence: tr.text(guide.FailureEvidence), IP: f.IP, Host: f.Host, URIs: metrics[f.ID].URIs}
 			if !f.TimezoneUnknown {
@@ -180,11 +183,24 @@ func prepareInvestigationReport(r *InvestigationReport, max int) {
 				rec.Last = ptr(f.Last)
 			}
 			add(rec)
+			advice := preventiveCheck(guide.Category)
+			if advice != "" && !preventions[advice] {
+				preventions[advice] = true
+				prevention := Recommendation{ID: bundleID("REC-", f.ID+"\x00prevent\x00"+advice), Type: "preventive_review", Title: tr.text("Review applicable preventive controls"), Reason: tr.text(guide.Category), FindingIDs: []string{f.ID}, Priority: priority, WhereToCheck: []string{tr.text("The referenced route, component configuration and authorized traffic baseline")}, Method: tr.text(advice), IP: f.IP, Host: f.Host, URIs: metrics[f.ID].URIs}
+				if !f.TimezoneUnknown {
+					prevention.First = ptr(f.First)
+					prevention.Last = ptr(f.Last)
+				}
+				add(prevention)
+			}
 		}
 	}
 	for i := range r.Detections {
 		d := &r.Detections[i]
 		if source := sourceAlertFor(r, *d); source != nil {
+			for _, sample := range source.Evidence {
+				d.SampleEvidenceRefs = append(d.SampleEvidenceRefs, evidenceReference(r, sample.File, sample.Line))
+			}
 			for _, ref := range source.Events {
 				if len(d.EvidenceRefs) >= 8 {
 					break
@@ -208,7 +224,7 @@ func prepareInvestigationReport(r *InvestigationReport, max int) {
 		r.Analysis.warn("Recommendation limit reached; recommendations are incomplete")
 	}
 	r.MaskingEnabled = !r.Metadata.IncludeSensitiveEvidence
-	r.MaskingNotes = []string{"Deterministic masking covers common query credentials, Authorization and Cookie values; it is not a guarantee that all personal or secret data is removed.", "Original files are unchanged. File identifiers, original hashes and line numbers retain source traceability.", "IP addresses and investigator metadata are not anonymized; review sensitive evidence before sharing."}
+	r.MaskingNotes = []string{"Control characters in source values are displayed as escapes; originals are unchanged.", "Deterministic masking covers common query credentials, Authorization and Cookie values; it is not a guarantee that all personal or secret data is removed.", "Original files are unchanged. File identifiers, original hashes and line numbers retain source traceability.", "IP addresses and investigator metadata are not anonymized; review sensitive evidence before sharing."}
 }
 
 var secretQuery = regexp.MustCompile(`(?i)((?:[?&;]|%3f|%26)(?:access_token|api[_-]?key|token|password|passwd|secret|session(?:id|_id)?|authorization|cookie)(?:=|%3d))([^&\s"'<>]+)`)
@@ -224,13 +240,28 @@ func maskReportString(s string) string {
 	s = secretHeader.ReplaceAllString(s, `${1}[REDACTED]`)
 	return secretBearer.ReplaceAllString(s, `${1} [REDACTED]`)
 }
-func maskTree(value any) any {
+func escapeReportControls(s string) string {
+	var out strings.Builder
+	for _, r := range s {
+		if unicode.IsControl(r) || unicode.Is(unicode.Bidi_Control, r) {
+			fmt.Fprintf(&out, "\\u%04X", r)
+		} else {
+			out.WriteRune(r)
+		}
+	}
+	return out.String()
+}
+func transformReportTree(value any, redact bool) any {
 	switch v := value.(type) {
 	case string:
-		return maskReportString(v)
+		v = escapeReportControls(v)
+		if redact {
+			v = maskReportString(v)
+		}
+		return v
 	case []any:
 		for i, item := range v {
-			v[i] = maskTree(item)
+			v[i] = transformReportTree(item, redact)
 		}
 		return v
 	case map[string]any:
@@ -238,30 +269,27 @@ func maskTree(value any) any {
 			if key == "pattern" || key == "filter" || key == "condition" || key == "conditions" {
 				continue
 			}
-			v[key] = maskTree(item)
+			v[key] = transformReportTree(item, redact)
 		}
 		return v
 	}
 	return value
 }
-func maskJSON(data []byte) ([]byte, error) {
+func transformReportJSON(data []byte, redact bool) ([]byte, error) {
 	var value any
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.UseNumber()
 	if err := decoder.Decode(&value); err != nil {
 		return nil, err
 	}
-	return json.Marshal(maskTree(value))
+	return json.Marshal(transformReportTree(value, redact))
 }
 func maskCommonReport(r *InvestigationReport) error {
-	if r.Metadata.IncludeSensitiveEvidence {
-		return nil
-	}
 	data, err := json.Marshal(r)
 	if err != nil {
 		return err
 	}
-	data, err = maskJSON(data)
+	data, err = transformReportJSON(data, !r.Metadata.IncludeSensitiveEvidence)
 	if err != nil {
 		return err
 	}
@@ -272,16 +300,20 @@ func maskCommonReport(r *InvestigationReport) error {
 	*r = masked
 	return nil
 }
-func maskCSVValue(value, header string) string {
+func reportCSVValue(value, header string, redact bool) string {
 	if header == "condition" || header == "conditions" || header == "filter" {
 		return value
 	}
 	if strings.HasSuffix(header, "_json") {
-		if masked, err := maskJSON([]byte(value)); err == nil {
-			return string(masked)
+		if transformed, err := transformReportJSON([]byte(value), redact); err == nil {
+			return string(transformed)
 		}
 	}
-	return maskReportString(value)
+	value = escapeReportControls(value)
+	if redact {
+		return maskReportString(value)
+	}
+	return value
 }
 func writeRecommendations(b *bundleWriter, r *InvestigationReport) error {
 	return b.csv("recommendations.csv", []string{"recommendation_id", "type", "title", "reason", "finding_ids", "detection_ids", "priority", "where_to_check", "method", "success_evidence", "failure_evidence", "first", "last", "source_ip", "host", "uri_samples"}, func(write func(...string) error) error {
@@ -328,4 +360,20 @@ func sourceAlertFor(r *InvestigationReport, d BundleDetection) *SourceAlert {
 		return nil
 	}
 	return &rows[*d.SourceIndex]
+}
+
+func preventiveCheck(category string) string {
+	switch category {
+	case "sensitive_file", "lfi_traversal", "rfi":
+		return "Verify whether the referenced paths are intended to be public before reviewing exposure and file access controls."
+	case "sqli", "nosqli", "ldap_injection", "xpath_injection":
+		return "Confirm whether the affected input reaches a database or interpreter before reviewing parameterization and validation."
+	case "xss":
+		return "Confirm the affected rendering context before reviewing output encoding and content handling."
+	case "command_injection", "deserialization", "log4shell", "spring4shell", "struts_ognl", "shellshock":
+		return "Identify the targeted functionality and component before reviewing applicable fixes and execution isolation."
+	case "rate", "burst", "WS-hour", "WS-ip":
+		return "Evaluate authorized traffic and service capacity before considering rate limits or traffic controls."
+	}
+	return ""
 }

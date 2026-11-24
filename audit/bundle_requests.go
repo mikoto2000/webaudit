@@ -32,6 +32,7 @@ type RequestSnapshot struct {
 	GeoIP            *GeoIPInfo   `json:"geoip"`
 }
 type BundleDetection struct {
+	SampleEvidenceRefs  []EvidenceReference `json:"sample_evidence_refs"`
 	EvidenceRefs        []EvidenceReference `json:"evidence_refs"`
 	SourceIndex         *int                `json:"source_index"`
 	StatusCounts        map[string]int64    `json:"status_counts"`

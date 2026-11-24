@@ -1,12 +1,14 @@
 package audit
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 	"testing"
+	"unicode"
 )
 
 func TestInvestigationHTMLChaptersNavigationAndSharedRecommendations(t *testing.T) {
@@ -129,5 +131,23 @@ func TestBundleEscapesControlCharactersEvenWithSensitiveEvidence(t *testing.T) {
 	}
 	if !strings.Contains(string(data), `\u001B`) {
 		t.Fatal("control character representation missing")
+	}
+}
+
+func TestInvestigationHTMLCatalogCoverage(t *testing.T) {
+	visible := regexp.MustCompile(`(?s)<style>.*?</style>|<pre(?: [^>]*)?>.*?</pre>|{{.*?}}|<[^>]*>`).ReplaceAllString(investigationHTML, "")
+	if strings.IndexFunc(visible, unicode.IsLetter) >= 0 {
+		t.Fatal("unlocalized static template text", visible)
+	}
+	for _, match := range regexp.MustCompile(`{{t ("(?:[^"\\]|\\.)*")}}`).FindAllStringSubmatch(investigationHTML, -1) {
+		var key string
+		if err := json.Unmarshal([]byte(match[1]), &key); err != nil || reportJapanese[key] == "" {
+			t.Fatal("missing Japanese template key", match[1])
+		}
+	}
+	for _, aspect := range bundleAspects() {
+		if reportJapanese[aspect.Name] == "" {
+			t.Fatal("missing perspective name", aspect.Name)
+		}
 	}
 }
