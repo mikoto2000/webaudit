@@ -44,3 +44,14 @@ Phase 1セルフレビューで、入力hash/診断の完全性低下を暫定HT
 `audit/bundle_coverage.go` の共通ルール一覧・41調査観点・全ソースルールをJSONとCSVへ出力する。`incidents.go` と `upstream.go` の任意observerで既存検出結果を利用し、新しい検出器を追加しない。coverageはstatus/evaluation/complete/has_detectionsを独立させる。必要項目の欠損・入力部分解析・統計母数不足・未対応・GeoIP未実施を区別する。共有・部分支援の観点はlimitationsを明示する。
 
 完全な不審/関連リクエストの関連付けとその件数はPhase 3で完成させる。現段階で復元できない独立エンジンの件数はnull/空欄としている。検出確度の既存数値からの変換はしない。既存coverage回帰テストを保持し、別ファイルにbundle契約テストを追加した。
+
+
+## Phase 3 実装記録
+
+- `bundle_requests.go`: サイズ上限付きprivate JSONL spool、全件CSVへのストリーム変換、Request/Detection/Findingの安定ID、独立engineのexact membership、aggregateのrelated証跡、出力完全性と理由。
+- `incidents.go`: 従来の事案キーを共通関数に抽出し、実際に保持された事案へ関連付ける。8件の代表証跡上限は維持。
+- Hubはdistinct適用後のbucket所属と実際にemitされたtokenだけを解決。Aura署名は実際のgroup一致を利用。遅延集計は元データを再走査せずspool snapshotへ照合。
+- coverageのdirect検出リクエストとrelatedリクエストを別の列にする。独立したengineの件数を一意requestへ単純合算しない。
+- findingsのURI例は最大8件/各1024bytes、methodキーは最大64種類/各128bytes。全件URIと元ログはメモリに保持しない。
+- source/aggregate検出のinterval indexを構築し、各requestで無関係な全検出を走査しない。メモリは保持検出数に、spoolは明示上限に制限。
+- 途中の検出元fieldがcompactされた場合は完全な照合を保証せず明示する。SIGKILL等の異常停止はINCOMPLETE markerで識別する。

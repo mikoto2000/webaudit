@@ -315,7 +315,7 @@ WebAuditは[MIT License](LICENSE)です。AuraDFIR、CrowdSec、CrowdSec Hubを�
 
 ## 提出用報告書一式（段階的実装）
 
-既存の単一ファイル出力とは別に、新しいディレクトリを排他的に作成するバッチ出力を利用できます。現在はPhase 2の原本来歴・解析メタデータ・調査観点カバレッジに対応し、11章構成・全件証跡等は後続フェーズで追加します。[設計と要求対応表](docs/reporting/design.md)を参照してください。
+既存の単一ファイル出力とは別に、新しいディレクトリを排他的に作成するバッチ出力を利用できます。現在はPhase 3の原本来歴・解析メタデータ・調査観点カバレッジ・全件証跡に対応し、11章構成・全件証跡等は後続フェーズで追加します。[設計と要求対応表](docs/reporting/design.md)を参照してください。
 
 ```sh
 webaudit access.log --report-dir report --system-name "対象システム" --investigator "調査担当者" --report-title "アクセスログ調査"
@@ -334,3 +334,14 @@ webaudit access.log --report-dir report --system-name "対象システム" --inv
 WebAudit署名では元観測ごとの一致ルール数を検出数、複数ルールに一致しても1件を検出リクエスト数として扱います。Hubの `matched_candidates` はbucket成立前のフィルター一致候補であり、アラート数や不審リクエスト数とは別です。独立エンジンの検出リクエストの全件関連付けはPhase 3で追加します。それまでは取得できない件数をnull/空欄とし、代表証跡から全件を推測しません。
 
 全アクセス数と観点別件数は加算関係ではありません。同一観測が複数観点・複数ルール・複数エンジンに該当できます。観点の共有ルール（例: traversal/LFI）も独立した攻撃数ではありません。統計分析は必要な母数が不足すると評価不能になり、未対応のIPレピュテーションや本文攻撃は「検出なし」と表示しません。
+
+
+### 不審リクエストと関連証跡
+
+報告書一式には `suspicious-requests.csv`、`related-requests.csv`、`detections.csv`、`findings.csv` を含みます。元ファイルIDと行番号に基づくrequest ID、engine/ruleに基づくdetection ID、既存のfinding IDで追跡できます。同内容でも異なる行・原本は別観測であり、複数ルール・エンジンに一致してもsuspicious一覧内では1行です。事案全体の成否をリクエストに転記しません。
+
+直接の署名一致・成立したHub検出の構成観測・単一応答のサイズ異常を不審リクエストとして出力します。WebAuditの時間窓/peer/hour分析とAuraの集計条件に属する観測は、正常アクセスを含み得る関連証跡として出力します。両方に該当する観測は両CSVに現れますが、direct_detection_ids / related_detection_ids で関係を区別できます。2つのCSVの行数を足して一意の不審リクエスト数としないでください。
+
+解析中の観測はprivateなサイズ上限付きJSONLへ一時記録し、解析終了後に確定した検出と照合してCSVへストリーム出力します。元ログの再走査は行わず、終了時成立の統計も関連付けます。Hubのdistinct条件と抑制期間は実際のbucket所属トークンで追跡し、成立しなかった候補を検出に変えません。一時spoolは通常終了・出力失敗時に削除します。強制終了後のINCOMPLETEディレクトリは元ログと同等の機密性で扱ってください。
+
+`report.json.evidence_complete` が全件出力の完全性を示します。spool上限・原本変更・解析上限等があればfalseとなり、理由と下限件数を記録します。圧縮原本のhash上限と展開後の解析上限は同じ `--max-file-bytes` の値をそれぞれ適用します。CSVには生ログ、URI、Referer等の機密情報が含まれ得ます。

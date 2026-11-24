@@ -483,6 +483,13 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 		return err
 	}
 	r.EvidenceComplete = r.Complete && !c.spool.truncated
+	for _, signal := range c.signals {
+		if signal.Event.EvidenceTruncated {
+			r.EvidenceComplete = false
+			uniqueAppend(&r.Evidence.Reasons, "Delayed-detection source fields were compacted; complete association cannot be guaranteed")
+		}
+	}
+
 	r.Evidence.SpoolBytes = c.spool.used
 	if c.spool.truncated {
 		r.Evidence.Reasons = append(r.Evidence.Reasons, "Private request spool byte limit reached; full request export is incomplete")
@@ -579,10 +586,23 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 					m.URIsTruncated = true
 				}
 				m.Methods[method]++
-				if len(m.URIs) < 64 {
-					uniqueAppend(&m.URIs, snapshot.Event.Target)
-				} else {
+				uri, uriCut := clipped(snapshot.Event.Target, 1024)
+				if uriCut {
 					m.URIsTruncated = true
+				}
+				knownURI := false
+				for _, v := range m.URIs {
+					if v == uri {
+						knownURI = true
+						break
+					}
+				}
+				if !knownURI {
+					if len(m.URIs) < 8 {
+						m.URIs = append(m.URIs, uri)
+					} else {
+						m.URIsTruncated = true
+					}
 				}
 				if snapshot.Event.Bytes != nil {
 					v := *snapshot.Event.Bytes
