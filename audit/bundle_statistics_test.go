@@ -103,3 +103,24 @@ func TestBundleStatisticsGeoAndInvalidDuration(t *testing.T) {
 		t.Fatal(country)
 	}
 }
+
+func TestBundleRecordsMatchedParserAndHandlesNumericOverflow(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "access.log")
+	jsonLine := `{"remote_addr":"192.0.2.1","time_iso8601":"2026-11-01T00:00:00Z","request":"GET / HTTP/1.1","status":200,"body_bytes_sent":0,"request_time":"1e308"}`
+	text := jsonLine + "\n" + jsonLine + "\n" + `192.0.2.1 - - [01/Nov/2026:00:00:00 +0000] "GET / HTTP/1.1" 200 0` + "\n"
+	if err := os.WriteFile(input, []byte(text), 0600); err != nil {
+		t.Fatal(err)
+	}
+	r, err := GenerateBundle([]string{input}, filepath.Join(dir, "report"), Options{}, BundleOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if r.Statistics.RequestDuration.Mean != nil || r.Statistics.RequestDuration.SumQuality != "overflow" {
+		t.Fatal("nonfinite sum hidden", r.Statistics.RequestDuration)
+	}
+	formats := strings.Join(r.Inventory[0].Formats, ";")
+	if !strings.Contains(formats, "nginx-json") || !strings.Contains(formats, "apache-nginx-common") {
+		t.Fatal("matched parser not recorded", formats)
+	}
+}
