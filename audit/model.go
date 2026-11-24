@@ -38,8 +38,11 @@ type Event struct {
 	Raw               string    `json:"raw"`
 }
 type Options struct {
-	bundle *bundleCapture
-	GeoIP  *GeoIP
+	// Progress is called synchronously while streaming input, including skipped or
+	// failed files. Completed files count attempts, not successful analysis.
+	Progress func(InputProgress)
+	bundle   *bundleCapture
+	GeoIP    *GeoIP
 
 	ErrorTimezone          string
 	RetainUpstreamEvidence bool
@@ -51,6 +54,14 @@ type Options struct {
 	MaxKeys                int
 	MaxFindings            int
 	LogRegex               string
+}
+
+// InputProgress describes file traversal and physical lines read (including
+// blank and invalid lines). Deduplicated files do not add lines.
+type InputProgress struct {
+	CompletedFiles int
+	TotalFiles     int
+	Lines          int64
 }
 
 func (o Options) defaults() Options {

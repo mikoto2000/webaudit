@@ -370,3 +370,5 @@ WebAudit署名では元観測ごとの一致ルール数を検出数、複数ル
 
 
 報告書一式の[利用方法・出力契約・件数定義・制約](docs/reporting/output.md)、[要求対応表とテスト](docs/reporting/traceability.md)、[性能と資源使用量](docs/reporting/performance.md)。[日本語サンプル](examples/investigation-ja/report.html) / [英語サンプル](examples/investigation-en/report.html)。
+
+`--verbose` は stderr に入力ファイルのプログレスバーと読み取り行数を表示します。単一の大きなファイルでも行数は約100ms間隔で更新します。バーは列挙したファイルの処理済み数（重複除外・読み取り失敗を含む）で、解析やレポート生成全体の成功率ではありません。gzip、ディレクトリ、`--report-dir` にも対応します。完了時は改行し、通常レポートのファイル別診断は従来どおり表示します。stdout のレポート形式は変わりません。
