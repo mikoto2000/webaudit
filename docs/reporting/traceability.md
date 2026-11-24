@@ -104,4 +104,4 @@ Phase6では集計型を含む観点の直接/関連リクエストをspoolか�
 | 3 | [#33](https://github.com/mikoto2000/webaudit/pull/33) | マージ済・CI成功・worktree削除済 |
 | 4 | [#34](https://github.com/mikoto2000/webaudit/pull/34) | マージ済・CI成功・worktree削除済 |
 | 5 | [#35](https://github.com/mikoto2000/webaudit/pull/35) | マージ済・PR/main CI成功・worktree削除済。main CIの既存PowerShell5秒タイムアウトは失敗ジョブの1回の再実行で成功 |
-| 6 | 作成時に追記 | 統合テスト/測定/サンプル生成済、CI・マージ待ち |
+| 6 | [#36](https://github.com/mikoto2000/webaudit/pull/36) | 統合テスト/測定/サンプル生成済。最終CI・マージ状態はPRおよび作業記録を参照 |
