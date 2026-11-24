@@ -70,16 +70,18 @@ type LogInventory struct {
 }
 
 type InvestigationReport struct {
-	Schema       string         `json:"schema"`
-	Metadata     BundleOptions  `json:"metadata"`
-	Started      time.Time      `json:"started_at"`
-	Finished     time.Time      `json:"finished_at"`
-	Status       string         `json:"status"`
-	Complete     bool           `json:"complete"`
-	CountQuality string         `json:"count_quality"`
-	Settings     map[string]any `json:"settings"`
-	Inventory    []LogInventory `json:"inventory"`
-	Analysis     Report         `json:"analysis"`
+	AnalysisRules []AnalysisRule `json:"analysis_rules"`
+	Coverage      []CoverageRow  `json:"coverage"`
+	Schema        string         `json:"schema"`
+	Metadata      BundleOptions  `json:"metadata"`
+	Started       time.Time      `json:"started_at"`
+	Finished      time.Time      `json:"finished_at"`
+	Status        string         `json:"status"`
+	Complete      bool           `json:"complete"`
+	CountQuality  string         `json:"count_quality"`
+	Settings      map[string]any `json:"settings"`
+	Inventory     []LogInventory `json:"inventory"`
+	Analysis      Report         `json:"analysis"`
 }
 type BundleArtifact struct {
 	Path   string `json:"path"`
@@ -256,6 +258,11 @@ type bundleDiagnostic struct {
 	Reason string
 }
 type bundleCapture struct {
+	rules                []AnalysisRule
+	observations         map[string]*ruleObservation
+	aspectObservations   map[string]*ruleObservation
+	signals              []Signal
+	ready                map[string]bool
 	o                    Options
 	inputs               map[string]*LogInventory
 	diagnostics          []bundleDiagnostic
@@ -399,7 +406,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 		return nil, err
 	}
 	writer := &bundleWriter{dir: target, limit: b.MaxOutputBytes}
-	c := &bundleCapture{o: o, inputs: map[string]*LogInventory{}}
+	c := &bundleCapture{o: o, inputs: map[string]*LogInventory{}, rules: analysisRules()}
 	o.bundle = c
 	o.RetainUpstreamEvidence = true
 	started := o.Now().UTC()
@@ -435,6 +442,10 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	}
 	if analysis.Parsed == 0 && analysis.Partial {
 		r.Status = "failed"
+	}
+	buildCoverage(r, c)
+	if err = writeCoverage(writer, r); err != nil {
+		return nil, err
 	}
 	if err = writer.csv("log-inventory.csv", []string{"file_id", "path", "size_bytes", "sha256", "hash_scope", "compression", "first", "last", "total_lines", "parsed", "unparsed", "excluded", "status", "truncated", "changed", "error"}, func(write func(...string) error) error {
 		for _, in := range r.Inventory {

@@ -269,6 +269,7 @@ func (u *Upstream) Observe(e Event) {
 		if !r.Supported || !sourceMatchView(r, e, v) {
 			continue
 		}
+		u.o.bundle.ruleHit("hub", r.ID)
 		group := sourceGroup(e, r.Group)
 		key := r.ID + "\x00" + group
 		domain := "instant"
@@ -366,6 +367,7 @@ func (u *Upstream) Observe(e Event) {
 }
 func (u *Upstream) observeAura(e Event) {
 	add := func(id string) {
+		u.o.bundle.ruleHit("aura", id)
 		key := id + "\x00" + e.IP
 		if e.TimezoneUnknown {
 			key += "\x00wall:" + e.File

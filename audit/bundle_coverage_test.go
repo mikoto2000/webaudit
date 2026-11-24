@@ -73,3 +73,21 @@ func TestCoverageNoHitAndInsufficientStatisticalBaseline(t *testing.T) {
 		}
 	}
 }
+
+func TestCoverageAspectCountsSeparateRequestsAndDetections(t *testing.T) {
+	c := &bundleCapture{rules: analysisRules()}
+	e := sourceEvent(0)
+	e.Target = "/?cmd=;whoami;&serialized=aced0005"
+	c.observeDetection(e, []Rule{{ID: "WA-command_injection"}, {ID: "WA-deserialization"}}, Normalize(e.Target))
+	r := &InvestigationReport{Complete: true, Analysis: Report{Parsed: 1}}
+	buildCoverage(r, c)
+	for _, row := range r.Coverage {
+		if row.ID == "ASPECT-rce" {
+			if row.DetectedRequests == nil || *row.DetectedRequests != 1 || row.Detections == nil || *row.Detections != 2 {
+				t.Fatal(row)
+			}
+			return
+		}
+	}
+	t.Fatal("RCE perspective missing")
+}

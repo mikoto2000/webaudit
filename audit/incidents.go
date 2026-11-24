@@ -306,12 +306,15 @@ func Analyze(paths []string, o Options) Report {
 		u.Observe(e)
 		aa.Observe(e)
 		hits, n := Detect(e)
+		o.bundle.observeDetection(e, hits, n)
 		c.Add(e, hits, n)
 		if !e.TimezoneUnknown {
 			a.Observe(e, hits)
 		}
 	})
-	for _, s := range a.Finish() {
+	signals := a.Finish()
+	o.bundle.observeSignals(a, signals)
+	for _, s := range signals {
 		c.AddSignal(s)
 	}
 	r.Findings = c.Finish()
