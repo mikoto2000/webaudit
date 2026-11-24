@@ -111,7 +111,7 @@ type statisticsRecorder struct {
 }
 
 func newStatisticsRecorder(max int, geo bool) *statisticsRecorder {
-	return &statisticsRecorder{max: max, geo: geo, tables: map[string]map[string]*StatisticsRow{}, other: map[string]*StatisticsRow{}, bins: map[int64]*TimelineRow{}, resolution: 60, pairs: map[string]bool{}, geoStatuses: map[string]int64{}, bytes: NumericSummary{Unit: "bytes"}, duration: NumericSummary{Unit: "seconds"}}
+	return &statisticsRecorder{max: max, geo: geo, tables: map[string]map[string]*StatisticsRow{}, other: map[string]*StatisticsRow{}, bins: map[int64]*TimelineRow{}, resolution: 60, pairs: map[string]bool{}, geoStatuses: map[string]int64{}, bytes: NumericSummary{Unit: "bytes", SumQuality: "unavailable"}, duration: NumericSummary{Unit: "seconds", SumQuality: "unavailable"}}
 }
 func (s *statisticsRecorder) dimensions(r RequestSnapshot) map[string]*string {
 	e := r.Event

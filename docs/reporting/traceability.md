@@ -64,3 +64,5 @@ Phase 1セルフレビューで、入力hash/診断の完全性低下を暫定HT
 時間粒度はadaptiveに統合し、負のUnix時刻を含めUTC区分とする。空白の期間をログ欠損とは扱わない。処理時間は単位が定義されたJSON/request_timeまたはcustom duration_secondsのみ採用する。欠損・0・不正値・数値overflowを区別する。parserが実際に通ったfamilyを非公開Event属性としてinventoryへ記録し、legacy JSONには追加しない。custom regexは本文を保存せずSHA-256を記録する。
 
 テストは全アクセス/不審の分母、ゼロ/欠損、spool切詰時の全体件数、cardinality上限、期間に応じた時間粒度、Geo、NaNと数値overflow、parser familyを検証する。11章表示とグラフは次Phase 5で実装する。
+
+Phase 4セルフレビューではGeoその他bucketに個別の国名/組織名を流用しないこと、欠損数値のsum quality、極端な年月での時系列ラベル、明示入力数の上限、custom regexの秘密を含むコンパイルエラーをbundleへ保存しないことも確認した。

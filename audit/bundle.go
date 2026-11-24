@@ -402,6 +402,20 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if b.Language != "ja" && b.Language != "en" {
 		return nil, fmt.Errorf("--lang must be ja or en")
 	}
+	if len(paths) > o.MaxKeys {
+		return nil, fmt.Errorf("explicit input path limit exceeded (max-keys)")
+	}
+	if o.LogRegex != "" {
+		rx, compileErr := regexp.Compile(o.LogRegex)
+		if compileErr != nil {
+			return nil, fmt.Errorf("invalid custom regex; pattern not recorded")
+		}
+		for _, name := range []string{"ip", "time", "target"} {
+			if rx.SubexpIndex(name) < 0 {
+				return nil, fmt.Errorf("custom regex requires named group %s", name)
+			}
+		}
+	}
 	target, err = filepath.Abs(target)
 	if err != nil {
 		return nil, err
