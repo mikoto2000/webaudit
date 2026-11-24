@@ -123,6 +123,14 @@ func run(args []string, out, errout io.Writer) int {
 	}
 	defer geo.Close()
 	o.GeoIP = geo
+	mode := *format
+	if mode == "" {
+		mode = "summary"
+		if *output != "" {
+			mode = "html"
+		}
+	}
+	o.RetainUpstreamEvidence = mode == "html"
 	r := audit.Analyze(fs.Args(), o)
 	for _, w := range geoWarnings {
 		r.AddWarning(w)
@@ -131,13 +139,6 @@ func run(args []string, out, errout io.Writer) int {
 	if *verbose {
 		for _, f := range r.Files {
 			fmt.Fprintf(errout, "%s: %d parsed, %d unparsed %s\n", audit.TerminalSafe(f.Path), f.Parsed, f.Unparsed, audit.TerminalSafe(f.Error))
-		}
-	}
-	mode := *format
-	if mode == "" {
-		mode = "summary"
-		if *output != "" {
-			mode = "html"
 		}
 	}
 	if *output != "" {

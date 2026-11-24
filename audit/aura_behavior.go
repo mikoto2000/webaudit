@@ -11,27 +11,31 @@ import (
 // Aura's case-wide aggregations are kept separate from WebAudit's windows and MAD.
 // These reproduce the single-shard aggregation definitions, within the key budget.
 type auraPeer struct {
-	Count, Auth, NotFound       int64
-	Bytes                       float64
-	First, Last                 time.Time
-	Worst                       int64
-	NotFoundFirst, NotFoundLast time.Time
+	Samples, AuthSamples, NotFoundSamples []SourceEvidence
+	Count, Auth, NotFound                 int64
+	Bytes                                 float64
+	First, Last                           time.Time
+	Worst                                 int64
+	NotFoundFirst, NotFoundLast           time.Time
 }
 type auraUA struct {
-	Value string
-	Count int64
+	Samples []SourceEvidence
+	Value   string
+	Count   int64
 }
 type auraAnalysis struct {
-	o        Options
-	peers    map[string]*auraPeer
-	windows  map[string]int64
-	uas      map[string]*auraUA
-	hours    map[int64]int64
-	warnings []string
+	evidence    *upstreamEvidence
+	hourSamples map[int64][]SourceEvidence
+	o           Options
+	peers       map[string]*auraPeer
+	windows     map[string]int64
+	uas         map[string]*auraUA
+	hours       map[int64]int64
+	warnings    []string
 }
 
 func newAuraAnalysis(o Options) *auraAnalysis {
-	return &auraAnalysis{o: o.defaults(), peers: map[string]*auraPeer{}, windows: map[string]int64{}, uas: map[string]*auraUA{}, hours: map[int64]int64{}}
+	return &auraAnalysis{o: o.defaults(), hourSamples: map[int64][]SourceEvidence{}, peers: map[string]*auraPeer{}, windows: map[string]int64{}, uas: map[string]*auraUA{}, hours: map[int64]int64{}}
 }
 
 // All four tables share a budget; only new entries need admission.
@@ -53,6 +57,7 @@ func (a *auraAnalysis) Observe(e Event) {
 	}
 	if p != nil {
 		p.Count++
+		a.evidence.add(&p.Samples, e)
 		p.Bytes += float64(val(e.Bytes))
 		if e.Time.Before(p.First) {
 			p.First = e.Time
@@ -68,9 +73,11 @@ func (a *auraAnalysis) Observe(e Event) {
 				p.NotFoundLast = e.Time
 			}
 			p.NotFound++
+			a.evidence.add(&p.NotFoundSamples, e)
 		}
 		if val(e.Status) == 401 || val(e.Status) == 403 {
 			p.Auth++
+			a.evidence.add(&p.AuthSamples, e)
 			key := e.IP + "/" + strconv.FormatInt(e.Time.Truncate(5*time.Minute).Unix(), 10)
 			count, exists := a.windows[key]
 			if exists || a.allowKey() {
@@ -95,17 +102,25 @@ func (a *auraAnalysis) Observe(e Event) {
 		}
 		if v != nil {
 			v.Count++
+			a.evidence.add(&v.Samples, e)
 		}
 	}
 	hour := e.Time.Truncate(time.Hour).Unix()
 	if count, exists := a.hours[hour]; exists || a.allowKey() {
 		a.hours[hour] = count + 1
+		if a.evidence != nil {
+			samples := a.hourSamples[hour]
+			a.evidence.add(&samples, e)
+			a.hourSamples[hour] = samples
+		}
 	}
 }
 func (a *auraAnalysis) Finish() []SourceAlert {
 	var out []SourceAlert
-	add := func(rule, ip, group string, n int64, first, last *time.Time) {
-		out = append(out, SourceAlert{Source: "AuraDFIR/analysis", RuleID: rule, IP: ip, Group: group, Count: n, First: first, Last: last})
+	add := func(rule, ip, group string, n int64, first, last *time.Time, samples []SourceEvidence) {
+		alert := SourceAlert{Source: "AuraDFIR/analysis", RuleID: rule, IP: ip, Group: group, Count: n, First: first, Last: last}
+		a.evidence.attach(&alert, samples)
+		out = append(out, alert)
 	}
 	peers := make([]string, 0, len(a.peers))
 	for ip := range a.peers {
@@ -128,13 +143,13 @@ func (a *auraAnalysis) Finish() []SourceAlert {
 	for _, ip := range top(func(p *auraPeer) int64 { return p.Auth }, 200) {
 		p := a.peers[ip]
 		if p.Worst >= 20 {
-			add("brute_force", ip, ip, p.Auth, nil, nil)
+			add("brute_force", ip, ip, p.Auth, nil, nil, p.AuthSamples)
 		}
 	}
 	for _, ip := range top(func(p *auraPeer) int64 { return p.NotFound }, 200) {
 		p := a.peers[ip]
 		if p.NotFound >= 50 {
-			add("enumeration_404", ip, ip, p.NotFound, ptr(p.NotFoundFirst), ptr(p.NotFoundLast))
+			add("enumeration_404", ip, ip, p.NotFound, ptr(p.NotFoundFirst), ptr(p.NotFoundLast), p.NotFoundSamples)
 		}
 	}
 	totals := top(func(p *auraPeer) int64 { return p.Count }, 500)
@@ -153,7 +168,7 @@ func (a *auraAnalysis) Finish() []SourceAlert {
 		for _, ip := range totals {
 			p := a.peers[ip]
 			if sd > 0 && p.Bytes > 10*1024*1024 && p.Bytes > mean+3*sd {
-				add("exfil_bytes", ip, ip, p.Count, nil, nil)
+				add("exfil_bytes", ip, ip, p.Count, nil, nil, p.Samples)
 			}
 		}
 	}
@@ -172,7 +187,7 @@ func (a *auraAnalysis) Finish() []SourceAlert {
 	}
 	for _, ua := range uas {
 		if ua.Count <= 5 && ua.Value != "" && ua.Value != "-" {
-			add("rare_user_agent", "", ua.Value, ua.Count, nil, nil)
+			add("rare_user_agent", "", ua.Value, ua.Count, nil, nil, ua.Samples)
 		}
 	}
 	if len(a.hours) > 0 {
@@ -204,7 +219,7 @@ func (a *auraAnalysis) Finish() []SourceAlert {
 					count := a.hours[h]
 					if (float64(count)-mean)/sd > 3 {
 						t := time.Unix(h, 0).UTC()
-						add("traffic_spike", "", t.Format(time.RFC3339), count, &t, nil)
+						add("traffic_spike", "", t.Format(time.RFC3339), count, &t, nil, a.hourSamples[h])
 					}
 				}
 			}

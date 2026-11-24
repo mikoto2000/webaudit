@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"compress/gzip"
 	"encoding/json"
 	"errors"
 	"io"
@@ -136,5 +137,54 @@ func TestSuccessfulReportSurvivesSummaryFailure(t *testing.T) {
 	var r audit.Report
 	if err != nil || json.Unmarshal(data, &r) != nil || r.Parsed != 1 {
 		t.Fatal("successful report removed or incomplete", err)
+	}
+}
+
+func TestHTMLUpstreamRawLogsFromGzip(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "access.log.gz")
+	file, err := os.Create(input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	gzipWriter := gzip.NewWriter(file)
+	raw := strings.Replace(logLine, "/.env", "/.env?q=<script>bad</script>", 1)
+	if _, err := gzipWriter.Write([]byte(raw + "\n")); err != nil {
+		t.Fatal(err)
+	}
+	if err := gzipWriter.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := file.Close(); err != nil {
+		t.Fatal(err)
+	}
+	for _, toFile := range []bool{false, true} {
+		args := []string{input}
+		output := filepath.Join(dir, "report.html")
+		if toFile {
+			args = append(args, "-o", output)
+		} else {
+			args = append(args, "--format", "html")
+		}
+		var out, errout bytes.Buffer
+		if code := run(args, &out, &errout); code != 0 {
+			t.Fatalf("code %d: %s", code, errout.String())
+		}
+		html := out.String()
+		if toFile {
+			data, err := os.ReadFile(output)
+			if err != nil {
+				t.Fatal(err)
+			}
+			html = string(data)
+		}
+		at := strings.Index(html, `<article id="upstream-`)
+		if at < 0 {
+			t.Fatal("missing upstream detail")
+		}
+		details := html[at:]
+		if !strings.Contains(details, "<pre>192.0.2.1") || !strings.Contains(details, "&lt;script&gt;bad&lt;/script&gt;") || strings.Contains(details, "<script>") {
+			t.Fatal("missing or unsafe raw source logs")
+		}
 	}
 }

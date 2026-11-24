@@ -283,6 +283,7 @@ func Analyze(paths []string, o Options) Report {
 	a := NewAnalysis(o)
 	u := NewUpstream(o)
 	aa := newAuraAnalysis(o)
+	aa.evidence = u.evidence
 	c := NewCorrelator(o)
 	var previous time.Time
 	var previousWall time.Time

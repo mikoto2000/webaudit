@@ -15,7 +15,13 @@ import (
 //go:embed report.html
 var htmlSource string
 var htmlReport = template.Must(template.New("report").Funcs(template.FuncMap{
-	"t":          func(v any) string { return fmt.Sprint(v) },
+	"t": func(v any) string { return fmt.Sprint(v) },
+	"sources": func(r Report) []SourceAlert {
+		alerts := make([]SourceAlert, 0, len(r.UpstreamAlerts)+len(r.AuraMatches)+len(r.AuraAnalysis))
+		alerts = append(alerts, r.UpstreamAlerts...)
+		alerts = append(alerts, r.AuraMatches...)
+		return append(alerts, r.AuraAnalysis...)
+	},
 	"lang":       func() string { return "ja" },
 	"diagnostic": func(v string) string { return v },
 	"outcome":    func(v string) string { return v },

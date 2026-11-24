@@ -32,6 +32,7 @@ type EventRef struct {
 	Line int64  `json:"line"`
 }
 type SourceAlert struct {
+	Evidence          []SourceEvidence  `json:"evidence,omitempty"`
 	Metadata          map[string]string `json:"metadata,omitempty"`
 	Source            string            `json:"source"`
 	RuleID            string            `json:"rule_id"`
@@ -55,8 +56,10 @@ type upstreamBucket struct {
 	count       int64
 	seen        map[string]bool
 	refs        []EventRef
+	samples     []SourceEvidence
 }
 type Upstream struct {
+	evidence      *upstreamEvidence
 	observed      int64
 	o             Options
 	buckets       map[string]*upstreamBucket
@@ -152,7 +155,12 @@ func init() {
 	}
 }
 func NewUpstream(o Options) *Upstream {
-	return &Upstream{o: o.defaults(), buckets: map[string]*upstreamBucket{}, blocked: map[string]sourceSuppression{}, aura: map[string]*SourceAlert{}}
+	o = o.defaults()
+	var evidence *upstreamEvidence
+	if o.RetainUpstreamEvidence {
+		evidence = &upstreamEvidence{limit: int64(o.MaxEvidenceBytes)}
+	}
+	return &Upstream{evidence: evidence, o: o, buckets: map[string]*upstreamBucket{}, blocked: map[string]sourceSuppression{}, aura: map[string]*SourceAlert{}}
 }
 func (u *Upstream) warning(s string) { uniqueAppend(&u.warnings, s) }
 func (u *Upstream) AlertsFor(id string) []SourceAlert {
@@ -307,6 +315,7 @@ func (u *Upstream) Observe(e Event) {
 		b.last = e.Time
 		b.count++
 		b.refs = append(b.refs, EventRef{e.File, e.Line})
+		u.evidence.add(&b.samples, e)
 		cache := r.Capacity
 		if r.CacheSize > 0 && r.CacheSize <= cache {
 			cache = r.CacheSize
@@ -324,6 +333,7 @@ func (u *Upstream) Observe(e Event) {
 				u.warning("Upstream alert limit reached; source alerts are incomplete")
 			} else {
 				alert := sourceAlert(e, r.ID, group, b)
+				u.evidence.attach(&alert, b.samples)
 				if r.ID == "crowdsecurity/http-technology-probing" {
 					alert.Metadata = map[string]string{"target_technology": lookupTag("technology_probing.json", v.full)}
 				}
@@ -387,6 +397,10 @@ func (u *Upstream) observeAura(e Event) {
 			if wall > a.WallLast {
 				a.WallLast = wall
 			}
+		}
+		u.evidence.add(&a.Evidence, e)
+		if u.evidence != nil && a.Count > int64(len(a.Evidence)) {
+			a.EvidenceTruncated = true
 		}
 		if len(a.Events) < 8 {
 			a.Events = append(a.Events, EventRef{e.File, e.Line})

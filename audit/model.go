@@ -39,15 +39,16 @@ type Event struct {
 type Options struct {
 	GeoIP *GeoIP
 
-	ErrorTimezone    string
-	DeduplicateFiles bool
-	Now              func() time.Time
-	MaxEvidenceBytes int
-	MaxLineBytes     int
-	MaxFileBytes     int64
-	MaxKeys          int
-	MaxFindings      int
-	LogRegex         string
+	ErrorTimezone          string
+	RetainUpstreamEvidence bool
+	DeduplicateFiles       bool
+	Now                    func() time.Time
+	MaxEvidenceBytes       int
+	MaxLineBytes           int
+	MaxFileBytes           int64
+	MaxKeys                int
+	MaxFindings            int
+	LogRegex               string
 }
 
 func (o Options) defaults() Options {
