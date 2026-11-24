@@ -714,5 +714,6 @@
   "Recorded timezone offsets": "記録されたタイムゾーンの時差",
   "recorded_time": "記録時刻（時差未確認を含む）",
   "Retained unique URIs / quality": "保持された異なるURI数・品質",
-  "URI counts within the incident": "事案内のURI別リクエスト数"
+  "URI counts within the incident": "事案内のURI別リクエスト数",
+  "ASN database is unavailable; ASN similarity was not evaluated": "ASN データベースを利用できないため、ASN の類似性は評価していません"
 }

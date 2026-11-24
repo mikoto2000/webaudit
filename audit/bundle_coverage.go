@@ -358,6 +358,16 @@ func buildCoverage(r *InvestigationReport, c *bundleCapture) {
 				row.Limitations = append(row.Limitations, "Insufficient baseline observations or peers for statistical evaluation")
 			}
 		}
+		if rule.Engine == "geoip" && r.Analysis.GeoIP != nil {
+			hasASN := false
+			for _, db := range r.Analysis.GeoIP.Databases {
+				hasASN = hasASN || db.Role == "asn"
+			}
+			if !hasASN {
+				ready = false
+				row.Limitations = append(row.Limitations, "ASN database is unavailable; ASN similarity was not evaluated")
+			}
+		}
 		partial := !r.Complete || ob.eligible < r.Analysis.Parsed-r.Analysis.Duplicates
 		if rule.Engine == "geoip" && r.Analysis.GeoIP != nil {
 			partial = partial || r.Analysis.GeoIP.Truncated || r.Analysis.GeoIP.CorrelationsTruncated

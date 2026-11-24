@@ -6,6 +6,23 @@ import (
 	"testing"
 )
 
+func TestCoverageRequiresASNDatabaseForASNSimilarity(t *testing.T) {
+	c := &bundleCapture{rules: analysisRules()}
+	e := sourceEvent(0)
+	c.observeDetection(e, nil, Normalize(e.Target))
+	r := &InvestigationReport{Complete: true, Analysis: Report{Parsed: 1, GeoIP: &GeoIPReport{Enabled: true, Databases: []GeoDatabase{{Role: "country"}}}}}
+	buildCoverage(r, c)
+	for _, row := range r.Coverage {
+		if row.ID == "RULE-geoip-geoip-similarity" {
+			if row.Status != "unable" || row.Complete {
+				t.Fatal("country database cannot evaluate ASN similarity", row)
+			}
+			return
+		}
+	}
+	t.Fatal("ASN perspective missing")
+}
+
 func TestCoverageSeparatesNoHitUnsupportedAndPartialHit(t *testing.T) {
 	dir := t.TempDir()
 	input := filepath.Join(dir, "access.log")
