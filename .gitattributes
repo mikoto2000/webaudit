@@ -16,3 +16,6 @@ audit/testdata/upstream/** text eol=lf
 *.mmdb binary
 vendor/** text eol=lf
 vendor/** whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab
+# Generated report samples preserve the exact bundled upstream rule conditions.
+examples/investigation-ja/** whitespace=-blank-at-eol,-blank-at-eof
+examples/investigation-en/** whitespace=-blank-at-eol,-blank-at-eof
