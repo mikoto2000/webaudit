@@ -105,3 +105,5 @@ Phase6では集計型を含む観点の直接/関連リクエストをspoolか�
 | 4 | [#34](https://github.com/mikoto2000/webaudit/pull/34) | マージ済・CI成功・worktree削除済 |
 | 5 | [#35](https://github.com/mikoto2000/webaudit/pull/35) | マージ済・PR/main CI成功・worktree削除済。main CIの既存PowerShell5秒タイムアウトは失敗ジョブの1回の再実行で成功 |
 | 6 | [#36](https://github.com/mikoto2000/webaudit/pull/36) | 統合テスト/測定/サンプル生成済。最終CI・マージ状態はPRおよび作業記録を参照 |
+
+Java移植との照合で国DBのみ利用時のASN類似性を評価不能とする前提確認を補正した。`TestCoverageRequiresASNDatabaseForASNSimilarity`が未修正で失敗し、補正後に成功する。国別統計の利用可否とは独立に扱う。
