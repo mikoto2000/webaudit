@@ -121,6 +121,16 @@ with tempfile.TemporaryDirectory() as tmp:
         if fmt == "json":
             report = json.loads(run.stdout)
             assert report["geoip"]["enabled"] and report["geoip"]["databases"][0]["generation"] == "gen-offline"
+    for language in ["ja", "en"]:
+        destination = Path(tmp) / ("investigation-" + language)
+        subprocess.run([str(exe), str(log), "--report-dir", str(destination), "--lang", language],
+                       env=env, preexec_fn=deny_network, capture_output=True, text=True, check=True)
+        common = json.loads((destination / "report.json").read_text())
+        manifest = json.loads((destination / "manifest.json").read_text())
+        assert common["schema"] == "webaudit/investigation-1" and common["statistics"]["total_requests"] == 6
+        assert not (destination / "INCOMPLETE").exists() and not list(destination.glob(".requests-*"))
+        for artifact in manifest["artifacts"]:
+            assert hashlib.sha256((destination / artifact["path"]).read_bytes()).hexdigest() == artifact["sha256"]
     (generation / "country.mmdb").write_bytes(b"corrupt")
     run = subprocess.run([str(exe), "geoip", "status"], env=env, preexec_fn=deny_network,
                          capture_output=True, text=True)
@@ -128,4 +138,4 @@ with tempfile.TemporaryDirectory() as tmp:
     run = subprocess.run([str(exe), str(log), "--format", "json"], env=env, preexec_fn=deny_network,
                          capture_output=True, text=True, check=True)
     assert "geoip" not in json.loads(run.stdout) and "Managed GeoIP unavailable" in run.stderr
-print("PASS: seccomp guard; offline watch JSONL/SIGINT with and without GeoIP; disabled/explicit/legacy/managed analysis; status; existing download; corrupt DB fallback; JSON/CSV/HTML; no network syscalls")
+print("PASS: seccomp guard; offline watch JSONL/SIGINT with and without GeoIP; disabled/explicit/legacy/managed analysis; status; existing download; corrupt DB fallback; JSON/CSV/HTML; ja/en investigation bundles and artifact hashes; no network syscalls")

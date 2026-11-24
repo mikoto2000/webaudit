@@ -1,0 +1,214 @@
+{
+  "schema": "webaudit/manifest-1",
+  "version": "2.0.1",
+  "build": {
+    "arch": "amd64",
+    "go_version": "go1.27.4",
+    "os": "windows",
+    "vcs.modified": "false",
+    "vcs.revision": "a5be39ee76a00c83b553a54ae172001404025028"
+  },
+  "started_at": "2026-11-24T07:04:32.6164018Z",
+  "finished_at": "2026-11-24T07:04:32.7519582Z",
+  "settings": {
+    "custom_regex": "[not recorded]",
+    "custom_regex_sha256": null,
+    "dedup_files": false,
+    "error_timezone": "",
+    "language": "en",
+    "max_evidence_bytes": 33554432,
+    "max_file_bytes": 8589934592,
+    "max_findings": 2000,
+    "max_keys": 4096,
+    "max_line_bytes": 65536,
+    "max_output_bytes": 1073741824,
+    "max_spool_bytes": 1073741824,
+    "parser": "auto",
+    "recorded_peer": "forwarded headers are not trusted"
+  },
+  "rules_version": "2026.11.20.2",
+  "rules_sha256": "2b9a12efc9c47282800921f6494378e84ce26db8d8822198c4b19a824178ed93",
+  "geoip": null,
+  "inputs": [
+    {
+      "timezones": [
+        "UTC+00:00"
+      ],
+      "timezones_truncated": false,
+      "count_quality": "exact",
+      "id": "FILE-68bcc0f084ea4195ec1b7dd381d271e4",
+      "path": "F:\\project\\webaudit\\webaudit\\examples\\sample.log",
+      "size_bytes": 887,
+      "sha256": "375176973265b13d9a7125bc8773da37de22d450cb02d15a369a722ed9b5c0d7",
+      "hash_scope": "original_file_bytes",
+      "hash_status": "complete",
+      "compression": "none",
+      "first": "2026-11-01T00:00:00Z",
+      "last": "2026-11-01T00:00:20Z",
+      "total_lines": 9,
+      "parsed": 9,
+      "unparsed": 0,
+      "excluded": 0,
+      "status": "complete",
+      "truncated": false,
+      "changed_during_analysis": false,
+      "formats": [
+        "apache-nginx-common/combined"
+      ],
+      "log_types": [
+        "http_access-log"
+      ],
+      "available_fields": [
+        "method",
+        "protocol",
+        "raw",
+        "request_uri",
+        "response_bytes",
+        "source_ip",
+        "status",
+        "timestamp",
+        "user_agent"
+      ]
+    }
+  ],
+  "complete": true,
+  "warnings": [
+    "Request bodies and response contents are unavailable; authentication results and compromise cannot be verified",
+    "Client address is the recorded peer; forwarded headers are untrusted and proxy topology is unknown",
+    "Too few IP peers for request/error-rate statistical inference",
+    "Missing referer in 9 parsed requests reduces related detection coverage"
+  ],
+  "artifacts": [
+    {
+      "path": "analysis-coverage.csv",
+      "sha256": "b7a5a51172a047ceb0a58125c4a294e71df63b56e02aac86e2db8bfaa3d0a06c",
+      "bytes": 69776
+    },
+    {
+      "path": "analysis-rules.csv",
+      "sha256": "359836d7f479d781e5aa87fbe5e48deb30407858f0c2ddd0bab76a0ed7bd7707",
+      "bytes": 45770
+    },
+    {
+      "path": "detections.csv",
+      "sha256": "fd12fd34a904fa4eb3beb7f7c59832c201cea610c83ec4aada782b69429bd9b6",
+      "bytes": 4677
+    },
+    {
+      "path": "diagnostics/excluded-requests.csv",
+      "sha256": "0bbf4efde1d0fe7dff313dd624c8085878bfd443b4bc98da291845edc0851294",
+      "bytes": 55
+    },
+    {
+      "path": "diagnostics/execution-log.txt",
+      "sha256": "057bf4b94b45e1ee61319d806063207509039de0f4c922711c88e3c121d246c2",
+      "bytes": 454
+    },
+    {
+      "path": "diagnostics/parse-errors.csv",
+      "sha256": "0bbf4efde1d0fe7dff313dd624c8085878bfd443b4bc98da291845edc0851294",
+      "bytes": 55
+    },
+    {
+      "path": "findings.csv",
+      "sha256": "11ddea444aab01cc0cfac3155dc932714729cbc154273f6011ffb3e7cf30173a",
+      "bytes": 21280
+    },
+    {
+      "path": "log-inventory.csv",
+      "sha256": "dd25d0e23e113a04d13162c33d4dd7d4b4c51badefe0a47ff42394c84f598646",
+      "bytes": 597
+    },
+    {
+      "path": "recommendations.csv",
+      "sha256": "f43063e2df560a9e94ba788527e528fe521b292b7b5f5834874be012f7ab1294",
+      "bytes": 10215
+    },
+    {
+      "path": "related-requests.csv",
+      "sha256": "b788e1242bd0db78212083b19e2eeb092149860f23e697a568ac710d07033564",
+      "bytes": 7234
+    },
+    {
+      "path": "report.html",
+      "sha256": "8c093a380d611a8adb56f32f12b948065d788d5295d42252d03cdcf0e6d29934",
+      "bytes": 243027
+    },
+    {
+      "path": "report.json",
+      "sha256": "a2d6681735daae711eac79ccd663523e16424362490e257a35a755c50d1fe2bd",
+      "bytes": 381136
+    },
+    {
+      "path": "statistics/asn-summary.csv",
+      "sha256": "386faf5a0d519f13d32d8d2bc48dbe319bec4fca5b5b4065b86fac74be53b92d",
+      "bytes": 178
+    },
+    {
+      "path": "statistics/country-summary.csv",
+      "sha256": "386faf5a0d519f13d32d8d2bc48dbe319bec4fca5b5b4065b86fac74be53b92d",
+      "bytes": 178
+    },
+    {
+      "path": "statistics/host-summary.csv",
+      "sha256": "830c8d1e5b61a00f50ff1016a1fb5d8cfeba5dbbddab3308d9b7115eae7265b2",
+      "bytes": 250
+    },
+    {
+      "path": "statistics/ip-summary.csv",
+      "sha256": "60a675f747785c2931ab2d9c5ee3aeaa626258ac394908868911586c265f3133",
+      "bytes": 745
+    },
+    {
+      "path": "statistics/log-type-summary.csv",
+      "sha256": "b9633fee645a7c96c7ddb6db79d529baed9374ea915e15d25ba6a82858339c95",
+      "bytes": 297
+    },
+    {
+      "path": "statistics/method-summary.csv",
+      "sha256": "1d01c0c6e5b297f6aa177db6866543de95d126206ad3286247659e035dfae25d",
+      "bytes": 285
+    },
+    {
+      "path": "statistics/numeric-summary.csv",
+      "sha256": "782b3215ef5f3afaf9d827cc089e603795491becafb86a2dd82861aba6c97c8b",
+      "bytes": 180
+    },
+    {
+      "path": "statistics/protocol-summary.csv",
+      "sha256": "740f489d6e5f1c2cf46522a24c8f9392cfc443db6f3d040d063a79e18f202a07",
+      "bytes": 290
+    },
+    {
+      "path": "statistics/status-class-summary.csv",
+      "sha256": "04ccbdfbb3df183c80a995c6d78326c7c120706d6c840ee70d823d7234a25bd1",
+      "bytes": 498
+    },
+    {
+      "path": "statistics/status-summary.csv",
+      "sha256": "acecc3c3b48b04354d3d9a68d4076450ee3f5789583cb64ea7f94b9cf66e9b3c",
+      "bytes": 498
+    },
+    {
+      "path": "statistics/timeline.csv",
+      "sha256": "597eb7b4e4e94722ee0e32bbabd7a982121a267ba5f9b9ddf45cd7d9c5247da5",
+      "bytes": 128
+    },
+    {
+      "path": "statistics/uri-summary.csv",
+      "sha256": "a5cf68ef598dc6a464ef720bea2a53368fea40f0e8c5abb56fa2b093277fc25f",
+      "bytes": 514
+    },
+    {
+      "path": "statistics/user-agent-summary.csv",
+      "sha256": "64bac814e4dab846c0c1c20d10b5139f35e7d87c26f62aefb8d9900f77cac542",
+      "bytes": 766
+    },
+    {
+      "path": "suspicious-requests.csv",
+      "sha256": "5e1303f987566e0f8eb5b564b8338825dfe43ca560ee8600b458f257b57b0c3d",
+      "bytes": 6786
+    }
+  ],
+  "artifact_hash_scope": "all listed artifacts; manifest excludes its own hash"
+}

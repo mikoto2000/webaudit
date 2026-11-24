@@ -561,6 +561,20 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 	}
 	coverageCounts := map[string]int64{}
 	coverageRelated := map[string]int64{}
+	aspectRules := map[string][]string{}
+	aspectDirect, aspectRelated, aspectDetections := map[string]int64{}, map[string]int64{}, map[string]int64{}
+	for _, aspect := range bundleAspects() {
+		for _, rule := range aspect.Rules {
+			aspectRules[ruleKey("webaudit", rule)] = append(aspectRules[ruleKey("webaudit", rule)], "ASPECT-"+aspect.ID)
+		}
+	}
+	for _, d := range groups {
+		if d.Engine == "webaudit" {
+			for _, id := range aspectRules[ruleKey(d.Engine, d.RuleID)] {
+				aspectDetections[id]++
+			}
+		}
+	}
 	// First pass produces suspicious observations and exact bounded group/finding counters.
 	err := b.csv("suspicious-requests.csv", requestHeaders, func(write func(...string) error) error {
 		return c.spool.scan(func(snapshot RequestSnapshot) error {
@@ -578,6 +592,7 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 			seenRules := map[string]bool{}
 			seenRelatedRules := map[string]bool{}
 			seenFindings := map[string]int{}
+			seenDirectAspects, seenRelatedAspects := map[string]bool{}, map[string]bool{}
 			for _, set := range []struct {
 				rows []*BundleDetection
 				flag int
@@ -592,6 +607,16 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 						d.RelatedRequestCount++
 					}
 					key := ruleKey(d.Engine, d.RuleID)
+					for _, aspectID := range aspectRules[key] {
+						if set.flag == 1 {
+							seenDirectAspects[aspectID] = true
+							if d.Engine == "webaudit" && d.signal == nil {
+								aspectDetections[aspectID]++
+							}
+						} else {
+							seenRelatedAspects[aspectID] = true
+						}
+					}
 					if set.flag == 1 && !seenRules[key] {
 						coverageCounts[key]++
 						seenRules[key] = true
@@ -612,6 +637,12 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 						seenFindings[id] |= set.flag
 					}
 				}
+			}
+			for id := range seenDirectAspects {
+				aspectDirect[id]++
+			}
+			for id := range seenRelatedAspects {
+				aspectRelated[id]++
 			}
 			for id, flags := range seenFindings {
 				m := metrics[id]
@@ -741,6 +772,17 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 	}
 	for i := range r.Coverage {
 		row := &r.Coverage[i]
+		if strings.HasPrefix(row.ID, "ASPECT-") && row.ID != "ASPECT-multi_ip" && row.Status != "unsupported" && row.Evaluation != "unable" && row.Evaluation != "not_performed" {
+			row.DetectedRequests = ptr(aspectDirect[row.ID])
+			row.RelatedRequests = ptr(aspectRelated[row.ID])
+			row.Detections = ptr(aspectDetections[row.ID])
+			if !r.EvidenceComplete {
+				row.CountQuality = "lower_bound"
+				row.Complete = false
+				row.Status = "partial"
+				row.Evaluation = "partial"
+			}
+		}
 		if strings.HasPrefix(row.ID, "RULE-") && len(row.Engines) == 1 && len(row.RuleIDs) == 1 && row.Status != "unsupported" && row.Engines[0] != "geoip" {
 			count := coverageCounts[ruleKey(row.Engines[0], row.RuleIDs[0])]
 			row.DetectedRequests = ptr(count)

@@ -32,7 +32,7 @@ Requestは原本ファイル識別子＋元行番号で識別する。同内容�
 
 依存を増やさないbounded JSONL spool方式を採用する。解析中に元行・正規化・直接検出を記録し、終了後に保持された検出の対象条件へ照合してCSVへストリーム出力する。終了時の統計・windowは直接検出と関連証跡を区別し、関連付けだけではsuspiciousにしない。spoolには専用privateディレクトリ、排他的作成、サイズ上限を用い、終了時に削除する。打ち切り・保持されなかった検出・入力失敗は完全性に反映する。
 
-原本のSHA-256は圧縮前の原本ファイルbytesを対象に前後照合する。hashを完全に取れない場合は値を捏造せずunavailable。解析中に変更された原本の全件出力を完全と扱わない。総作業量は入力読込み＋原本hash＋spool書込み/読込みでO(input)、メモリはO(maxKeys + maxFindings + maxEvidenceBytes)、ディスクは設定されたspool/output上限。上位表の打ち切りはその他・下限と明示。
+原本のSHA-256は圧縮ファイルを含む保存状態の原本ファイルbytesを対象に前後照合する。hashを完全に取れない場合は値を捏造せずunavailable。解析中に変更された原本の全件出力を完全と扱わない。総作業量は入力読込み＋原本hash＋spool書込み/読込みでO(input)、メモリはO(maxKeys + maxFindings + maxEvidenceBytes)、ディスクは設定されたspool/output上限。上位表の打ち切りはその他・下限と明示。
 
 ## フェーズ契約と検証
 

@@ -1,0 +1,8 @@
+WebAudit 2.0.1
+Started: 2026-11-24T07:04:32.6164018Z
+Finished: 2026-11-24T07:04:32.7519582Z
+Status: completed
+Request bodies and response contents are unavailable; authentication results and compromise cannot be verified
+Client address is the recorded peer; forwarded headers are untrusted and proxy topology is unknown
+Too few IP peers for request/error-rate statistical inference
+Missing referer in 9 parsed requests reduces related detection coverage
