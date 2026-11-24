@@ -35,3 +35,5 @@
 - `cmd/webaudit/main.go`: `--report-dir`、任意metadata、spool/output上限。既存-o/formatと排他。
 - Phase 1のreport.htmlは既存調査画面を再利用する暫定出力。11章構成・全件・coverage・全統計はまだ未完了であり後続phase対象。
 - 原本hashのbefore/after比較は、並行変更を完全にロックするものではない。変更が観測された場合は完全性を下げる。
+
+Phase 1セルフレビューで、入力hash/診断の完全性低下を暫定HTMLの部分解析表示にも反映するよう修正。出力先はrenameで既存空ディレクトリを置き換え得る方式を避け、mkdirによる排他予約＋未完了marker方式を採用。

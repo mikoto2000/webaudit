@@ -428,6 +428,8 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 		r.Analysis.warn("Report diagnostic limit reached; diagnostic samples are incomplete")
 	}
 	if !r.Complete {
+		r.Analysis.Partial = true
+		r.Analysis.warn("Investigation report is incomplete; inspect inventory and diagnostic completeness")
 		r.Status = "partial"
 		r.CountQuality = "lower_bound"
 	}
