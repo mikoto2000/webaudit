@@ -37,7 +37,8 @@ type Event struct {
 	Raw               string    `json:"raw"`
 }
 type Options struct {
-	GeoIP *GeoIP
+	bundle *bundleCapture
+	GeoIP  *GeoIP
 
 	ErrorTimezone          string
 	RetainUpstreamEvidence bool
