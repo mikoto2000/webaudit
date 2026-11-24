@@ -64,13 +64,12 @@ func sourceRE(p, s string) bool {
 	return v.(*regexp.Regexp).MatchString(s)
 }
 func listContains(name, s string, fold bool) bool {
+	patterns := sourceLists[name]
 	if fold {
 		s = strings.ToUpper(s)
+		patterns = upperSourceLists[name]
 	}
-	for _, p := range sourceLists[name] {
-		if fold {
-			p = strings.ToUpper(p)
-		}
+	for _, p := range patterns {
 		if strings.Contains(s, p) {
 			return true
 		}

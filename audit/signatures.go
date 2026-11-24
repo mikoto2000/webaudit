@@ -3,7 +3,6 @@ package audit
 import (
 	_ "embed"
 	"encoding/json"
-	"regexp"
 	"strings"
 )
 
@@ -20,7 +19,7 @@ type Rule struct {
 	Field       string   `json:"field"`
 	Source      string   `json:"source"`
 	Exclude     []string `json:"exclude,omitempty"`
-	rx          *regexp.Regexp
+	matcher     sourcePattern
 }
 
 var compiled = func() []Rule {
@@ -29,7 +28,7 @@ var compiled = func() []Rule {
 		panic(err)
 	}
 	for i := range r {
-		r[i].rx = regexp.MustCompile("(?i)" + r[i].Pattern)
+		r[i].matcher = newSourcePattern("(?i)" + r[i].Pattern)
 	}
 	return r
 }()
@@ -38,28 +37,36 @@ func Rules() []Rule { return append([]Rule(nil), compiled...) }
 func Detect(e Event) ([]Rule, Normalized) {
 	n := Normalize(e.Target)
 	var hits []Rule
+	// Fold each field once, shared across all rules using that field.
+	foldedVariants := make([]string, len(n.Variants))
+	for i, v := range n.Variants {
+		foldedVariants[i] = patternInput(v)
+	}
+	foldedUA, foldedReferer := patternInput(val(e.UA)), patternInput(val(e.Referer))
+	foldedMethod, foldedProtocol := patternInput(val(e.Method)), patternInput(val(e.Protocol))
 	for _, r := range compiled {
-		var values []string
+		var values, folded []string
 		switch r.Field {
 		case "ua":
 			if e.UA != nil {
-				values = []string{*e.UA}
+				values, folded = []string{*e.UA}, []string{foldedUA}
 			}
 		case "method":
 			if e.Method != nil {
-				values = []string{*e.Method}
+				values, folded = []string{*e.Method}, []string{foldedMethod}
 			}
 		case "protocol":
 			if e.Protocol != nil {
-				values = []string{*e.Protocol}
+				values, folded = []string{*e.Protocol}, []string{foldedProtocol}
 			}
 		default:
-			values = n.Variants
+			values, folded = n.Variants, foldedVariants
 			if r.Field == "url_headers" {
 				values = append(append([]string(nil), values...), val(e.UA), val(e.Referer))
+				folded = append(append([]string(nil), folded...), foldedUA, foldedReferer)
 			}
 		}
-		for _, v := range values {
+		for i, v := range values {
 			excluded := false
 			for _, x := range r.Exclude {
 				if strings.EqualFold(x, v) {
@@ -70,7 +77,7 @@ func Detect(e Event) ([]Rule, Normalized) {
 			if excluded {
 				continue
 			}
-			if r.rx.MatchString(v) {
+			if r.matcher.match(v, folded[i]) {
 				hits = append(hits, r)
 				break
 			}

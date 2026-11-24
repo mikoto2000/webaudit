@@ -4,7 +4,6 @@ import (
 	"embed"
 	"encoding/json"
 	"net"
-	"regexp"
 	"strings"
 	"time"
 )
@@ -80,7 +79,8 @@ type sourceSuppression struct {
 var sourceRules []SourceRule
 var upstreamCommits = map[string]string{}
 var sourceLists = map[string][]string{}
-var sourceRegex = map[string]*regexp.Regexp{}
+var auraPatterns []sourcePattern
+var upperSourceLists = map[string][]string{}
 var dataPatterns = map[string][]sourcePattern{}
 var auraSource struct {
 	Signatures []struct{ ID, Severity, Pattern, Description string }
@@ -124,7 +124,7 @@ func init() {
 		r.blackholeDuration, _ = time.ParseDuration(r.Blackhole)
 	}
 	for _, s := range auraSource.Signatures {
-		sourceRegex["aura/"+s.ID] = regexp.MustCompile("(?i)" + s.Pattern)
+		auraPatterns = append(auraPatterns, newSourcePattern("(?i)"+s.Pattern))
 	}
 	files, err := upstreamFiles.ReadDir("upstream/data")
 	if err != nil {
@@ -140,6 +140,11 @@ func init() {
 			if line != "" && !strings.HasPrefix(line, "#") {
 				sourceLists[f.Name()] = append(sourceLists[f.Name()], line)
 			}
+		}
+	}
+	for name, values := range sourceLists {
+		for _, value := range values {
+			upperSourceLists[name] = append(upperSourceLists[name], strings.ToUpper(value))
 		}
 	}
 	for _, name := range []string{"technology_probing.json", "trendy_cves_uris.json"} {
@@ -427,8 +432,9 @@ func (u *Upstream) observeAura(e Event) {
 			return r
 		}, target)
 	}
-	for _, s := range auraSource.Signatures {
-		if sourceRegex["aura/"+s.ID].MatchString(target) {
+	folded := patternInput(target)
+	for i, s := range auraSource.Signatures {
+		if auraPatterns[i].match(target, folded) {
 			add(s.ID)
 		}
 	}

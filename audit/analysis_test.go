@@ -1,6 +1,8 @@
 package audit
 
 import (
+	"math/rand"
+	"slices"
 	"testing"
 	"time"
 )
@@ -25,6 +27,10 @@ func TestOutlierThresholds(t *testing.T) {
 		{"above ratio", 20, 106, 0, 10, true},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
+			a := NewAnalysis(Options{})
+			if got := a.sizeOutlier(tc.value, base[:tc.n], tc.floor, tc.ratio); got != tc.want {
+				t.Fatalf("reused scratch: got %v, want %v", got, tc.want)
+			}
 			stats := newOutlierBaseline(base[:tc.n])
 			if got := stats.isOutlier(tc.value, tc.floor, tc.ratio); got != tc.want {
 				t.Fatalf("fixed population: got %v, want %v", got, tc.want)
@@ -74,5 +80,30 @@ func TestFinishHourlyBaselineIncludesEmptyHours(t *testing.T) {
 	a.hours[h+19] = &peer{sample: last, n: 200}
 	if !hasSignal(a.Finish(), "WS-hour") {
 		t.Fatal("empty hours excluded from statistical population")
+	}
+}
+
+// Compare exact prior-window statistics through population and ring changes.
+func TestOnlineSizeOutlierMatchesReference(t *testing.T) {
+	a := NewAnalysis(Options{})
+	rng := rand.New(rand.NewSource(42))
+	var b baseline
+	for i := 0; i < 1024; i++ {
+		before := slices.Clone(b.values)
+		value := float64(rng.Intn(1 << 24))
+		for _, threshold := range [][2]float64{{4096, 5}, {1 << 20, 10}, {0, 1}} {
+			got := a.sizeOutlier(value, b.values, threshold[0], threshold[1])
+			want := newOutlierBaseline(b.values).isOutlier(value, threshold[0], threshold[1])
+			if got != want {
+				t.Fatalf("sample %d: got %v want %v", i, got, want)
+			}
+		}
+		if !slices.Equal(before, b.values) {
+			t.Fatal("prior samples reordered")
+		}
+		b.add(value)
+	}
+	if allocs := testing.AllocsPerRun(100, func() { a.sizeOutlier(1<<30, b.values, 4096, 5) }); allocs != 0 {
+		t.Fatalf("size baseline allocated %g times", allocs)
 	}
 }

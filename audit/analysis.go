@@ -64,6 +64,7 @@ type Analysis struct {
 	ips      map[string]*peer
 	urls     map[string]*baseline
 	hours    map[int64]*peer
+	scratch  [128]float64
 	global   baseline
 	signals  []Signal
 	warnings []string
@@ -210,12 +211,12 @@ func (a *Analysis) Observe(e Event, hits []Rule) {
 			a.urls[uk] = b
 		}
 		if b != nil {
-			if isOutlier(value, b.values, 4096, 5) {
+			if a.sizeOutlier(value, b.values, 4096, 5) {
 				a.emit("WS-url-size", "Response differs from same URL/status baseline", e, 1, "At least 20 prior size samples; >median+6*MAD, >5x median and >4096 bytes difference", e.Time, e.Time)
 			}
 			b.add(value)
 		}
-		if isOutlier(value, a.global.values, 1<<20, 10) {
+		if a.sizeOutlier(value, a.global.values, 1<<20, 10) {
 			a.emit("WS-size", "Unusually large response", e, 1, "At least 20 prior samples; robust size threshold plus 1 MiB and 10x effect floors", e.Time, e.Time)
 		}
 		a.global.add(value)
@@ -239,6 +240,30 @@ func median(v []float64) float64 {
 	if len(x) == 0 {
 		return 0
 	}
+	i := len(x) / 2
+	if len(x)%2 == 0 {
+		return (x[i-1] + x[i]) / 2
+	}
+	return x[i]
+}
+
+// Online populations contain at most 128 prior values. Reuse one analysis-local
+// scratch buffer; observations stay in arrival order and thresholds stay exact.
+func (a *Analysis) sizeOutlier(v float64, base []float64, floor, ratio float64) bool {
+	if len(base) < 20 {
+		return false
+	}
+	x := a.scratch[:len(base)]
+	copy(x, base)
+	sort.Float64s(x)
+	m := sortedMedian(x)
+	for i, value := range base {
+		x[i] = math.Abs(value - m)
+	}
+	sort.Float64s(x)
+	return (outlierBaseline{count: len(base), median: m, mad: sortedMedian(x)}).isOutlier(v, floor, ratio)
+}
+func sortedMedian(x []float64) float64 {
 	i := len(x) / 2
 	if len(x)%2 == 0 {
 		return (x[i-1] + x[i]) / 2

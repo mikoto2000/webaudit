@@ -1,0 +1,1449 @@
+{
+  "compared_reports": 180,
+  "corpus_cases": 71,
+  "all_equal": true,
+  "ignored_field": "analyzed_at",
+  "sorted_field": "warnings (existing map iteration order)",
+  "reports": [
+    {
+      "case": "attack-00.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "b9b62903db3f7cc69a8fdfb8e77963dc5558a18bc0f68c9823879710b3c1bfc8"
+    },
+    {
+      "case": "attack-01.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "c43dcc71de4844b9e6699c9e09035c21c5b09fdbbfc8b42d66923f792aa63456"
+    },
+    {
+      "case": "attack-02.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "27df613425851745ffed83865e32e239230bb4801e3fbafb5c7c51f028d84161"
+    },
+    {
+      "case": "attack-03.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "f9a1f1d70215a430530afd396683a74375fcff1aff6d6ea6b9c945cd003fdfc8"
+    },
+    {
+      "case": "attack-04.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "8acfbc9309e3620ab371ab0c36fe9edac6d82fbec935cdb6562fa588f46a0c43"
+    },
+    {
+      "case": "attack-05.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "28eedad30abbe2e21fed67552c5343137f1fe7bb9ef46e5422a6bc19ddb78a45"
+    },
+    {
+      "case": "attack-06.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "dd5ae8567ec9073ffc132d030d8a516dbe34c5611883101a99bb003dbd7098c0"
+    },
+    {
+      "case": "attack-07.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "d2ea3ddfc24eaa9fb854b4a42202d04f2dc3a8e906f4f9792f900d319e25e53f"
+    },
+    {
+      "case": "attack-08.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "e72f0f6f1631cd61cb2236dfe5b266c175350876ade6e872e48c5ab347ede53c"
+    },
+    {
+      "case": "attack-09.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "466d2f86781ea4bae558a0215a234685daf2952b82181faee86f1b93e6adb486"
+    },
+    {
+      "case": "attack-10.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "e30d12a6c63b36a407e7a7a844ca35a0027c4b040652f9c495a23aa9d9846078"
+    },
+    {
+      "case": "attack-11.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "f6352870d5ed69754f65507764ed69d46bd02f2608ed1ad34dca54dc5229554b"
+    },
+    {
+      "case": "attack-12.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "a2ba4ac3a105a2b548ae996bbf2dd9cfed7d9435bcbda0cb5dbc212f1d331dfa"
+    },
+    {
+      "case": "attack-13.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "8bcc10dcda8c9a742e896d260eff97b10b7db948c1ea6ecb68ff0f046fabef73"
+    },
+    {
+      "case": "attack-14.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "189666c879574ed794cba081c671f9872079d18a9e7bfcbb454a4a4825249e9f"
+    },
+    {
+      "case": "attack-15.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "3b89407e48c1c75203eaaec69cf1b6b9b8dd95d718ff5005ad7bac0d8d5ebf36"
+    },
+    {
+      "case": "attack-16.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "3053232ac4839727cc336e4afa75cc113cb797151ec9e99837f825e8ed3894ac"
+    },
+    {
+      "case": "attack-17.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "9b47641dce1748e3bf67facdc45f2b9bda03cdf0f9cbb1aa87d1b85bcd182d83"
+    },
+    {
+      "case": "attack-18.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "cb1a99d3718bdb46d8d40402b059592b51a766a540eab343ac5c8c5a96817154"
+    },
+    {
+      "case": "attack-19.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "1698132296dacaf6fa29c1e3633c3842ec81a26d0b7788a499c88554c7f333fc"
+    },
+    {
+      "case": "attack-20.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "d6f4e649c35cd1be229510634b04266fb4e58868962d8000d5cb3f762023d5e0"
+    },
+    {
+      "case": "attack-21.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "f5c70ac92aa73b73b08f64fe2dfc8f74223ba74bd6b4589a379300aca0fb7116"
+    },
+    {
+      "case": "attack-22.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "682977dc67559d3a2dac4ed03c91953f624b81f67062887bd6466b60f4913e8d"
+    },
+    {
+      "case": "attack-23.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "c5215d4a64eb7382062678cd27d12862f5b35dee8059341629b4eafd1b8c3a69"
+    },
+    {
+      "case": "attack-24.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "4d9a7df61fa7190fb974c1693be026c5529b7cb8ff061d09520a80f4150111b7"
+    },
+    {
+      "case": "attack-25.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "b4f4c36b7358d3023255e3e5dff032c0b63411bdfb5bef7b1642ff894a07d37f"
+    },
+    {
+      "case": "attack-26.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "b0be080c50cd79087d3befe6c9395ef8bbd6a2f92f8a820b0cf307b902df8ea5"
+    },
+    {
+      "case": "attack-27.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "c94b1d91bd1babadcae51e2ca8dcfd68026b9f339e8b0a6ccb8262c9fd26e8f1"
+    },
+    {
+      "case": "attack-28.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "6069121ddf6ee40ef6a753188ddace9cfd175bca8b990e11ab48f1ee0b632088"
+    },
+    {
+      "case": "attack-29.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "548037762e2f4fec22c02285cddb61cabc9ec4f0ba1abffc13f7ecbe2ccc60e3"
+    },
+    {
+      "case": "attack-30.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "6b5996894de8e9c6ad59ed1ef87516301e1b394024d02e9f5caf238516d2b45a"
+    },
+    {
+      "case": "attack-31.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "948e2546c5f3b220b4c640975a1e03ef6d0fb272f879ab5b2e6f26700487d7d4"
+    },
+    {
+      "case": "attack-32.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "5cee01883a0626b456939083ad64e316d3e834dd570f8ff0b4bd43134d30fe30"
+    },
+    {
+      "case": "attack-33.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "892fb8c8028a6a59deb0d718db802fba2de69bb30e361d5c3139ea4fdf67475f"
+    },
+    {
+      "case": "attack-34.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "7f041417c084da7009dd46b6102fd467294dda11f5b46193e998ab09cb7f6d1f"
+    },
+    {
+      "case": "normal-00.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "d52ed8cbc50ebaba1b485cebed3f663969f06f1598b70bb7be62f24b04085aaf"
+    },
+    {
+      "case": "normal-01.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "bfa79f0a83be1d955d51f477ca6f158dd971288e6e7b3b8ec89a0e29e6b607e1"
+    },
+    {
+      "case": "normal-02.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "4cd47c8ff986fc4c49c17c95beff43e3e1b5ebd8ae1a9046d184d04ceececc24"
+    },
+    {
+      "case": "normal-03.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "2e520a112f7ad2065151e0306ac579809ac83af886a3e374ef68724b56a1506a"
+    },
+    {
+      "case": "normal-04.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "8adb1f6d76fa953c6f3cb67c5527309c6ef4771b8823930c425e16e34c949820"
+    },
+    {
+      "case": "normal-05.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "34d40750a96f77a13616a3fc5c60395e753bcec21175f8c4897818209e0fce4c"
+    },
+    {
+      "case": "normal-06.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "687e66d8fad7da1df525518dcc489ff0ada5d00cba122d5e03a3cf960602143a"
+    },
+    {
+      "case": "normal-07.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "f534ab16205e87244019ad045eb40300ab4a61aa645acd2fbc0177bf860252bd"
+    },
+    {
+      "case": "normal-08.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "999e07085c97c4a20abb919fd74ec0d657a9b4ef5d3c67e13044d8b68f118e00"
+    },
+    {
+      "case": "normal-09.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "8c2e4e6a83b21cc4e4744acdacf76675ee2d09cc7b4c3a244df392451a1c70a1"
+    },
+    {
+      "case": "normal-10.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "ff5c90e2755dbec6d9d489f26fd08fd4df498b1a6433d56d37ad0253acd30a03"
+    },
+    {
+      "case": "normal-11.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "d4a63394cf98c055eff3d85fbb6bb7c7299d89aa07c313862d9e63317a57ce57"
+    },
+    {
+      "case": "normal-12.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "6c0b56d626d1be6f55e38e6231a8e3648004887d8ba5c9e2cac45fb0beba3ff2"
+    },
+    {
+      "case": "normal-13.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "fed0f4ed658ae89d0ede919088ca687fcbd56e0dd04476707d0a52c13ae8c7bc"
+    },
+    {
+      "case": "normal-14.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "750096974446879dad420598a47c3a294270e33536bc3eb4113f8361bc8d1074"
+    },
+    {
+      "case": "normal-15.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "1c8c72c73d4e53df9280bdddcba6e91706ada4fc9553f4ff5020cea40290afdd"
+    },
+    {
+      "case": "normal-16.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "013c87423b03c9b51ef499a1d17aa6695f2d9804a43cd0ca4bc04fd5f2e918be"
+    },
+    {
+      "case": "normal-17.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "f76518b2c5fad984661b6afea4ccb963a0fe2c088c3f7e59777ac8dd32feebdc"
+    },
+    {
+      "case": "normal-18.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "55774540e0a182e3ce10fd266ae885883b780f68e5fc3692af5f05fdbcd0ad1c"
+    },
+    {
+      "case": "normal-19.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "9a04e9e3ffa6820017b8bed779d4a29215f69e2f5901a4ea974f0097c4e5b838"
+    },
+    {
+      "case": "benign-client-curl.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "d67f25a1e05c958806b6fbf0b2dbcf4554cb3bb5f251648e0074af3e89154308"
+    },
+    {
+      "case": "benign-client-python-requests.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "901c39ef40ed6b24d627722a827f49bf6d4c74824b3b8412bdc45a19ab2803b7"
+    },
+    {
+      "case": "benign-client-Go-http-client.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "4b80c74202f591b88691b606d21f100bad3a760a6f8d2977e71c4609d2ee3fcb"
+    },
+    {
+      "case": "benign-client-Googlebot.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "32a3d9eca65827136a118fec2110abc302bba3b7e997e627159272f3500e611e"
+    },
+    {
+      "case": "benign-client-Mozilla.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "81307b40a463b74478f12af4d9aab58921b5ff107ecb9f52fea67b4ac915805b"
+    },
+    {
+      "case": "benign-admin.log",
+      "report_equal": true,
+      "parsed": 80,
+      "findings": 0,
+      "partial": false,
+      "sha256": "6ef48860e06590eaea48c9486492690adcee0b2ec65cb857dba2d0c454b10bf0"
+    },
+    {
+      "case": "benign-crawler.log",
+      "report_equal": true,
+      "parsed": 100,
+      "findings": 0,
+      "partial": true,
+      "sha256": "9647b14c47a1e35c478ce80686dcefaa15ec2f7643729ad1b59436f4e625b854"
+    },
+    {
+      "case": "benign-fast-api.log",
+      "report_equal": true,
+      "parsed": 700,
+      "findings": 2,
+      "partial": false,
+      "sha256": "4f670ba88d4b2975237b4a742b58bec327693cd23e8adb8069027d16a612fa4f"
+    },
+    {
+      "case": "auth-burst.log",
+      "report_equal": true,
+      "parsed": 25,
+      "findings": 2,
+      "partial": false,
+      "sha256": "0b400bb49de2ebd317629a30f32492bb77c26e72ed78361f503ec9c607e79f72"
+    },
+    {
+      "case": "blocked-probes.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 1,
+      "partial": false,
+      "sha256": "23c2b3dc8f098c885bcb7b7ca6327a859b99b579ff90687e776ab6fbf532229c"
+    },
+    {
+      "case": "sensitive-transition.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 1,
+      "partial": false,
+      "sha256": "2887393c119f4696cacf9e668aae9004b310663c7fc743c61c8e3fec5d51cdcf"
+    },
+    {
+      "case": "sensitive-soft404.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "61c4c2411fd2986b5ec321852cbe9f1511d23d675680d2a3570cfff1ae84a333"
+    },
+    {
+      "case": "sensitive-real-exposure.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "08ecb640c8a48f87637600cc6606c7f639621a5f5b3cf84c58b50ba7186709fa"
+    },
+    {
+      "case": "sql-500.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "bd0535ca254031af6674595a0d71353497bd88656e7f866be791517457af1553"
+    },
+    {
+      "case": "login-302.log",
+      "report_equal": true,
+      "parsed": 26,
+      "findings": 2,
+      "partial": false,
+      "sha256": "f7a564e69a1d913ea9a5e20b37c9a3b26c2bb92095eb81d964c3b96369c68597"
+    },
+    {
+      "case": "unsupported-obfuscation.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "47233a6a39c37da9bb6a892caf64bd833356d4fffe421826120983e36087e4a4"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\actual-budget-whitelist\\actual-budget-logs.log",
+      "report_equal": true,
+      "parsed": 9,
+      "findings": 0,
+      "partial": false,
+      "sha256": "cf008b399a12528a167aae26e5eccceae0133dcf09c767daada716ee3f7fea7d"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\apache-cve-2021-41773\\apache-cve-2021-41773.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 3,
+      "partial": false,
+      "sha256": "9246ead334b0bb9f2a6b2e1970ef4d19d26ff415d307e9b1f891ad1b0c59317d"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\apache-http-probing\\apache-http-probing.log",
+      "report_equal": true,
+      "parsed": 77,
+      "findings": 3,
+      "partial": true,
+      "sha256": "f4fd0e6eeb2c1dce531b3748f01392444ef3e33b0f5536120dbdc1eaf325d70f"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\apache2-http-sensitive-files\\apache2-http-sensitive-files.log",
+      "report_equal": true,
+      "parsed": 13,
+      "findings": 1,
+      "partial": false,
+      "sha256": "3bfe8deb18a55046786a0d7c6414c5c26dd8c71862e3a865f2d7699a0abb5e38"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\apache2-logs\\apache2-logs.log",
+      "report_equal": true,
+      "parsed": 9,
+      "findings": 1,
+      "partial": true,
+      "sha256": "8dbac7e1e23f9bbd575044ed0b56a18507a8eb96d88ae20104594c0068c74623"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\apache2-malformed\\apache2-logs.log",
+      "report_equal": true,
+      "parsed": 11,
+      "findings": 0,
+      "partial": false,
+      "sha256": "4cd6d418e7dd7417130c25ef6ad0809470ecf0709ebbdcb867db06718a59dcf4"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\apache_log4j2_cve-2021-44228\\apache_log4j2_cve-2021-44228.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 3,
+      "partial": false,
+      "sha256": "46f759b6ac1018a832c0933ed79eec3d9d438563cf5623edf6e9480af8ad6eb3"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\apiscp-bf\\apiscp-bf.log",
+      "report_equal": true,
+      "parsed": 7,
+      "findings": 0,
+      "partial": false,
+      "sha256": "b0a3c66d4e821ac54c8fcda2f8be7218a4c9a23caee7b0f5b8eb174c3fe97189"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\aws-alb-http-bad-user-agent\\aws-alb-http-bad-user-agent.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "36d1bf04c318b2e2a3b56f635ed5a7cdb5f4c1ad8d17e4c11a7fb6fe9b5c8c8d"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\base-upsun-generic-test\\base-upsun-generic-test.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "6156c51357508a7a9478e6a38d8dd13411816ed17c41bc36ab80b83cadb97a6f"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\base-upsun-httplog-logs\\base-upsun-httplog-logs.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "c3eb45af429f5fcac9ac156a3164553eb41551d3a181db99ef61d301bff599f9"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\bunkerweb-bad-user-agent\\bunkerweb-bad-user-agent.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": true,
+      "sha256": "61a59a1081b61bfb528b9425d16780a5653743fcf2b2ba1e275baa0e91fd72a4"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\bunkerweb-http-path-traversal\\bunkerweb-http-path-traversal.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 1,
+      "partial": true,
+      "sha256": "c17ba0139c705f9b903635511a4b334c570433765cf351e223a86060b63bebe6"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\bunkerweb-http-sensitive-files\\bunkerweb-http-sensitive-files.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 0,
+      "partial": true,
+      "sha256": "4a380918f8a1e1acb73ea78570e760b270648ae7a92449a0630f9fd2fdc224e0"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\bunkerweb-logs\\bunkerweb-logs.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "f52941325dd4283a72f389e8321437d666217ae1a6e5f5a37a23f069f1fd52a2"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\caddy-basic-auth-bf\\caddy-logs.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "aac1df63f46103a16cffe803d0782bbcd21c63fb31efaea76e0fa98d376f2eb5"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\calibre-web-whitelist\\calibre-web-logs.log",
+      "report_equal": true,
+      "parsed": 16,
+      "findings": 0,
+      "partial": false,
+      "sha256": "e22e4f3af2ecd6100cce3ad68617d1236f44076786f019817729f8d44d07e8ca"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\cri-logs\\cri-logs.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "327d2047ab2cef33f81f55925e8503b79241ed5fa915be96d868ce45ab4006c0"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2017-9841\\CVE-2017-9841.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "088659d90c2e96f6dee2a7042a3a4a3a92615137c4e8d15aab23e4f0058778f1"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2019-18935\\CVE-2019-18935.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "33f7cb45332e06e2a196da3dc55b527e526cc7fe45d340b7019abdc075cf9f28"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\cve-2021-42013\\cve-2021-42013.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "619eaf1fc345c4cf43046738f76619ae8ac83eb00bcc2d244dd3c0a918915cf2"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2022-26134\\CVE-2022-26134.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 2,
+      "partial": false,
+      "sha256": "836bef8b3df1d73ee3b72ec859f6fac83009588258db7bd6b3d5c47e7492cfea"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2022-35914\\CVE-2022-35914.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 0,
+      "partial": false,
+      "sha256": "6e1357e5a5830f456f79a6803b287d1c6fdfaceab1404973b85df7a75515ba3d"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2022-40684\\CVE-2022-40684.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "855ab42c336bdbc0748c841626300a8dd620a7205497532808d25e11c58685aa"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2022-41697\\CVE-2022-41697.log",
+      "report_equal": true,
+      "parsed": 6,
+      "findings": 0,
+      "partial": false,
+      "sha256": "386251c1df48078afcf7a676b8a75db171c1855d0387313918dd698cbc18e456"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2022-42889\\CVE-2022-42889.log",
+      "report_equal": true,
+      "parsed": 4,
+      "findings": 2,
+      "partial": false,
+      "sha256": "2846e0002f340d4508f68816cc71d9431e4786444997883a363b8409cfa25205"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2022-44877\\CVE-2022-44877.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 1,
+      "partial": false,
+      "sha256": "71e28d9cb764f68e305b5311e51b70203a68c0f8cabf9f7f4e20abff4b5afe5d"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2022-46169\\CVE-2022-46169.log",
+      "report_equal": true,
+      "parsed": 9,
+      "findings": 0,
+      "partial": false,
+      "sha256": "3f3cf9425a3988f23baf609b303eb8280d45ab0652ed3895becee3d2af3cc9fe"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2023-22515\\CVE-2023-22515.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 0,
+      "partial": false,
+      "sha256": "b9be788ef822441e7fcd339c9bfc31b659a90afae9d62ecbfcdd64f7b0ec0e29"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2023-22518\\CVE-2023-22518.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "bdcc8462bb69feca76e76d2273089643cdeafd6c4130bc6f3868db8818452d6a"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\cve-2023-49103\\cve-2023-49103.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 0,
+      "partial": false,
+      "sha256": "1bc93333c0c91e02d0e84e4c04016e34cae01983f419b390d62b3c0766d27349"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2024-0012\\CVE-2024-0012.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 0,
+      "partial": false,
+      "sha256": "11ad13ca27fd7bbb2003b173caf99eb69184de7c95b6ffa61575b3b85e8f2e64"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2024-38475\\CVE-2024-38475.log",
+      "report_equal": true,
+      "parsed": 12,
+      "findings": 2,
+      "partial": true,
+      "sha256": "c61b066fec47a35f2be166c2dfa0988c3414fbbdaabf7d139d08b6a4ea9aeedd"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2024-9474\\CVE-2024-9474.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "f041771741f3121bc8fa263f09631bb8ded31b242f3625416deb20321e42d8f2"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\CVE-2025-0108\\CVE-2025-0108.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "2ab61820fbd0625e782e4b81604d615ec6a29ed31e1e4028adb8364cd5b2ec88"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\cve_2022_37042\\cve_2022_37042.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 0,
+      "partial": false,
+      "sha256": "99b6a64e22bc7177eb4e84e2c225768d31e54c140b5b734954fca96913c3ead8"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\docker-logs\\docker-logs.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "6d97aed6e76fcfaa50fdf2c06f2bbb239c8c7f61e0683f37d04185ba4ce26fb2"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\envoy-http-bad-user-agent\\envoy-http-bad-user-agent.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "2ec2b4c25b252ed3eb10403a3aec7e4a4a34a0fd6fb96b3381516ee75830736d"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\envoy-http-crawl-non_statics\\envoy-http-crawl-non_statics.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "25df3259de5fb14583316fd5e8c5ace5b0003fd08750703dd5ed1dd3ecafafac"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\f5-big-ip-cve-2020-5902\\f5-big-ip-cve-2020-5902.log",
+      "report_equal": true,
+      "parsed": 4,
+      "findings": 4,
+      "partial": false,
+      "sha256": "a6c0568e44b6daf415f794b4cfd7d3e353644f592dfbd37c57b7f2be57ed57d4"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\fortinet-cve-2018-13379\\fortinet-cve-2018-13379.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 2,
+      "partial": false,
+      "sha256": "9857ddc4c8e79b432717a6541dbb0df26f0fff0c215004b708c7af7b987e82fc"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\grafana_cve-2021-43798\\grafana_cve-2021-43798.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 2,
+      "partial": false,
+      "sha256": "90726bf71504977813e980a0537452d666755c275f347202625d796008d23854"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\haproxy-logs\\haproxy-logs.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "358c1e8fe1fd152681aa91c615af861550bb618907e69dc8ee09d913049ef2c6"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\haproxy-nextcloud-whitelist\\haproxy-logs.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "8ecfc0ef5f659fceb7e3fb0eee95f67b160c0a5dd5ad9652ed2a298a88955453"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-admin-interface-probing\\http-admin-interface-probing.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 0,
+      "partial": false,
+      "sha256": "4f5bf88716c08b96b90a9da4ade65077ba50bdfcac95338b82a1b0d5bb58ec6f"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-bf-wordpress-bf\\http-bf-wordpress-bf.log",
+      "report_equal": true,
+      "parsed": 9,
+      "findings": 0,
+      "partial": false,
+      "sha256": "2f7cab38f679a0684cb40c5b61d12bd96caa051a41be7a9676525ad27efb43f0"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-cve-probing\\http-cve-probing.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 0,
+      "partial": false,
+      "sha256": "194706111434cdc852fca4ac0abaf0f782ca390bf90f03cae8c9de5b996f87b0"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-dos-bypass-cache\\http_dos_bypass_cache.log",
+      "report_equal": true,
+      "parsed": 356,
+      "findings": 0,
+      "partial": false,
+      "sha256": "8c89c2e358bff71247ebb5346ccebb3f118464b73bf2a9f66d9d72cdfeaa88d8"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-dos-invalid-http-versions\\http-dos-invalid-http-versions.log",
+      "report_equal": true,
+      "parsed": 6,
+      "findings": 2,
+      "partial": false,
+      "sha256": "07a8d8f6b2790aeb5cb13e1df62bcae2682709c519c83bc1bfb0776b3eadaf75"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-dos-random-uri\\http_dos_random_uri.log",
+      "report_equal": true,
+      "parsed": 66,
+      "findings": 2,
+      "partial": false,
+      "sha256": "5a2816c859aeb3e301c4904c01c80a8a0f0d9ccb6392707cf654791ba4260c6e"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-dos-switching-ua\\http-dos-switching-ua.log",
+      "report_equal": true,
+      "parsed": 15,
+      "findings": 5,
+      "partial": false,
+      "sha256": "728b5b9858d02be3fbde4f819d6832acbb913fb1ab5aacc09898fbaef8ac7fa5"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-generic-test\\http-generic-test.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "144210034fb0558387ab9a19864043eceebea5328fbaae66c3257387a9f5aec4"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-magento-bf\\http-magento-bf.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "26033a1826a6281e6b9de39475013f4ad565fa5b0520074261ab4c6202e3cc45"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-technology-probing\\http-technology-probing.log",
+      "report_equal": true,
+      "parsed": 5,
+      "findings": 0,
+      "partial": true,
+      "sha256": "c99f631f92a2e2c63ca2d9bfb5164a699197d7b51bc32c55584e9c50857dbe4c"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-wordpress-scan\\http-wordpress-scan.log",
+      "report_equal": true,
+      "parsed": 8,
+      "findings": 0,
+      "partial": false,
+      "sha256": "526c7ff29f527f5f9d095a274dea08ca3a91afd9729fc9ed575a834e3c1f5f0f"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-wordpress_user-enum\\http-wordpress_user-enum.log",
+      "report_equal": true,
+      "parsed": 12,
+      "findings": 0,
+      "partial": false,
+      "sha256": "ad15b07c1b4662cf2f54d7d0eccecdeaec46547150eb5b42b984c2db65b0810c"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\http-wordpress_wpconfig\\http-wordpress_wpconfig.log",
+      "report_equal": true,
+      "parsed": 14,
+      "findings": 1,
+      "partial": false,
+      "sha256": "23755d667e35313eb6987391c484f57ea546414dc2e20bd74e05fda641fbdcb4"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\ipv6-postoverflow\\ipv6-postoverflow.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 2,
+      "partial": false,
+      "sha256": "d1a053ed5a4557269ba245f1d1dfb06ed95e54c4c3bd7742062f7d1623062247"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\jellyfin-whitelist\\jellyfin-logs.log",
+      "report_equal": true,
+      "parsed": 5,
+      "findings": 0,
+      "partial": true,
+      "sha256": "487ca3ec219f180a5cbbd60229342342570db6da5b3866221ac54895defad6c5"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\jellyseerr-whitelist\\jellyseerr-logs.log",
+      "report_equal": true,
+      "parsed": 5,
+      "findings": 0,
+      "partial": false,
+      "sha256": "14f29a00068931ffa012bdaf653b1f37a590b7a64f5427ade6de3b9c3fea5d31"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\jira_cve-2021-26086\\jira_cve-2021-26086.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 2,
+      "partial": false,
+      "sha256": "9ff84a24d65b63169b1f6859a8c3ca566f1d219b10e9d6683b069bfa8cf8fa63"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\litespeed-http-sensitive-files\\litespeed-http-sensitive-files.log",
+      "report_equal": true,
+      "parsed": 6,
+      "findings": 1,
+      "partial": false,
+      "sha256": "5f1a895203e70525f9f62fb7f2e6f55e136f1ff76703f943e2f74a97a06e48bd"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\litespeed-logs\\litespeed-logs.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": true,
+      "sha256": "8387c48287ed5a5fd1c3c32ad8e080ff76d353b57e8b0bb19a186018fcba9281"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\magento-ccs\\magento-ccs.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "ceb0ebf3e4cb50f78f4ec428b4d059a4e5d59f75b2023e795a70b2a8b58bd49a"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\magento-ccs-by-as\\magento-ccs-by-as.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "c945ece0d59a06d24ff37f225d1bef7818ebd8de1750c1099f7c993eff4434f1"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\magento-ccs-by-country\\magento-ccs-by-country.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "3764e8c7e243c84937fd3854e5a378957fdf9bdcd625e003f3c38de73a9faa3b"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\netgear_rce\\netgear_rce.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 1,
+      "partial": false,
+      "sha256": "9df69ee308fd6a52ed30908e0a92867d869fa2ba07f9e2cfbfb06f48f44e4109"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nextcloud-whitelist\\nextcloud-whitelist.log",
+      "report_equal": true,
+      "parsed": 32,
+      "findings": 0,
+      "partial": false,
+      "sha256": "b896b8053ed5af5d52ec600625b1fab6aea64b0462bce995d1d7a533c885f784"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-bad-user-agent\\nginx-bad-user-agent.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 3,
+      "partial": false,
+      "sha256": "3e0063a3b577e47453435256ecbe3b33fe5037ad89d8a0d99c319063cbe8cb3c"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-cve-2021-41773\\cve-2021-41773.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 2,
+      "partial": false,
+      "sha256": "4e89734704677aab91c138aefe2c41e0e4c3a007964f61f42141775bacafca89"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-http-backdoor\\nginx-http-backdoor.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 0,
+      "partial": false,
+      "sha256": "417212dbe474a6dffff48487176bec5910c51aebd16f698e90d01e8786b493cb"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-http-generic-bf\\nginx-http-generic-bf.log",
+      "report_equal": true,
+      "parsed": 28,
+      "findings": 0,
+      "partial": false,
+      "sha256": "4a846a69f5f1944a71ee6118cbd75f30ea4abefe0d35f044b2fa7ecbbb3f32bc"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-http-malformed\\nginx_http-logs.log",
+      "report_equal": true,
+      "parsed": 12,
+      "findings": 0,
+      "partial": false,
+      "sha256": "b3d9974c0493b70aa12ee94a1b8edee9a9ec03d23d9b84c1ca577d2749ca0ea9"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-http-open-proxy\\nginx-http-open-proxy.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 1,
+      "partial": false,
+      "sha256": "2e39c075446b075557912e4b4c734595ce27242b5763ca1fe3be64f6cb0e05b0"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-http-path-traversal\\nginx-http-path-traversal.log",
+      "report_equal": true,
+      "parsed": 9,
+      "findings": 2,
+      "partial": false,
+      "sha256": "039250f14d2b112dd5e2226eae3af91edd855341c62be2f4cbbc66d10267a466"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-http-sensitive-files\\nginx-http-sensitive-files.log",
+      "report_equal": true,
+      "parsed": 9,
+      "findings": 1,
+      "partial": false,
+      "sha256": "5d90da4580cf5378e7cad31a81b0e6f27d5e8576f393336a2e8e5ea94a2d9325"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-http-sqli-probing\\nginx-http-sqli-probing.log",
+      "report_equal": true,
+      "parsed": 16,
+      "findings": 1,
+      "partial": false,
+      "sha256": "eefd016fcf9c678caaa68ca3124416492ea64f3a30e27bb520e215eaa87d8af2"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-http-w00twoot\\nginx-http-w00twoot.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 0,
+      "partial": false,
+      "sha256": "e0b3fe25c77225eec4a64b56d2a35b3f492aba7570b391e5de662c9e19461166"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-http-xss-probing\\nginx-http-xss-probing.log",
+      "report_equal": true,
+      "parsed": 26,
+      "findings": 2,
+      "partial": false,
+      "sha256": "64f46110b958b4f6a0d8ec7f742cdd57599923e2654fba5e0597e2ffc919ade6"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-mail-bf\\nginx-mail-bf.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "ffb650e77a11f9bac5512bc4f77743d19e0a4aa4218c2013eaba54aaf290828e"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-mail-logs\\nginx-mail-logs.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 0,
+      "partial": true,
+      "sha256": "2cb61fed5a81ae8b4ec3b5cd434b9dc83640bf9b7076715838b0136c6ab12883"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-proxy-manager-logs\\nginx-proxy-manager-logs.log",
+      "report_equal": true,
+      "parsed": 14,
+      "findings": 1,
+      "partial": true,
+      "sha256": "697637990b42d2a9d6ba5efd9121b071e8ae60b820b550f1a1d4ef3413f415ed"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx-proxy-manager-malformed\\nginx_http-logs.log",
+      "report_equal": true,
+      "parsed": 12,
+      "findings": 0,
+      "partial": false,
+      "sha256": "9b4aeaaa43a791eecde65908671ba0339c0218814893b1cf01c14c502a54a497"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx_http-catch-npm\\nginx_http-catch-npm.log",
+      "report_equal": true,
+      "parsed": 6,
+      "findings": 0,
+      "partial": true,
+      "sha256": "696a4660db4672ad42326a5207629cb38be2b37033f1db5826f1835c4696c674"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx_http-logs\\nginx_http-logs.log",
+      "report_equal": true,
+      "parsed": 9,
+      "findings": 0,
+      "partial": false,
+      "sha256": "103e9a39374f4235c61da4443de54c1250a0bdd0fa8c10004053714a8de539ee"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\nginx_req_limit_exceeded\\nginx_req_limit_exceeded.log",
+      "report_equal": true,
+      "parsed": 9,
+      "findings": 1,
+      "partial": false,
+      "sha256": "b10abe00fa9bcffbc8c97f3137d60acfd054a4383ec3fbbf2b02cb91ab3fbc2d"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\npmplus-logs\\npmplus-logs.log",
+      "report_equal": true,
+      "parsed": 17,
+      "findings": 0,
+      "partial": true,
+      "sha256": "3e3c08d5b857a577aadf3d91adab09da9797a0dffd9e09da1daa08ae8e026418"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\openappsec\\openappsec.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "2614c20e793710503df84f0a1aa0307344ac1628323119bfefdf7f73c327ca7c"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\overseerr-whitelist\\overseerr-logs.log",
+      "report_equal": true,
+      "parsed": 5,
+      "findings": 0,
+      "partial": false,
+      "sha256": "32b663d5170b171d7acd6e4f9fea96d8199034125a4dc5fa5cd175ec5940dc62"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\pfsense-rfc5424-nginx\\pfsense-rfc5424-nginx.log",
+      "report_equal": true,
+      "parsed": 1,
+      "findings": 0,
+      "partial": false,
+      "sha256": "f8ffa1f7daa8469abdb676f2f6a3503ba1328b36af03c14bd0c66f2a08fef3a5"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\plex-allowlist\\plex-allowlist.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 0,
+      "partial": false,
+      "sha256": "c10adcfc4b3ca2218835f99c19bb13f2455bffec49f24234bb289249e9d9c906"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\pulse-secure-sslvpn-cve-2019-11510\\pulse-secure-sslvpn-cve-2019-11510.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 2,
+      "partial": false,
+      "sha256": "63869b06a4a8bd242e07dc1f013e59e2e8d6b114cfdca1c606463964dc6185de"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\rocketchat-whitelist\\rocketchat-whitelist.log",
+      "report_equal": true,
+      "parsed": 3,
+      "findings": 0,
+      "partial": false,
+      "sha256": "ce8f51445a4507049b1dd0f51046564de1a30151b4769c8a3a8a079742aad453"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\sap-probing\\sap-probing.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 0,
+      "partial": false,
+      "sha256": "29ed68b010a41b473fb8df76a156e41f202d9ab7ad89a17a4713bb7efaf172da"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\spring4shell_cve-2022-22965\\spring4shell_cve-2022-22965.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 2,
+      "partial": false,
+      "sha256": "fa89a7bb6313d05dc9ea24b0c33c53e9fd60685e9a1498ade235439107eadbfa"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\sympa_ww-http-scan\\sympa_ww-logs.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "777b182c682f1a24179ec6a652f83e52cfcb1e0dcb99e6f7fd4e63225ab59fb4"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\thinkphp-cve-2018-20062\\thinkphp-cve-2018-20062.log",
+      "report_equal": true,
+      "parsed": 8,
+      "findings": 0,
+      "partial": true,
+      "sha256": "e14316222937ad2b6ab708f1a3feff320cc6b286e036495c921520b72754941c"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\traefik_base-http-scenario\\traefik_base-http-scenario.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "2c3174e1de3f140d313bf4133f73d898e18cb1f13c4eea554b798109f05f504b"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\traefik_clf\\traefik_clf.log",
+      "report_equal": true,
+      "parsed": 13,
+      "findings": 9,
+      "partial": true,
+      "sha256": "5c2d2b85e13deddebd1332948bcb6cfed11f79d207772c87e704fcabcceb307c"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\vmware-cve-2022-22954\\vmware-cve-2022-22954.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 2,
+      "partial": false,
+      "sha256": "e32b34488d89310b4724548de82594cbedea40dda86cd2bd1bca921350f57481"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\vmware-vcenter-vmsa-2021-0027\\vmware-vcenter-vmsa-2021-0027.log",
+      "report_equal": true,
+      "parsed": 2,
+      "findings": 2,
+      "partial": false,
+      "sha256": "fac0d8a7d99460dc6b8f267bb043e188565ec89cb342cb9d3177201e4b21232e"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\zammad-whitelist\\zammad-whitelist.log",
+      "report_equal": true,
+      "parsed": 5,
+      "findings": 0,
+      "partial": false,
+      "sha256": "426fb2cfeae8ccb79f12f2d8cd7cb54f6e8d97c7cc68ce1a64569121b2ba1ae4"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\zammad-whitelist-bypass\\zammad-whitelist-bypass.log",
+      "report_equal": true,
+      "parsed": 4,
+      "findings": 1,
+      "partial": false,
+      "sha256": "070506c05c8ce4cb527fd170d32b9458f09ee6e582d3d32ee6544346fa3c7419"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\zoneminder_cve-39285\\zoneminder_cve-39285.log",
+      "report_equal": true,
+      "parsed": 4,
+      "findings": 0,
+      "partial": false,
+      "sha256": "44dc30049bb647155539f0a79619313f7960823874237734e7570ba00ff6cdaf"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\zoneminder_cve-39290\\zoneminder_cve-39290.log",
+      "report_equal": true,
+      "parsed": 15,
+      "findings": 0,
+      "partial": true,
+      "sha256": "f0037f13e466a99293caf02fa1e59fc48ac570febadd48f462b41d3b82735219"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\zoneminder_cve-39291\\zoneminder_cve-39291.log",
+      "report_equal": true,
+      "parsed": 15,
+      "findings": 0,
+      "partial": false,
+      "sha256": "9dfcfccbbbbda904ed163d120939ef325fb3a0e70dab77f3dbd4c7a93bccf054"
+    },
+    {
+      "case": "audit\\testdata\\upstream\\zoraxy-http-bad-user-agent\\zoraxy.log",
+      "report_equal": true,
+      "parsed": 0,
+      "findings": 0,
+      "partial": true,
+      "sha256": "1a6164e858a1bad7985de75136429f9aa498bb0cff2717347eb3e6b41b499bba"
+    },
+    {
+      "case": "examples\\geoip-sample.log",
+      "report_equal": true,
+      "parsed": 4,
+      "findings": 3,
+      "partial": false,
+      "sha256": "813cde360551ca41b29ddae09cf13a6a5dcf0a4ad54ac2dfe69f8df61a67edc7"
+    },
+    {
+      "case": "examples\\sample.log",
+      "report_equal": true,
+      "parsed": 9,
+      "findings": 4,
+      "partial": false,
+      "sha256": "c371a7c14c3344d9143cdab566360b8676e99d8081756fd05f7f9beff284fbaf"
+    }
+  ]
+}
