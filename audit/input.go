@@ -86,6 +86,7 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 	seenFiles := map[[32]byte]Input{}
 	for _, p := range sorted {
 		in := Input{Path: p}
+		o.bundle.begin(p)
 		var signature [32]byte
 		hashedComplete := false
 		if o.DeduplicateFiles {
@@ -102,6 +103,7 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 						in.Parsed = old.Parsed
 						in.Unparsed = old.Unparsed
 						in.DuplicateOf = old.Path
+						o.bundle.duplicate(p, old.Path)
 						r.Parsed += in.Parsed
 						r.Unparsed += in.Unparsed
 						r.Duplicates += in.Parsed
@@ -113,15 +115,18 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 		}
 		err := readLog(p, o, func(line string, n int64, tooLong bool) {
 			if tooLong {
+				o.bundle.line(p, n, "parse_error", "oversized_line")
 				in.Unparsed++
 				r.warn("Oversized line skipped (max-line-bytes)")
 				return
 			}
 			if strings.TrimSpace(line) == "" {
+				o.bundle.line(p, n, "excluded", "blank_line")
 				return
 			}
 			e, err := Parse(line, p, n, o.LogRegex)
 			if err != nil {
+				o.bundle.line(p, n, "parse_error", err.Error())
 				in.Unparsed++
 				if in.Unparsed <= 3 {
 					r.warn(fmt.Sprintf("%s:%d: %v", p, n, err))
@@ -129,6 +134,7 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 				return
 			}
 			in.Parsed++
+			o.bundle.line(p, n, "parsed", "")
 			if e.TimezoneUnknown && location != nil {
 				v := e.Time
 				e.Time = time.Date(v.Year(), v.Month(), v.Day(), v.Hour(), v.Minute(), v.Second(), v.Nanosecond(), location)
@@ -145,8 +151,10 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 					r.Missing[name]++
 				}
 			}
+			o.bundle.event(e)
 			consume(e)
 		})
+		o.bundle.finish(p, err)
 		if err != nil {
 			in.Error = err.Error()
 			r.warn(fmt.Sprintf("%s: %v", p, err))

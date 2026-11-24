@@ -26,3 +26,14 @@
 | §11 TDD/worktree/PR/CI/merge/cleanup | 新規 | 全phase | 作業記録とPRで追跡 |
 | §12 必須テスト全項目 | 部分 | 1–6 | 既存回帰＋新規契約テスト。未実装 |
 | §13 完了条件と§14 最終報告 | 未対応 | 6/Java完了時 | 本表・PR/測定/sampleで照合。未完了 |
+
+
+## Phase 1 実装記録
+
+- `audit/bundle.go`: 明示的bundle API、private/exclusiveディレクトリ、原本hash前後確認、実効設定・build/rules hash・成果物hash、上限付き診断と未完了marker。
+- `audit/input.go`: 任意bundle captureにより総行/空行/parse error/時刻・項目・ログ種別を既存streamから取得。legacyの構造・挙動は維持。
+- `cmd/webaudit/main.go`: `--report-dir`、任意metadata、spool/output上限。既存-o/formatと排他。
+- Phase 1のreport.htmlは既存調査画面を再利用する暫定出力。11章構成・全件・coverage・全統計はまだ未完了であり後続phase対象。
+- 原本hashのbefore/after比較は、並行変更を完全にロックするものではない。変更が観測された場合は完全性を下げる。
+
+Phase 1セルフレビューで、入力hash/診断の完全性低下を暫定HTMLの部分解析表示にも反映するよう修正。出力先はrenameで既存空ディレクトリを置き換え得る方式を避け、mkdirによる排他予約＋未完了marker方式を採用。

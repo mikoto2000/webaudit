@@ -188,3 +188,33 @@ func TestHTMLUpstreamRawLogsFromGzip(t *testing.T) {
 		}
 	}
 }
+
+func TestInvestigationBundleCLI(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "a.log")
+	target := filepath.Join(dir, "report")
+	if err := os.WriteFile(input, []byte(logLine+"\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	args := []string{input, "--report-dir", target, "--system-name", "test-system", "--investigator", "test-analyst", "--report-title", "Test report"}
+	var out, errout bytes.Buffer
+	if code := run(args, &out, &errout); code != 0 {
+		t.Fatalf("code %d: %s", code, errout.String())
+	}
+	data, err := os.ReadFile(filepath.Join(target, "report.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(data, []byte("test-system")) || !bytes.Contains(data, []byte("test-analyst")) {
+		t.Fatal("metadata missing")
+	}
+	if code := run(args, &out, &errout); code != 1 {
+		t.Fatal("existing bundle must be rejected", code)
+	}
+	if code := run([]string{input, "--report-dir", filepath.Join(dir, "invalid"), "-o", filepath.Join(dir, "old.html")}, &out, &errout); code != 2 {
+		t.Fatal("ambiguous output modes accepted", code)
+	}
+	if _, err := os.Stat(filepath.Join(target, "INCOMPLETE")); !os.IsNotExist(err) {
+		t.Fatal("completed output marked incomplete")
+	}
+}

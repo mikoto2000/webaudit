@@ -25,6 +25,15 @@ func run(args []string, out, errout io.Writer) int {
 	fs := flag.NewFlagSet("webaudit", flag.ContinueOnError)
 	fs.SetOutput(errout)
 	output := fs.String("o", "", "Write a new report file (default HTML; never overwrite)")
+	var bundle audit.BundleOptions
+	reportDir := fs.String("report-dir", "", "Create a new investigation report directory (exclusive; batch only)")
+	fs.StringVar(&bundle.Title, "report-title", "", "Optional investigation report title")
+	fs.StringVar(&bundle.System, "system-name", "", "Optional target system name")
+	fs.StringVar(&bundle.Background, "investigation-background", "", "Optional investigation background")
+	fs.StringVar(&bundle.Purpose, "investigation-purpose", "", "Optional investigation purpose")
+	fs.StringVar(&bundle.Investigator, "investigator", "", "Optional investigator name")
+	fs.Int64Var(&bundle.MaxSpoolBytes, "max-spool-bytes", 1<<30, "Maximum private report spool bytes")
+	fs.Int64Var(&bundle.MaxOutputBytes, "max-report-bytes", 1<<30, "Maximum total report artifact bytes")
 	format := fs.String("format", "", "html, json or csv (default console summary)")
 	language := fs.String("lang", "ja", "HTML report language: ja or en (default ja; other formats unchanged)")
 	verbose := fs.Bool("verbose", false, "Show file-level diagnostics on stderr")
@@ -80,6 +89,14 @@ func run(args []string, out, errout io.Writer) int {
 		fmt.Fprintln(errout, "--format must be html, json or csv")
 		return 2
 	}
+	if *reportDir != "" && (*output != "" || *format != "") {
+		fmt.Fprintln(errout, "--report-dir cannot be combined with -o or --format")
+		return 2
+	}
+	if bundle.MaxSpoolBytes < 1 || bundle.MaxSpoolBytes > 1<<50 || bundle.MaxOutputBytes < 1 || bundle.MaxOutputBytes > 1<<50 {
+		fmt.Fprintln(errout, "Invalid report resource limits")
+		return 2
+	}
 	if o.LogRegex != "" {
 		rx, er := regexp.Compile(o.LogRegex)
 		if er != nil {
@@ -123,6 +140,24 @@ func run(args []string, out, errout io.Writer) int {
 	}
 	defer geo.Close()
 	o.GeoIP = geo
+	if *reportDir != "" {
+		bundle.Language = *language
+		bundle.Warnings = geoWarnings
+		report, err := audit.GenerateBundle(fs.Args(), *reportDir, o, bundle)
+		if err != nil {
+			fmt.Fprintln(errout, audit.TerminalSafe(err.Error()))
+			return 1
+		}
+		if err = audit.WriteReport(out, report.Analysis, "summary"); err != nil {
+			fmt.Fprintln(errout, audit.TerminalSafe(err.Error()))
+			return 1
+		}
+		fmt.Fprintln(out, "\nReport directory:", audit.TerminalSafe(*reportDir))
+		if !report.Complete {
+			return 1
+		}
+		return 0
+	}
 	mode := *format
 	if mode == "" {
 		mode = "summary"
