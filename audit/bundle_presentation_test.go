@@ -107,3 +107,27 @@ func TestBundleMasksSecretsWithoutChangingOriginalEvidence(t *testing.T) {
 		t.Fatal("explicit sensitive export not respected")
 	}
 }
+
+func TestBundleEscapesControlCharactersEvenWithSensitiveEvidence(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "access.log")
+	raw := `{"remote_addr":"192.0.2.1","time_iso8601":"2026-11-01T00:00:00Z","request":"GET /.env HTTP/1.1","status":404,"body_bytes_sent":0,"http_user_agent":"Browser\u001b[31m\u202e"}`
+	if err := os.WriteFile(input, []byte(raw+"\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	target := filepath.Join(dir, "report")
+	_, err := GenerateBundle([]string{input}, target, Options{}, BundleOptions{IncludeSensitiveEvidence: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	data, err := os.ReadFile(filepath.Join(target, "report.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.ContainsAny(string(data), "\u001b\u202e") {
+		t.Fatal("active control character in rendered report")
+	}
+	if !strings.Contains(string(data), `\u001B`) {
+		t.Fatal("control character representation missing")
+	}
+}
