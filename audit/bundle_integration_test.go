@@ -2,6 +2,8 @@ package audit
 
 import (
 	"compress/gzip"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -10,6 +12,30 @@ import (
 	"strings"
 	"testing"
 )
+
+func TestPublishedInvestigationSamplesKeepArtifactHashes(t *testing.T) {
+	for _, lang := range []string{"ja", "en"} {
+		dir := filepath.Join("..", "examples", "investigation-"+lang)
+		data, err := os.ReadFile(filepath.Join(dir, "manifest.json"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		var manifest BundleManifest
+		if err = json.Unmarshal(data, &manifest); err != nil {
+			t.Fatal(err)
+		}
+		for _, artifact := range manifest.Artifacts {
+			data, err := os.ReadFile(filepath.Join(dir, filepath.FromSlash(artifact.Path)))
+			if err != nil {
+				t.Fatal(err)
+			}
+			sum := sha256.Sum256(data)
+			if artifact.Bytes != int64(len(data)) || artifact.SHA256 != hex.EncodeToString(sum[:]) {
+				t.Fatal("sample artifact differs", lang, artifact.Path)
+			}
+		}
+	}
+}
 
 func TestBundleRotatedGzipOutOfOrderAndSharedCounts(t *testing.T) {
 	dir := t.TempDir()

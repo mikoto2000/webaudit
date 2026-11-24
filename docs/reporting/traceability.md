@@ -2,30 +2,29 @@
 
 要求の原文は[requirements.md](requirements.md)。各章の列挙項目は該当する行の範囲に含む。完了時には根拠となるモデル・テスト・成果物を更新し、未対応を完了と表現しない。
 
-| 要求 | 現行 | 実装phase | 検証根拠/完成状態 |
-|---|---|---|---|
-| §1–2 オフライン・再現性・互換性・batch | 部分 | 全phase | 現行設計を維持。設計のみ |
-| §3 第1章 基本情報・結果サマリー | 部分 | 1,3,4,5 | 任意metadata、共通model、計数定義。未実装 |
-| 第2章 対象・inventory・対象外 | 部分 | 1,5 | 原本hash/format/field/診断。未実装 |
-| 第3章 実装に即した方法 | 部分 | 1,2,5 | ルール・制限と実行条件。未実装 |
-| 第4章 severity/confidence/outcomeの分離 | 部分 | 2,5 | 未評価confidenceはunknown。未実装 |
-| 第5章 基礎・時系列・Geo統計と全グラフ | 部分 | 4,5 | 共通分母・件数属性。未実装 |
-| 第6章 全観点・全ルールcoverage | 未対応 | 2,5 | 支援なし/未評価/部分/hitを独立。未実装 |
-| 第7章 事案一覧・engine別集計 | 部分 | 3,5 | 一意requestと重複検出を区別。未実装 |
-| 第8章 詳細・事実/推定・証拠・案内 | 部分 | 3,5 | 現行investigation再利用。未実装 |
-| 第9章 根拠ある総合評価 | 未対応 | 4,5 | 不存在/成功の断定禁止。未実装 |
-| 第10章 一般制約と発生制約 | 部分 | 1,2,5 | completenessとwarnings。未実装 |
-| 第11章 事案に応じた推奨対応 | 部分 | 3,5 | finding参照・priority・種類。未実装 |
-| §4 不審/関連全件・遅延検出・変更確認 | 未対応 | 3 | bounded spool・request ID。未実装 |
-| §5 共通modelとstable ID | 部分 | 1–5 | Request/Detection/Finding別。未実装 |
-| §6 一式出力とmanifest・全hash | 未対応 | 1,3–5 | report-dir専用モード。未実装 |
-| §7 日英・目次・navigation・offline・印刷 | 部分 | 5 | HTML/escape/graph。未実装 |
-| §8 全出力の安全性・資源制限 | 部分 | 1,3,5,6 | 注入/paths/上限/排他。未実装 |
-| §9 正確性・完全性・集計関係 | 部分 | 1–6 | 分母・重複・欠損・下限。未実装 |
-| §10 phase順序 | 新規 | 0–6 | Go完了後Java。Phase 0設計作成 |
-| §11 TDD/worktree/PR/CI/merge/cleanup | 新規 | 全phase | 作業記録とPRで追跡 |
-| §12 必須テスト全項目 | 部分 | 1–6 | 既存回帰＋新規契約テスト。未実装 |
-| §13 完了条件と§14 最終報告 | 未対応 | 6/Java完了時 | 本表・PR/測定/sampleで照合。未完了 |
+| 要求 | Go版の最終実装/検証 | 制約・未評価事項 |
+|---|---|---|
+| §1–2 offline/再現性/batch/互換性 | bundleは明示モード、既存検出再利用。全既存テスト、Linux seccomp付きoffline CI | 外部LLM/API不使用。任意DB/OS監査を自動理解しない |
+| §3 第1章 概要 | 共通summary/metadata、入力・request・検出・事案・優先度別。presentation/integration tests | 入力任意metadataは未指定表示、下限と評価不能を区別 |
+| 第2章 対象 | LogInventory、保存状態SHA-256、format/field/timezone/診断。bundle_test | 前後hash照合で観測できない瞬間的変更は保証外 |
+| 第3章 方法 | 実効settings、全rule metadata/条件/必要field、limits、parser/normalization/windowの説明 | 既存source互換範囲・順序依存を明示 |
+| 第4章 評価軸 | severity、検出confidence、outcome、outcome evidence strengthを独立表示。TestOutcome | 検出confidenceは独立した校正根拠未整備でunknown。severityは既存優先度の意味 |
+| 第5章 統計/グラフ | 全観測次元・数値・adaptive UTC timeline/Geo、offline meter。statistics/presentation tests | Geoなしは未実施、durationは明示単位のみ。上位/other/下限を開示 |
+| 第6章 coverage | 全41観点＋全既存rule。状態/完全性/hit独立、direct/related union counts。coverage/integration tests | 本文専用・reputationは未対応、Geo request membershipはnull、共有rule観点は部分支援 |
+| 第7章 一覧 | native事案と独立source検出を別表、優先度順、詳細リンク/戻りリンク。presentation tests | engine間の自動事案統合なし、同観測の一致は全件CSVのIDで追跡 |
+| 第8章 詳細 | 既存証拠/正規化/条件/成否/調査案内＋共通case統計・事実/推定/未知/条件付影響 | 原本request IDではなく生成ID。代表ログ上限8と全件CSVを区別 |
+| 第9章 総合評価 | 共通集計、集中の統計への参照、possible-successと優先事案への参照 | 共通主体・侵入・被害を断定しない |
+| 第10章 制約 | 冒頭部分解析、一般制約と今回のwarnings/実効上限、入力別status | 実運用での精度検証/任意難読化の完全検出は保証外 |
+| 第11章 推奨 | 既存攻撃別案内再利用。時刻/IP/host/URI、証拠、優先度、追加調査/予防策の別 | source独立検出の成否・優先度未評価は明示、任意システム構成を捏造しない |
+| §4 全件 | bounded spoolで全観測固定、遅延検出との照合、直接/関連別紙。requests/integration tests | spool/事案/キー/証跡上限は部分解析、全件性を保証しない |
+| §5 共通model | InvestigationReport、RequestSnapshot、BundleDetection、FindingObservation、CoverageRow、Recommendation | 公開JSONとHTML/CSVは同じ値。native singlefile schemaを維持 |
+| §6 成果物 | output.mdの全成果物、排他的新規ディレクトリ、manifest全hash。bundle_test | manifest自身は自己hash除外、失敗出力はINCOMPLETE |
+| §7 日英/UI | 11章、全anchor検査、printCSS、外部資源なし、表示量制限、ja/en sample | ブラウザーがfile URLを禁止したため画面目視は未実施。静的検査は成功 |
+| §8 安全性 | HTML/CSV/JSON注入防止、controls/Bidi可視化、secret masking、排他/temp/limits。presentation/integration tests | パターン外の秘密・個人情報の完全匿名化は非対応、共有前確認が必要 |
+| §9 正確性 | 元file/line別一意request、各engine重複、0/null/quality、共通分母、部分解析。output.md参照 | 観測≠検証済みネットワーク取引。観点/engineの単純加算禁止 |
+| §10–11 開発工程 | Phase0–6各専用worktree、RED/GREEN、PR/CI/merge/cleanup。下記PR表・作業記録 | Java移植はGo完了後に開始 |
+| §12 必須テスト | 次表参照。既存＋bundle一式テスト/静的解析/CI | 実ログに対する攻撃分類精度は未測定 |
+| §13–14 成果と測定 | output.md、performance.md、生値、ja/en sample、本表 | Java版は別repoで順次実装。Go単体完了を全体完了と呼ばない |
 
 
 ## Phase 1 実装記録
@@ -75,3 +74,34 @@ Phase 4セルフレビューではGeoその他bucketに個別の国名/組織名
 事案・独立検出にunion request数、direct/related別、検出数、観測期間/平均頻度、status/method、URI別件数と上限付きユニークURI数、サイズ統計、時系列を追加する。時刻不明は捏造せず、入力ごとに観測timezone offsetも開示する。sourceのエラー/auth profileでは既存検出器に合わせてwall-timeと必要fieldだけを前提にする。
 
 マスクは検出後の共通モデル/CSVスカラー/構造化JSONに適用する。代表証跡の参照はマスク前のfileID+lineから作成し、マスク後のパス衝突でも失わない。制御文字とBidi制御は可視化、HTMLは標準template escape、CSVは既存formula guardを再利用する。opt-outは明示flagのみ。ja/en章・静的文言・全anchor・CSV共通値・元ログ不変・全artifact機密値・制御文字の回帰テストを追加。
+
+
+## Phase 6 統合テストの対応
+
+| 必須観点 | 主な根拠 |
+|---|---|
+| 正常のみ/空/不審のみ/混在 | TestBundleNoHitEmptyAndFormulaSafeMetadata、FullRequestExport、StatisticsUseAllRequests |
+| 複数rule/engine・同文別観測 | TestFullRequestExportPreservesDistinctObservationsAndSeparatesRelated、CoverageAspectCounts |
+| 複数file/rotation/gzip/逆順 | TestBundleRotatedGzipOutOfOrderAndSharedCounts、BundleInventoryAndManifest、既存input tests |
+| parse不能/必要field欠損/不読 | BundleInventoryAndManifest、DedupEmptyUnreadableAndPrivateSettings、CoverageNoHitAndInsufficientStatisticalBaseline、SourceAuthProfile |
+| Geo有/無/DB不正 | BundleStatisticsGeoAndInvalidDuration、既存geoip/reporting/managed tests |
+| 上限/入力変更/遅延検出 | BundleChangedInputAndOutputLimit、LateStatisticalEvidenceAndSpoolLimit、StatisticsBoundCardinalityAndAdaptTimeline |
+| 成否不明/200/403/404 | 既存TestOutcomeとInvestigation、統合700件の200でもconfirmed_successを禁止 |
+| HTML/CSV/JSON/秘密/controls | BundleHostileEvidenceIsSafeAcrossArtifacts、MasksSecretsWithoutChangingOriginalEvidence、EscapesControlCharactersEvenWithSensitiveEvidence |
+| 共通集計/言語/navigation/manifest | InvestigationHTMLChaptersNavigationAndSharedRecommendations、RotatedGzipOutOfOrderAndSharedCounts、InventoryAndManifest |
+| 大規模資源使用 | report-benchmark、performance.md、performance-data.json |
+| offline/既存CLI/output/watch | 全既存テスト、tools/verify-offline.pyのja/en bundleと全hash追加、Linux seccomp、race/fuzz CI |
+
+Phase6では集計型を含む観点の直接/関連リクエストをspoolからunion計数し、署名一致と保持groupの検出数を別単位で合算する。観点の対象母数は既存streamでのrule適用可能性のunionとし、最後に見た集計ruleの値で上書きしない。新しい検出器は追加しない。
+
+## Go版のPR
+
+| Phase | PR | 状態 |
+|---|---|---|
+| 0 | [#30](https://github.com/mikoto2000/webaudit/pull/30) | マージ済・CI成功・worktree削除済 |
+| 1 | [#31](https://github.com/mikoto2000/webaudit/pull/31) | マージ済・CI成功・worktree削除済 |
+| 2 | [#32](https://github.com/mikoto2000/webaudit/pull/32) | マージ済・CI成功・worktree削除済 |
+| 3 | [#33](https://github.com/mikoto2000/webaudit/pull/33) | マージ済・CI成功・worktree削除済 |
+| 4 | [#34](https://github.com/mikoto2000/webaudit/pull/34) | マージ済・CI成功・worktree削除済 |
+| 5 | [#35](https://github.com/mikoto2000/webaudit/pull/35) | マージ済・PR CI成功・worktree削除済。main CIの既存PowerShell5秒タイムアウトは再確認中 |
+| 6 | 作成時に追記 | 統合テスト/測定/サンプル生成済、CI・マージ待ち |
