@@ -19,6 +19,7 @@ type auraPeer struct {
 	NotFoundFirst, NotFoundLast           time.Time
 }
 type auraUA struct {
+	Key     string
 	Samples []SourceEvidence
 	Value   string
 	Count   int64
@@ -97,7 +98,7 @@ func (a *auraAnalysis) Observe(e Event) {
 			if cut {
 				uniqueAppend(&a.warnings, "Aura User-Agent samples truncated; source references remain authoritative")
 			}
-			v = &auraUA{Value: value}
+			v = &auraUA{Value: value, Key: key}
 			a.uas[key] = v
 		}
 		if v != nil {
@@ -188,6 +189,7 @@ func (a *auraAnalysis) Finish() []SourceAlert {
 	for _, ua := range uas {
 		if ua.Count <= 5 && ua.Value != "" && ua.Value != "-" {
 			add("rare_user_agent", "", ua.Value, ua.Count, nil, nil, ua.Samples)
+			out[len(out)-1].bundleMatchKey = ua.Key
 		}
 	}
 	if len(a.hours) > 0 {

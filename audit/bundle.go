@@ -70,18 +70,22 @@ type LogInventory struct {
 }
 
 type InvestigationReport struct {
-	AnalysisRules []AnalysisRule `json:"analysis_rules"`
-	Coverage      []CoverageRow  `json:"coverage"`
-	Schema        string         `json:"schema"`
-	Metadata      BundleOptions  `json:"metadata"`
-	Started       time.Time      `json:"started_at"`
-	Finished      time.Time      `json:"finished_at"`
-	Status        string         `json:"status"`
-	Complete      bool           `json:"complete"`
-	CountQuality  string         `json:"count_quality"`
-	Settings      map[string]any `json:"settings"`
-	Inventory     []LogInventory `json:"inventory"`
-	Analysis      Report         `json:"analysis"`
+	EvidenceComplete    bool                 `json:"evidence_complete"`
+	Evidence            EvidenceSummary      `json:"evidence"`
+	Detections          []BundleDetection    `json:"detections"`
+	FindingObservations []FindingObservation `json:"finding_observations"`
+	AnalysisRules       []AnalysisRule       `json:"analysis_rules"`
+	Coverage            []CoverageRow        `json:"coverage"`
+	Schema              string               `json:"schema"`
+	Metadata            BundleOptions        `json:"metadata"`
+	Started             time.Time            `json:"started_at"`
+	Finished            time.Time            `json:"finished_at"`
+	Status              string               `json:"status"`
+	Complete            bool                 `json:"complete"`
+	CountQuality        string               `json:"count_quality"`
+	Settings            map[string]any       `json:"settings"`
+	Inventory           []LogInventory       `json:"inventory"`
+	Analysis            Report               `json:"analysis"`
 }
 type BundleArtifact struct {
 	Path   string `json:"path"`
@@ -258,6 +262,8 @@ type bundleDiagnostic struct {
 	Reason string
 }
 type bundleCapture struct {
+	spool                *requestSpool
+	pendingSources       []string
 	rules                []AnalysisRule
 	aspects              []aspectDefinition
 	observations         map[string]*ruleObservation
@@ -307,6 +313,7 @@ func (c *bundleCapture) event(e Event) {
 	if c == nil {
 		return
 	}
+	c.pendingSources = nil
 	in := c.inputs[e.File]
 	uniqueAppend(&in.LogTypes, e.LogType)
 	format := "automatic supported parser"
@@ -408,6 +415,12 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	}
 	writer := &bundleWriter{dir: target, limit: b.MaxOutputBytes}
 	c := &bundleCapture{o: o, inputs: map[string]*LogInventory{}, rules: analysisRules()}
+	spool, err := newRequestSpool(target, b.MaxSpoolBytes)
+	if err != nil {
+		return nil, err
+	}
+	c.spool = spool
+	defer spool.remove()
 	o.bundle = c
 	o.RetainUpstreamEvidence = true
 	started := o.Now().UTC()
@@ -445,6 +458,12 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 		r.Status = "failed"
 	}
 	buildCoverage(r, c)
+	if err = exportRequestEvidence(writer, r, c); err != nil {
+		return nil, err
+	}
+	if err = os.Remove(spool.path); err != nil {
+		return nil, err
+	}
 	if err = writeCoverage(writer, r); err != nil {
 		return nil, err
 	}

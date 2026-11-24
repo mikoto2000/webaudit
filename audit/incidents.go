@@ -73,12 +73,20 @@ func family(r Rule) string {
 		return "exploitation_attempt"
 	}
 }
-func (c *Correlator) get(e Event, group string) *Incident {
+func incidentKey(e Event, group string) string {
 	key := e.IP + "\x00" + val(e.Host) + "\x00" + val(e.UA) + "\x00" + group + "\x00" + strconv.FormatInt(e.Time.Unix()/300, 10)
 	if e.TimezoneUnknown {
 		key += "\x00wall:" + e.File
 	}
 	key = digest(key)
+	return key
+}
+func incidentID(e Event, group string) string {
+	hash := sha256.Sum256([]byte(incidentKey(e, group)))
+	return fmt.Sprintf("WA-%x", hash[:8])
+}
+func (c *Correlator) get(e Event, group string) *Incident {
+	key := incidentKey(e, group)
 	if f := c.items[key]; f != nil {
 		return f
 	}
@@ -308,6 +316,7 @@ func Analyze(paths []string, o Options) Report {
 		hits, n := Detect(e)
 		o.bundle.observeDetection(e, hits, n)
 		c.Add(e, hits, n)
+		o.bundle.writeRequest(e, hits, n, c)
 		if !e.TimezoneUnknown {
 			a.Observe(e, hits)
 		}
