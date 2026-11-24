@@ -104,7 +104,13 @@ func (c *Correlator) Add(e Event, hits []Rule, n Normalized) {
 	for _, h := range hits {
 		groups[family(h)] = append(groups[family(h)], h)
 	}
-	for group, rules := range groups {
+	groupKeys := make([]string, 0, len(groups))
+	for group := range groups {
+		groupKeys = append(groupKeys, group)
+	}
+	sort.Strings(groupKeys)
+	for _, group := range groupKeys {
+		rules := groups[group]
 		f := c.get(e, group)
 		if f == nil {
 			continue

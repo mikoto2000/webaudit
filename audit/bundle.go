@@ -21,15 +21,16 @@ import (
 
 // BundleOptions contains explicit investigator metadata; missing values stay empty.
 type BundleOptions struct {
-	Warnings       []string `json:"-"`
-	Title          string   `json:"title"`
-	System         string   `json:"system"`
-	Background     string   `json:"background"`
-	Purpose        string   `json:"purpose"`
-	Investigator   string   `json:"investigator"`
-	Language       string   `json:"language"`
-	MaxSpoolBytes  int64    `json:"max_spool_bytes"`
-	MaxOutputBytes int64    `json:"max_output_bytes"`
+	IncludeSensitiveEvidence bool     `json:"include_sensitive_evidence"`
+	Warnings                 []string `json:"-"`
+	Title                    string   `json:"title"`
+	System                   string   `json:"system"`
+	Background               string   `json:"background"`
+	Purpose                  string   `json:"purpose"`
+	Investigator             string   `json:"investigator"`
+	Language                 string   `json:"language"`
+	MaxSpoolBytes            int64    `json:"max_spool_bytes"`
+	MaxOutputBytes           int64    `json:"max_output_bytes"`
 }
 
 func (o BundleOptions) defaults() BundleOptions {
@@ -71,23 +72,29 @@ type LogInventory struct {
 }
 
 type InvestigationReport struct {
-	Statistics          RequestStatistics    `json:"statistics"`
-	EvidenceComplete    bool                 `json:"evidence_complete"`
-	Evidence            EvidenceSummary      `json:"evidence"`
-	Detections          []BundleDetection    `json:"detections"`
-	FindingObservations []FindingObservation `json:"finding_observations"`
-	AnalysisRules       []AnalysisRule       `json:"analysis_rules"`
-	Coverage            []CoverageRow        `json:"coverage"`
-	Schema              string               `json:"schema"`
-	Metadata            BundleOptions        `json:"metadata"`
-	Started             time.Time            `json:"started_at"`
-	Finished            time.Time            `json:"finished_at"`
-	Status              string               `json:"status"`
-	Complete            bool                 `json:"complete"`
-	CountQuality        string               `json:"count_quality"`
-	Settings            map[string]any       `json:"settings"`
-	Inventory           []LogInventory       `json:"inventory"`
-	Analysis            Report               `json:"analysis"`
+	Summary                  InvestigationSummary `json:"summary"`
+	Assessments              []CaseAssessment     `json:"assessments"`
+	Recommendations          []Recommendation     `json:"recommendations"`
+	RecommendationsTruncated bool                 `json:"recommendations_truncated"`
+	MaskingEnabled           bool                 `json:"masking_enabled"`
+	MaskingNotes             []string             `json:"masking_notes"`
+	Statistics               RequestStatistics    `json:"statistics"`
+	EvidenceComplete         bool                 `json:"evidence_complete"`
+	Evidence                 EvidenceSummary      `json:"evidence"`
+	Detections               []BundleDetection    `json:"detections"`
+	FindingObservations      []FindingObservation `json:"finding_observations"`
+	AnalysisRules            []AnalysisRule       `json:"analysis_rules"`
+	Coverage                 []CoverageRow        `json:"coverage"`
+	Schema                   string               `json:"schema"`
+	Metadata                 BundleOptions        `json:"metadata"`
+	Started                  time.Time            `json:"started_at"`
+	Finished                 time.Time            `json:"finished_at"`
+	Status                   string               `json:"status"`
+	Complete                 bool                 `json:"complete"`
+	CountQuality             string               `json:"count_quality"`
+	Settings                 map[string]any       `json:"settings"`
+	Inventory                []LogInventory       `json:"inventory"`
+	Analysis                 Report               `json:"analysis"`
 }
 type BundleArtifact struct {
 	Path   string `json:"path"`
@@ -180,6 +187,7 @@ func originalFingerprint(p string, limit int64) (*int64, *string, string, string
 }
 
 type bundleWriter struct {
+	maskSecrets bool
 	dir         string
 	limit, used int64
 	files       []string
@@ -226,6 +234,13 @@ func (b *bundleWriter) csv(name string, header []string, rows func(func(...strin
 		write := func(row ...string) error {
 			safe := make([]string, len(row))
 			for i, v := range row {
+				if b.maskSecrets {
+					headerName := ""
+					if i < len(header) {
+						headerName = header[i]
+					}
+					v = maskCSVValue(v, headerName)
+				}
 				safe[i] = csvSafe(v)
 			}
 			return c.Write(safe)
@@ -439,7 +454,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if err = marker.Close(); err != nil {
 		return nil, err
 	}
-	writer := &bundleWriter{dir: target, limit: b.MaxOutputBytes}
+	writer := &bundleWriter{dir: target, limit: b.MaxOutputBytes, maskSecrets: !b.IncludeSensitiveEvidence}
 	c := &bundleCapture{o: o, inputs: map[string]*LogInventory{}, rules: analysisRules()}
 	spool, err := newRequestSpool(target, b.MaxSpoolBytes)
 	if err != nil {
@@ -507,6 +522,13 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if err = writeCoverage(writer, r); err != nil {
 		return nil, err
 	}
+	prepareInvestigationReport(r, o.MaxFindings)
+	if err = maskCommonReport(r); err != nil {
+		return nil, err
+	}
+	if err = writeRecommendations(writer, r); err != nil {
+		return nil, err
+	}
 	if err = writer.csv("log-inventory.csv", []string{"file_id", "path", "size_bytes", "sha256", "hash_scope", "compression", "first", "last", "total_lines", "parsed", "unparsed", "excluded", "status", "truncated", "changed", "error"}, func(write func(...string) error) error {
 		for _, in := range r.Inventory {
 			size, hash := "", ""
@@ -545,7 +567,13 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 			if err != nil {
 				return err
 			}
-			_, err = fmt.Fprintln(w, TerminalSafe(warning))
+			_, err = fmt.Fprintln(w, func() string {
+				v := TerminalSafe(warning)
+				if !b.IncludeSensitiveEvidence {
+					v = maskReportString(v)
+				}
+				return v
+			}())
 		}
 		return err
 	}); err != nil {
@@ -554,7 +582,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if err = writer.json("report.json", r); err != nil {
 		return nil, err
 	}
-	if err = writer.write("report.html", func(w io.Writer) error { return WriteReportWithLanguage(w, r.Analysis, "html", b.Language) }); err != nil {
+	if err = writer.write("report.html", func(w io.Writer) error { return writeInvestigationHTML(w, r) }); err != nil {
 		return nil, err
 	}
 	artifacts, err := writer.artifacts()

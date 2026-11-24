@@ -26,6 +26,7 @@ func run(args []string, out, errout io.Writer) int {
 	fs.SetOutput(errout)
 	output := fs.String("o", "", "Write a new report file (default HTML; never overwrite)")
 	var bundle audit.BundleOptions
+	fs.BoolVar(&bundle.IncludeSensitiveEvidence, "include-sensitive-evidence", false, "Bundle only: include unmasked sensitive source values (review before sharing)")
 	reportDir := fs.String("report-dir", "", "Create a new investigation report directory (exclusive; batch only)")
 	fs.StringVar(&bundle.Title, "report-title", "", "Optional investigation report title")
 	fs.StringVar(&bundle.System, "system-name", "", "Optional target system name")

@@ -32,38 +32,55 @@ type RequestSnapshot struct {
 	GeoIP            *GeoIPInfo   `json:"geoip"`
 }
 type BundleDetection struct {
-	ID                  string     `json:"id"`
-	Engine              string     `json:"engine"`
-	RuleID              string     `json:"rule_id"`
-	Kind                string     `json:"kind"`
-	Category            string     `json:"category"`
-	Severity            string     `json:"severity"`
-	DetectionConfidence string     `json:"detection_confidence"`
-	Reason              string     `json:"reason"`
-	Condition           string     `json:"condition"`
-	First               *time.Time `json:"first"`
-	Last                *time.Time `json:"last"`
-	IP                  string     `json:"source_ip"`
-	Host                *string    `json:"host"`
-	FindingIDs          []string   `json:"finding_ids"`
-	RequestCount        int64      `json:"request_count"`
-	RelatedRequestCount int64      `json:"related_request_count"`
-	CountQuality        string     `json:"count_quality"`
+	EvidenceRefs        []EvidenceReference `json:"evidence_refs"`
+	SourceIndex         *int                `json:"source_index"`
+	StatusCounts        map[string]int64    `json:"status_counts"`
+	Methods             map[string]int64    `json:"methods"`
+	URIExamples         []string            `json:"uri_examples"`
+	MetadataTruncated   bool                `json:"metadata_truncated"`
+	ResponseBytes       NumericSummary      `json:"response_bytes"`
+	ObservedFirst       *time.Time          `json:"observed_first"`
+	ObservedLast        *time.Time          `json:"observed_last"`
+	ID                  string              `json:"id"`
+	Engine              string              `json:"engine"`
+	RuleID              string              `json:"rule_id"`
+	Kind                string              `json:"kind"`
+	Category            string              `json:"category"`
+	Severity            string              `json:"severity"`
+	DetectionConfidence string              `json:"detection_confidence"`
+	Reason              string              `json:"reason"`
+	Condition           string              `json:"condition"`
+	First               *time.Time          `json:"first"`
+	Last                *time.Time          `json:"last"`
+	IP                  string              `json:"source_ip"`
+	Host                *string             `json:"host"`
+	FindingIDs          []string            `json:"finding_ids"`
+	RequestCount        int64               `json:"request_count"`
+	RelatedRequestCount int64               `json:"related_request_count"`
+	CountQuality        string              `json:"count_quality"`
 	signal              *Signal
 	source              *SourceAlert
 }
 type FindingObservation struct {
-	ID              string           `json:"finding_id"`
-	DirectRequests  int64            `json:"direct_requests"`
-	RelatedRequests int64            `json:"related_requests"`
-	StatusCounts    map[string]int64 `json:"status_counts"`
-	Methods         map[string]int64 `json:"methods"`
-	URIs            []string         `json:"uri_samples"`
-	URIsTruncated   bool             `json:"uri_samples_truncated"`
-	BytesCount      int64            `json:"bytes_count"`
-	BytesSum        float64          `json:"bytes_sum"`
-	BytesMin        *int64           `json:"bytes_min"`
-	BytesMax        *int64           `json:"bytes_max"`
+	Requests                  int64         `json:"requests"`
+	Detections                int64         `json:"detections"`
+	First                     *time.Time    `json:"first"`
+	Last                      *time.Time    `json:"last"`
+	RequestRatePerSecond      *float64      `json:"request_rate_per_second"`
+	Timeline                  []TimelineRow `json:"timeline"`
+	TimelineResolutionSeconds int64         `json:"timeline_resolution_seconds"`
+	timeline                  *statisticsRecorder
+	ID                        string           `json:"finding_id"`
+	DirectRequests            int64            `json:"direct_requests"`
+	RelatedRequests           int64            `json:"related_requests"`
+	StatusCounts              map[string]int64 `json:"status_counts"`
+	Methods                   map[string]int64 `json:"methods"`
+	URIs                      []string         `json:"uri_samples"`
+	URIsTruncated             bool             `json:"uri_samples_truncated"`
+	BytesCount                int64            `json:"bytes_count"`
+	BytesSum                  float64          `json:"bytes_sum"`
+	BytesMin                  *int64           `json:"bytes_min"`
+	BytesMax                  *int64           `json:"bytes_max"`
 }
 type EvidenceSummary struct {
 	SuspiciousRequests  int64    `json:"suspicious_requests"`
@@ -228,7 +245,7 @@ func bundleDetections(r *InvestigationReport, c *bundleCapture) []BundleDetectio
 	}{{"hub", r.Analysis.UpstreamAlerts}, {"aura", r.Analysis.AuraMatches}, {"aura-analysis", r.Analysis.AuraAnalysis}} {
 		for i, a := range set.alerts {
 			copyAlert := a
-			d := BundleDetection{ID: sourceDetectionID(a, i), Engine: set.engine, RuleID: a.RuleID, Kind: "direct", Severity: "unknown", DetectionConfidence: "unknown", Reason: a.RuleID, First: a.First, Last: a.Last, IP: a.IP, source: &copyAlert, CountQuality: r.CountQuality}
+			d := BundleDetection{ID: sourceDetectionID(a, i), Engine: set.engine, SourceIndex: ptr(i), RuleID: a.RuleID, Kind: "direct", Severity: "unknown", DetectionConfidence: "unknown", Reason: a.RuleID, First: a.First, Last: a.Last, IP: a.IP, source: &copyAlert, CountQuality: r.CountQuality}
 			if set.engine == "aura-analysis" {
 				d.Kind = "related"
 			}
@@ -523,7 +540,14 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 	index := newEvidenceIndex(groups)
 	metrics := map[string]*FindingObservation{}
 	for _, f := range r.Analysis.Findings {
-		metrics[f.ID] = &FindingObservation{ID: f.ID, StatusCounts: map[string]int64{}, Methods: map[string]int64{}}
+		metrics[f.ID] = &FindingObservation{ID: f.ID, StatusCounts: map[string]int64{}, Methods: map[string]int64{}, timeline: newStatisticsRecorder(64, false)}
+	}
+	for _, d := range groups {
+		for _, id := range d.FindingIDs {
+			if m := metrics[id]; m != nil {
+				m.Detections++
+			}
+		}
 	}
 	coverageCounts := map[string]int64{}
 	coverageRelated := map[string]int64{}
@@ -566,7 +590,15 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 						coverageRelated[key]++
 						seenRelatedRules[key] = true
 					}
+					if d.signal != nil || d.source != nil {
+						observeDetectionMetadata(d, snapshot.Event)
+					}
 					for _, id := range d.FindingIDs {
+						if set.flag == 1 && d.Engine == "webaudit" && d.signal == nil {
+							if m := metrics[id]; m != nil {
+								m.Detections++
+							}
+						}
 						seenFindings[id] |= set.flag
 					}
 				}
@@ -576,8 +608,15 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 				if m == nil {
 					continue
 				}
+				m.Requests++
+				m.timeline.observeTimeline(snapshot.Event)
 				if flags&1 != 0 {
 					m.DirectRequests++
+					if !snapshot.Event.TimezoneUnknown {
+						if bin := m.timeline.bins[floorBin(snapshot.Event.Time.Unix(), m.timeline.resolution)]; bin != nil {
+							bin.SuspiciousRequests++
+						}
+					}
 				}
 				if flags&2 != 0 {
 					m.RelatedRequests++
@@ -671,7 +710,19 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 	r.Detections = groups
 	r.Evidence.AggregateDetections = int64(len(groups))
 	for _, f := range r.Analysis.Findings {
-		r.FindingObservations = append(r.FindingObservations, *metrics[f.ID])
+		m := metrics[f.ID]
+		m.timeline.finalizeTimeline()
+		m.First = m.timeline.first
+		m.Last = m.timeline.last
+		m.TimelineResolutionSeconds = m.timeline.resolution
+		for _, row := range m.timeline.bins {
+			m.Timeline = append(m.Timeline, *row)
+		}
+		sort.Slice(m.Timeline, func(i, j int) bool { return m.Timeline[i].Time.Before(m.Timeline[j].Time) })
+		if m.First != nil && m.Last != nil && m.Last.After(*m.First) {
+			m.RequestRatePerSecond = ptr(float64(m.Requests) / m.Last.Sub(*m.First).Seconds())
+		}
+		r.FindingObservations = append(r.FindingObservations, *m)
 	}
 	for i := range r.Coverage {
 		row := &r.Coverage[i]
@@ -691,7 +742,7 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 			}
 		}
 	}
-	return b.csv("findings.csv", []string{"finding_id", "source_ip", "host", "first", "last", "categories", "rule_ids", "direct_requests", "related_requests", "severity", "detection_confidence", "attack_score", "outcome", "outcome_confidence", "count_quality", "details_json"}, func(write func(...string) error) error {
+	return b.csv("findings.csv", []string{"finding_id", "source_ip", "host", "first", "last", "categories", "rule_ids", "direct_requests", "related_requests", "requests", "detections", "severity", "detection_confidence", "attack_score", "outcome", "outcome_confidence", "count_quality", "details_json"}, func(write func(...string) error) error {
 		for _, f := range r.Analysis.Findings {
 			m := metrics[f.ID]
 			ids := []string{}
@@ -710,7 +761,7 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 				first = f.First.Format(time.RFC3339Nano)
 				last = f.Last.Format(time.RFC3339Nano)
 			}
-			if err := write(f.ID, f.IP, val(f.Host), first, last, strings.Join(f.Categories, ";"), strings.Join(ids, ";"), strconv.FormatInt(m.DirectRequests, 10), strconv.FormatInt(m.RelatedRequests, 10), f.Severity, "unknown", strconv.Itoa(f.Score), f.Outcome.Verdict, strconv.FormatFloat(f.Outcome.Confidence, 'g', -1, 64), r.CountQuality, string(details)); err != nil {
+			if err := write(f.ID, f.IP, val(f.Host), first, last, strings.Join(f.Categories, ";"), strings.Join(ids, ";"), strconv.FormatInt(m.DirectRequests, 10), strconv.FormatInt(m.RelatedRequests, 10), strconv.FormatInt(m.Requests, 10), strconv.FormatInt(m.Detections, 10), f.Severity, "unknown", strconv.Itoa(f.Score), f.Outcome.Verdict, strconv.FormatFloat(f.Outcome.Confidence, 'g', -1, 64), r.CountQuality, string(details)); err != nil {
 				return err
 			}
 		}
@@ -725,4 +776,55 @@ func filterAssociationLimitation(in []string) []string {
 		}
 	}
 	return out
+}
+
+func observeDetectionMetadata(d *BundleDetection, e Event) {
+	if d.StatusCounts == nil {
+		d.StatusCounts = map[string]int64{}
+		d.Methods = map[string]int64{}
+		d.ResponseBytes.Unit = "bytes"
+		d.ResponseBytes.SumQuality = "unavailable"
+	}
+	status := "unknown"
+	if e.Status != nil {
+		status = strconv.Itoa(*e.Status)
+	}
+	d.StatusCounts[status]++
+	method := val(e.Method)
+	if method == "" {
+		method = "unknown"
+	}
+	method, cut := clipped(method, 128)
+	d.MetadataTruncated = d.MetadataTruncated || cut
+	if len(d.Methods) >= 64 && d.Methods[method] == 0 {
+		method = "(other)"
+		d.MetadataTruncated = true
+	}
+	d.Methods[method]++
+	uri, cut := clipped(e.Target, 1024)
+	d.MetadataTruncated = d.MetadataTruncated || cut
+	known := false
+	for _, value := range d.URIExamples {
+		known = known || value == uri
+	}
+	if !known {
+		if len(d.URIExamples) < 8 {
+			d.URIExamples = append(d.URIExamples, uri)
+		} else {
+			d.MetadataTruncated = true
+		}
+	}
+	if e.Bytes == nil {
+		d.ResponseBytes.add(nil)
+	} else {
+		d.ResponseBytes.add(ptr(float64(*e.Bytes)))
+	}
+	if !e.TimezoneUnknown {
+		if d.ObservedFirst == nil || e.Time.Before(*d.ObservedFirst) {
+			d.ObservedFirst = ptr(e.Time)
+		}
+		if d.ObservedLast == nil || e.Time.After(*d.ObservedLast) {
+			d.ObservedLast = ptr(e.Time)
+		}
+	}
 }
