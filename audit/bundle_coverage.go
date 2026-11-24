@@ -106,7 +106,13 @@ func analysisRules() []AnalysisRule {
 		out = append(out, AnalysisRule{ID: r.id, Engine: "webaudit", Kind: "aggregate", Category: r.id, Description: r.desc, Required: strings.Split(r.required, ","), Condition: condition, Supported: true, Enabled: true})
 	}
 	for _, r := range sourceRules {
-		required := []string{"ip", "time", "target"}
+		required := []string{"ip", "recorded_time"}
+		for _, token := range []string{"http_path", "Parsed.request", "http_args", "file_name"} {
+			if strings.Contains(r.Filter+" "+r.Group+" "+r.Distinct, token) {
+				required = append(required, "target")
+				break
+			}
+		}
 		for field, token := range map[string]string{"status": "http_status", "method": "http_verb", "user_agent": "http_user_agent", "protocol": "http_version", "referer": "http_referer", "host": "target_fqdn"} {
 			if strings.Contains(r.Filter+" "+r.Group+" "+r.Distinct, token) {
 				required = append(required, field)
@@ -139,6 +145,8 @@ func requestEligible(e Event, fields []string) bool {
 		switch field {
 		case "ip":
 			ok = e.IP != ""
+		case "recorded_time":
+			ok = !e.TimezoneUnknown || e.WallTime != nil
 		case "time":
 			ok = !e.TimezoneUnknown
 		case "target":
@@ -282,6 +290,10 @@ func coverageStatus(row *CoverageRow, supported bool, partial bool, ready bool) 
 	if !ready || row.EligibleRequests == nil || *row.EligibleRequests == 0 {
 		row.Status = "unable"
 		row.Evaluation = "unable"
+		if row.HasDetections {
+			row.Status = "partial"
+			row.Evaluation = "partial"
+		}
 		row.Complete = false
 		row.CountQuality = "unavailable"
 		return

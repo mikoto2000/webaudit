@@ -710,5 +710,7 @@
   "enumeration_404": "404応答の探索傾向",
   "exfil_bytes": "応答バイト量の異常",
   "rare_user_agent": "少数のUser-Agent",
-  "traffic_spike": "時間別通信量の急増"
+  "traffic_spike": "時間別通信量の急増",
+  "Recorded timezone offsets": "記録されたタイムゾーンの時差",
+  "recorded_time": "記録時刻（時差未確認を含む）"
 }

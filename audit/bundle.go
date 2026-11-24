@@ -47,28 +47,30 @@ func (o BundleOptions) defaults() BundleOptions {
 }
 
 type LogInventory struct {
-	CountQuality    string     `json:"count_quality"`
-	ID              string     `json:"id"`
-	Path            string     `json:"path"`
-	Size            *int64     `json:"size_bytes"`
-	SHA256          *string    `json:"sha256"`
-	HashScope       string     `json:"hash_scope"`
-	HashStatus      string     `json:"hash_status"`
-	Compression     string     `json:"compression"`
-	First           *time.Time `json:"first"`
-	Last            *time.Time `json:"last"`
-	TotalLines      int64      `json:"total_lines"`
-	Parsed          int64      `json:"parsed"`
-	Unparsed        int64      `json:"unparsed"`
-	Excluded        int64      `json:"excluded"`
-	Status          string     `json:"status"`
-	Truncated       bool       `json:"truncated"`
-	Changed         bool       `json:"changed_during_analysis"`
-	DuplicateOf     string     `json:"duplicate_of,omitempty"`
-	Formats         []string   `json:"formats"`
-	LogTypes        []string   `json:"log_types"`
-	AvailableFields []string   `json:"available_fields"`
-	Error           string     `json:"error,omitempty"`
+	Timezones          []string   `json:"timezones"`
+	TimezonesTruncated bool       `json:"timezones_truncated"`
+	CountQuality       string     `json:"count_quality"`
+	ID                 string     `json:"id"`
+	Path               string     `json:"path"`
+	Size               *int64     `json:"size_bytes"`
+	SHA256             *string    `json:"sha256"`
+	HashScope          string     `json:"hash_scope"`
+	HashStatus         string     `json:"hash_status"`
+	Compression        string     `json:"compression"`
+	First              *time.Time `json:"first"`
+	Last               *time.Time `json:"last"`
+	TotalLines         int64      `json:"total_lines"`
+	Parsed             int64      `json:"parsed"`
+	Unparsed           int64      `json:"unparsed"`
+	Excluded           int64      `json:"excluded"`
+	Status             string     `json:"status"`
+	Truncated          bool       `json:"truncated"`
+	Changed            bool       `json:"changed_during_analysis"`
+	DuplicateOf        string     `json:"duplicate_of,omitempty"`
+	Formats            []string   `json:"formats"`
+	LogTypes           []string   `json:"log_types"`
+	AvailableFields    []string   `json:"available_fields"`
+	Error              string     `json:"error,omitempty"`
 }
 
 type InvestigationReport struct {
@@ -346,6 +348,29 @@ func (c *bundleCapture) event(e Event) {
 		format = e.format
 	}
 	uniqueAppend(&in.Formats, format)
+	zone := "unknown"
+	if !e.TimezoneUnknown {
+		_, offset := e.Time.Zone()
+		sign := "+"
+		if offset < 0 {
+			sign = "-"
+			offset = -offset
+		}
+		zone = fmt.Sprintf("UTC%s%02d:%02d", sign, offset/3600, offset%3600/60)
+	}
+	knownZone := false
+	for _, value := range in.Timezones {
+		knownZone = knownZone || value == zone
+	}
+	if !knownZone {
+		if len(in.Timezones) < 64 {
+			in.Timezones = append(in.Timezones, zone)
+		} else {
+			in.TimezonesTruncated = true
+			in.Status = "partial"
+		}
+	}
+
 	if !e.TimezoneUnknown {
 		if in.First == nil || e.Time.Before(*in.First) {
 			in.First = ptr(e.Time)
@@ -389,6 +414,7 @@ func (c *bundleCapture) finish(p string, err error) {
 	if in.Unparsed > 0 {
 		in.Status = "partial"
 	}
+	sort.Strings(in.Timezones)
 	sort.Strings(in.AvailableFields)
 	sort.Strings(in.LogTypes)
 	sort.Strings(in.Formats)
@@ -527,7 +553,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if err = writeRecommendations(writer, r); err != nil {
 		return nil, err
 	}
-	if err = writer.csv("log-inventory.csv", []string{"file_id", "path", "size_bytes", "sha256", "hash_scope", "compression", "first", "last", "total_lines", "parsed", "unparsed", "excluded", "status", "truncated", "changed", "error"}, func(write func(...string) error) error {
+	if err = writer.csv("log-inventory.csv", []string{"file_id", "path", "size_bytes", "sha256", "hash_scope", "compression", "first", "last", "total_lines", "parsed", "unparsed", "excluded", "status", "truncated", "changed", "error", "formats", "log_types", "timezones", "timezones_truncated", "available_fields"}, func(write func(...string) error) error {
 		for _, in := range r.Inventory {
 			size, hash := "", ""
 			if in.Size != nil {
@@ -536,7 +562,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 			if in.SHA256 != nil {
 				hash = *in.SHA256
 			}
-			if err := write(in.ID, in.Path, size, hash, in.HashScope, in.Compression, bundleTime(in.First), bundleTime(in.Last), strconv.FormatInt(in.TotalLines, 10), strconv.FormatInt(in.Parsed, 10), strconv.FormatInt(in.Unparsed, 10), strconv.FormatInt(in.Excluded, 10), in.Status, strconv.FormatBool(in.Truncated), strconv.FormatBool(in.Changed), in.Error); err != nil {
+			if err := write(in.ID, in.Path, size, hash, in.HashScope, in.Compression, bundleTime(in.First), bundleTime(in.Last), strconv.FormatInt(in.TotalLines, 10), strconv.FormatInt(in.Parsed, 10), strconv.FormatInt(in.Unparsed, 10), strconv.FormatInt(in.Excluded, 10), in.Status, strconv.FormatBool(in.Truncated), strconv.FormatBool(in.Changed), in.Error, strings.Join(in.Formats, ";"), strings.Join(in.LogTypes, ";"), strings.Join(in.Timezones, ";"), strconv.FormatBool(in.TimezonesTruncated), strings.Join(in.AvailableFields, ";")); err != nil {
 				return err
 			}
 		}
