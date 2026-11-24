@@ -499,7 +499,9 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 	}
 	if !r.EvidenceComplete {
 		r.Complete = false
-		r.Status = "partial"
+		if r.Status != "failed" {
+			r.Status = "partial"
+		}
 		r.CountQuality = "lower_bound"
 		r.Analysis.Partial = true
 		for _, reason := range r.Evidence.Reasons {
