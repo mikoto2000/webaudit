@@ -84,6 +84,13 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 		r.Partial = true
 	}
 	seenFiles := map[[32]byte]Input{}
+	progress := InputProgress{TotalFiles: len(sorted)}
+	notify := func() {
+		if o.Progress != nil {
+			o.Progress(progress)
+		}
+	}
+	notify()
 	for _, p := range sorted {
 		in := Input{Path: p}
 		o.bundle.begin(p)
@@ -108,12 +115,16 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 						r.Unparsed += in.Unparsed
 						r.Duplicates += in.Parsed
 						r.Files = append(r.Files, in)
+						progress.CompletedFiles++
+						notify()
 						continue
 					}
 				}
 			}
 		}
 		err := readLog(p, o, func(line string, n int64, tooLong bool) {
+			progress.Lines++
+			notify()
 			if tooLong {
 				o.bundle.line(p, n, "parse_error", "oversized_line")
 				in.Unparsed++
@@ -166,6 +177,8 @@ func Stream(paths []string, options Options, consume func(Event)) Report {
 		if o.DeduplicateFiles && hashedComplete && in.Error == "" {
 			seenFiles[signature] = in
 		}
+		progress.CompletedFiles++
+		notify()
 	}
 	if r.Duplicates > 0 {
 		r.warn("Identical complete input files excluded by explicit --dedup-files; repeated requests within a file are preserved")

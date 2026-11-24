@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
+	"webaudit/audit"
 )
 
 func TestVerboseInputProgress(t *testing.T) {
@@ -14,16 +16,53 @@ func TestVerboseInputProgress(t *testing.T) {
 		for _, verbose := range []bool{false, true} {
 			d := t.TempDir()
 			p := filepath.Join(d, "access.log")
-			if err := os.WriteFile(p, []byte(logLine+"\n"), 0600); err != nil { t.Fatal(err) }
+			if err := os.WriteFile(p, []byte(logLine+"\n"), 0600); err != nil {
+				t.Fatal(err)
+			}
 			args := []string{p}
-			if bundle { args = append(args, "--report-dir", filepath.Join(d, "bundle")) } else { args = append(args, "--format", "json") }
-			if verbose { args = append(args, "--verbose") }
+			if bundle {
+				args = append(args, "--report-dir", filepath.Join(d, "bundle"))
+			} else {
+				args = append(args, "--format", "json")
+			}
+			if verbose {
+				args = append(args, "--verbose")
+			}
 			var out, stderr bytes.Buffer
-			if code := run(args, &out, &stderr); code != 0 { t.Fatal(code, stderr.String()) }
-			if strings.Contains(stderr.String(), "Input files [") != verbose { t.Fatal("verbose progress", stderr.String()) }
-			if verbose && (!strings.Contains(stderr.String(), "0/1 files, 0 lines") || !strings.Contains(stderr.String(), "1/1 files, 1 lines\n")) { t.Fatal(stderr.String()) }
-			if !bundle && !json.Valid(out.Bytes()) { t.Fatal("invalid JSON stdout", out.String()) }
+			if code := run(args, &out, &stderr); code != 0 {
+				t.Fatal(code, stderr.String())
+			}
+			if strings.Contains(stderr.String(), "Input files [") != verbose {
+				t.Fatal("verbose progress", stderr.String())
+			}
+			if verbose && (!strings.Contains(stderr.String(), "0/1 files, 0 lines") || !strings.Contains(stderr.String(), "1/1 files, 1 lines\n")) {
+				t.Fatal(stderr.String())
+			}
+			if !bundle && !json.Valid(out.Bytes()) {
+				t.Fatal("invalid JSON stdout", out.String())
+			}
 		}
+	}
+}
+
+func TestInputProgressUpdatesDuringSingleFileAndThrottles(t *testing.T) {
+	var out bytes.Buffer
+	now := time.Unix(1, 0)
+	update := inputProgress(&out, func() time.Time { return now })
+	update(audit.InputProgress{TotalFiles: 1})
+	initial := out.Len()
+	update(audit.InputProgress{TotalFiles: 1, Lines: 1})
+	if out.Len() != initial {
+		t.Fatal("unthrottled update")
+	}
+	now = now.Add(100 * time.Millisecond)
+	update(audit.InputProgress{TotalFiles: 1, Lines: 2})
+	if !strings.Contains(out.String(), "0/1 files, 2 lines") {
+		t.Fatal("no live line update")
+	}
+	update(audit.InputProgress{TotalFiles: 1, CompletedFiles: 1, Lines: 2})
+	if !strings.HasSuffix(out.String(), "1/1 files, 2 lines\n") {
+		t.Fatal("completion throttled")
 	}
 }
 
@@ -33,8 +72,12 @@ func TestVerboseProgressPartialAndEmpty(t *testing.T) {
 		os.WriteFile(p, []byte(content), 0600)
 		var out, stderr bytes.Buffer
 		code := run([]string{p, "--verbose"}, &out, &stderr)
-		if (content == "" && code != 0) || (content != "" && code != 1) || !strings.Contains(stderr.String(), "1/1 files,") { t.Fatal(code, stderr.String()) }
+		if (content == "" && code != 0) || (content != "" && code != 1) || !strings.Contains(stderr.String(), "1/1 files,") {
+			t.Fatal(code, stderr.String())
+		}
 	}
 	var out, stderr bytes.Buffer
-	if run([]string{t.TempDir(), "--verbose"}, &out, &stderr) != 1 || !strings.Contains(stderr.String(), "0/0 files, 0 lines\n") { t.Fatal(stderr.String()) }
+	if run([]string{t.TempDir(), "--verbose"}, &out, &stderr) != 1 || !strings.Contains(stderr.String(), "0/0 files, 0 lines\n") {
+		t.Fatal(stderr.String())
+	}
 }

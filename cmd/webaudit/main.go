@@ -37,7 +37,7 @@ func run(args []string, out, errout io.Writer) int {
 	fs.Int64Var(&bundle.MaxOutputBytes, "max-report-bytes", 1<<30, "Maximum total report artifact bytes")
 	format := fs.String("format", "", "html, json or csv (default console summary)")
 	language := fs.String("lang", "ja", "Report language: ja or en (default ja; legacy JSON/CSV unchanged)")
-	verbose := fs.Bool("verbose", false, "Show file-level diagnostics on stderr")
+	verbose := fs.Bool("verbose", false, "Show input progress and file-level diagnostics on stderr")
 	version := fs.Bool("version", false, "Show version")
 	help := fs.Bool("help", false, "Show help")
 	var o audit.Options
@@ -141,6 +141,9 @@ func run(args []string, out, errout io.Writer) int {
 	}
 	defer geo.Close()
 	o.GeoIP = geo
+	if *verbose {
+		o.Progress = newInputProgress(errout)
+	}
 	if *reportDir != "" {
 		bundle.Language = *language
 		bundle.Warnings = geoWarnings
