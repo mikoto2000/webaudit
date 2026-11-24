@@ -162,3 +162,14 @@ func TestHubMembershipDistinguishesSuppressedAndDistinctCandidates(t *testing.T)
 		t.Fatal(r.Analysis.UpstreamAlerts)
 	}
 }
+
+func TestBundleFailedAnalysisStaysFailed(t *testing.T) {
+	dir := t.TempDir()
+	r, err := GenerateBundle([]string{filepath.Join(dir, "missing.log")}, filepath.Join(dir, "report"), Options{}, BundleOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if r.Status != "failed" || r.Complete || r.EvidenceComplete {
+		t.Fatalf("failed analysis mislabeled: %s", r.Status)
+	}
+}
