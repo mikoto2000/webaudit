@@ -8,6 +8,7 @@ import (
 )
 
 type AnalysisRule struct {
+	Severity    string   `json:"severity"`
 	ID          string   `json:"id"`
 	Engine      string   `json:"engine"`
 	Kind        string   `json:"kind"`
@@ -80,7 +81,7 @@ func analysisRules() []AnalysisRule {
 	var out []AnalysisRule
 	for _, r := range Rules() {
 		required := append([]string(nil), r.Required...)
-		out = append(out, AnalysisRule{ID: r.ID, Engine: "webaudit", Kind: "signature", Category: r.Category, Description: r.Description, Required: required, Condition: r.Field + ": " + r.Pattern, Supported: true, Enabled: true})
+		out = append(out, AnalysisRule{ID: r.ID, Severity: r.Severity, Engine: "webaudit", Kind: "signature", Category: r.Category, Description: r.Description, Required: required, Condition: r.Field + ": " + r.Pattern, Supported: true, Enabled: true})
 	}
 	behavior := []struct{ id, desc, required, condition string }{
 		{"WB-404", "Concentrated HTTP 404 responses", "ip,time,status", "at least 20 HTTP 404 observations"},
@@ -103,10 +104,16 @@ func analysisRules() []AnalysisRule {
 		if strings.HasPrefix(r.id, "WB-") {
 			condition += "; two overlapping five-minute partitions offset by 150s; diversity capped at 64"
 		}
-		out = append(out, AnalysisRule{ID: r.id, Engine: "webaudit", Kind: "aggregate", Category: r.id, Description: r.desc, Required: strings.Split(r.required, ","), Condition: condition, Supported: true, Enabled: true})
+		out = append(out, AnalysisRule{ID: r.id, Severity: "medium", Engine: "webaudit", Kind: "aggregate", Category: r.id, Description: r.desc, Required: strings.Split(r.required, ","), Condition: condition, Supported: true, Enabled: true})
 	}
 	for _, r := range sourceRules {
-		required := []string{"ip", "time", "target"}
+		required := []string{"ip", "recorded_time"}
+		for _, token := range []string{"http_path", "Parsed.request", "http_args", "file_name"} {
+			if strings.Contains(r.Filter+" "+r.Group+" "+r.Distinct, token) {
+				required = append(required, "target")
+				break
+			}
+		}
 		for field, token := range map[string]string{"status": "http_status", "method": "http_verb", "user_agent": "http_user_agent", "protocol": "http_version", "referer": "http_referer", "host": "target_fqdn"} {
 			if strings.Contains(r.Filter+" "+r.Group+" "+r.Distinct, token) {
 				required = append(required, field)
@@ -117,7 +124,7 @@ func analysisRules() []AnalysisRule {
 		out = append(out, AnalysisRule{ID: r.ID, Engine: "hub", Kind: r.Type, Description: r.Description, Required: required, Condition: condition, Supported: r.Supported, Enabled: r.Supported})
 	}
 	for _, r := range auraSource.Signatures {
-		out = append(out, AnalysisRule{ID: r.ID, Engine: "aura", Kind: "signature", Category: r.ID, Description: r.Description, Required: []string{"target"}, Condition: r.Pattern, Supported: true, Enabled: true})
+		out = append(out, AnalysisRule{ID: r.ID, Severity: r.Severity, Engine: "aura", Kind: "signature", Category: r.ID, Description: r.Description, Required: []string{"target"}, Condition: r.Pattern, Supported: true, Enabled: true})
 	}
 	out = append(out, AnalysisRule{ID: "scanner_ua", Engine: "aura", Kind: "signature", Description: "Source scanner User-Agent match", Required: []string{"user_agent"}, Condition: strings.Join(auraSource.ScannerUAs, " | "), Supported: true, Enabled: true}, AnalysisRule{ID: "dangerous_method", Engine: "aura", Kind: "signature", Description: "Source dangerous HTTP method", Required: []string{"method"}, Condition: strings.Join(auraSource.Methods, " | "), Supported: true, Enabled: true})
 	for _, r := range []struct{ id, fields, condition string }{{"brute_force", "ip,time,status", "at least 20 HTTP 401/403 requests in one fixed five-minute interval; case-wide auth count"}, {"enumeration_404", "ip,time,status", "at least 50 HTTP 404 observations per peer, case-wide"}, {"exfil_bytes", "ip,time,bytes", "at least 5 peers; bytes above mean+3SD and above 10MiB; not proof of exfiltration"}, {"rare_user_agent", "time,user_agent", "case-wide UA count at most 5; bottom 25 UAs; excludes empty and '-'"}, {"traffic_spike", "time", "at least 6-hour observed span; hourly z-score greater than 3; includes bounded zero-hour baseline"}} {
@@ -139,6 +146,8 @@ func requestEligible(e Event, fields []string) bool {
 		switch field {
 		case "ip":
 			ok = e.IP != ""
+		case "recorded_time":
+			ok = !e.TimezoneUnknown || e.WallTime != nil
 		case "time":
 			ok = !e.TimezoneUnknown
 		case "target":
@@ -282,6 +291,10 @@ func coverageStatus(row *CoverageRow, supported bool, partial bool, ready bool) 
 	if !ready || row.EligibleRequests == nil || *row.EligibleRequests == 0 {
 		row.Status = "unable"
 		row.Evaluation = "unable"
+		if row.HasDetections {
+			row.Status = "partial"
+			row.Evaluation = "partial"
+		}
 		row.Complete = false
 		row.CountQuality = "unavailable"
 		return

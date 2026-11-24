@@ -1,0 +1,153 @@
+package audit
+
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
+	"testing"
+	"unicode"
+)
+
+func TestInvestigationHTMLChaptersNavigationAndSharedRecommendations(t *testing.T) {
+	for _, lang := range []string{"ja", "en"} {
+		t.Run(lang, func(t *testing.T) {
+			dir := t.TempDir()
+			target := filepath.Join(dir, "report")
+			r, err := GenerateBundle([]string{"../examples/sample.log"}, target, Options{}, BundleOptions{Language: lang, Title: "<script>title</script>"})
+			if err != nil {
+				t.Fatal(err)
+			}
+			data, err := os.ReadFile(filepath.Join(target, "report.html"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			html := string(data)
+			for i := 1; i <= 11; i++ {
+				if !strings.Contains(html, fmt.Sprintf(`id="chapter-%d"`, i)) || !strings.Contains(html, fmt.Sprintf(`href="#chapter-%d"`, i)) {
+					t.Fatal("chapter missing", i)
+				}
+			}
+			if strings.Contains(html, "<script>") || !strings.Contains(html, "&lt;script&gt;title&lt;/script&gt;") || !strings.Contains(html, "<meter") || !strings.Contains(html, "@media print") {
+				t.Fatal("unsafe or missing visual/print output")
+			}
+			if lang == "ja" && !strings.Contains(html, "第11章 推奨対応") {
+				t.Fatal("missing Japanese title")
+			}
+			if lang == "en" && !strings.Contains(html, "11. Recommended actions") {
+				t.Fatal("missing English title")
+			}
+			if len(r.Recommendations) == 0 || r.Summary.TotalRequests != r.Statistics.TotalRequests {
+				t.Fatal("missing common summary/recommendations")
+			}
+			ids := map[string]bool{}
+			for _, m := range regexp.MustCompile(`id="([^"]+)"`).FindAllStringSubmatch(html, -1) {
+				if ids[m[1]] {
+					t.Fatal("duplicate anchor", m[1])
+				}
+				ids[m[1]] = true
+			}
+			for _, m := range regexp.MustCompile(`href="#([^"]+)"`).FindAllStringSubmatch(html, -1) {
+				if !ids[m[1]] {
+					t.Fatal("broken navigation", m[1])
+				}
+			}
+			rows := bundleCSV(t, filepath.Join(target, "recommendations.csv"))
+			if len(rows) != len(r.Recommendations) {
+				t.Fatal("recommendation model differs from CSV")
+			}
+		})
+	}
+}
+func TestBundleMasksSecretsWithoutChangingOriginalEvidence(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "access.log")
+	raw := `192.0.2.1 - - [01/Nov/2026:00:00:00 +0000] "GET /.env?token=TOPSECRET HTTP/1.1" 404 0 "-" "Browser"`
+	if err := os.WriteFile(input, []byte(raw+"\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	target := filepath.Join(dir, "masked")
+	r, err := GenerateBundle([]string{input}, target, Options{}, BundleOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !r.MaskingEnabled {
+		t.Fatal("masking not disclosed")
+	}
+	err = filepath.WalkDir(target, func(path string, entry os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		if strings.Contains(string(data), "TOPSECRET") {
+			t.Fatal("secret exposed", path)
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	original, _ := os.ReadFile(input)
+	if !strings.Contains(string(original), "TOPSECRET") {
+		t.Fatal("original source modified")
+	}
+	clear := filepath.Join(dir, "sensitive")
+	_, err = GenerateBundle([]string{input}, clear, Options{}, BundleOptions{IncludeSensitiveEvidence: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	data, _ := os.ReadFile(filepath.Join(clear, "suspicious-requests.csv"))
+	if !strings.Contains(string(data), "TOPSECRET") {
+		t.Fatal("explicit sensitive export not respected")
+	}
+}
+
+func TestBundleEscapesControlCharactersEvenWithSensitiveEvidence(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "access.log")
+	raw := `{"remote_addr":"192.0.2.1","time_iso8601":"2026-11-01T00:00:00Z","request":"GET /.env HTTP/1.1","status":404,"body_bytes_sent":0,"http_user_agent":"Browser\u001b[31m\u202e"}`
+	if err := os.WriteFile(input, []byte(raw+"\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	target := filepath.Join(dir, "report")
+	_, err := GenerateBundle([]string{input}, target, Options{}, BundleOptions{IncludeSensitiveEvidence: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	data, err := os.ReadFile(filepath.Join(target, "report.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.ContainsAny(string(data), "\u001b\u202e") {
+		t.Fatal("active control character in rendered report")
+	}
+	if !strings.Contains(string(data), `\u001B`) {
+		t.Fatal("control character representation missing")
+	}
+}
+
+func TestInvestigationHTMLCatalogCoverage(t *testing.T) {
+	visible := regexp.MustCompile(`(?s)<style>.*?</style>|<pre(?: [^>]*)?>.*?</pre>|{{.*?}}|<[^>]*>`).ReplaceAllString(investigationHTML, "")
+	if strings.IndexFunc(visible, unicode.IsLetter) >= 0 {
+		t.Fatal("unlocalized static template text", visible)
+	}
+	for _, match := range regexp.MustCompile(`{{t ("(?:[^"\\]|\\.)*")}}`).FindAllStringSubmatch(investigationHTML, -1) {
+		var key string
+		if err := json.Unmarshal([]byte(match[1]), &key); err != nil || reportJapanese[key] == "" {
+			t.Fatal("missing Japanese template key", match[1])
+		}
+	}
+	for _, aspect := range bundleAspects() {
+		if reportJapanese[aspect.Name] == "" {
+			t.Fatal("missing perspective name", aspect.Name)
+		}
+	}
+}

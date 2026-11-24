@@ -91,3 +91,22 @@ func TestCoverageAspectCountsSeparateRequestsAndDetections(t *testing.T) {
 	}
 	t.Fatal("RCE perspective missing")
 }
+
+func TestCoverageSourceAuthProfileAcceptsRecordedWallTimeWithoutURI(t *testing.T) {
+	e := sourceEvent(0)
+	e.LogType = "http_error-log"
+	e.Target = ""
+	e.Path = ""
+	e.AuthFailure = true
+	e.TimezoneUnknown = true
+	e.WallTime = ptr("2026-01-01T00:00:00")
+	for _, rule := range analysisRules() {
+		if rule.Engine == "hub" && rule.ID == "crowdsecurity/http-generic-bf" {
+			if !requestEligible(e, rule.Required) {
+				t.Fatal("source engine can evaluate recorded wall-time auth indicator without URI", rule.Required)
+			}
+			return
+		}
+	}
+	t.Fatal("source auth rule missing")
+}

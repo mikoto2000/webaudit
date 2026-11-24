@@ -181,7 +181,10 @@ func (a *auraAnalysis) Finish() []SourceAlert {
 		if uas[i].Count != uas[j].Count {
 			return uas[i].Count < uas[j].Count
 		}
-		return uas[i].Value < uas[j].Value
+		if uas[i].Value != uas[j].Value {
+			return uas[i].Value < uas[j].Value
+		}
+		return uas[i].Key < uas[j].Key
 	})
 	if len(uas) > 25 {
 		uas = uas[:25]

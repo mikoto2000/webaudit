@@ -281,6 +281,9 @@ func (s *statisticsRecorder) observe(r RequestSnapshot) {
 	if r.InvalidDuration {
 		s.duration.Invalid++
 	}
+	s.observeTimeline(e)
+}
+func (s *statisticsRecorder) observeTimeline(e Event) {
 	if e.TimezoneUnknown {
 		s.unknownTime++
 		return
@@ -312,7 +315,9 @@ func (s *statisticsRecorder) observe(r RequestSnapshot) {
 	if e.Status != nil && *e.Status >= 500 && *e.Status < 600 {
 		row.Errors5xx++
 	}
+
 }
+
 func (s *statisticsRecorder) finalizeTimeline() {
 	if s.first == nil || s.last == nil {
 		return

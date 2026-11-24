@@ -66,3 +66,12 @@ Phase 1セルフレビューで、入力hash/診断の完全性低下を暫定HT
 テストは全アクセス/不審の分母、ゼロ/欠損、spool切詰時の全体件数、cardinality上限、期間に応じた時間粒度、Geo、NaNと数値overflow、parser familyを検証する。11章表示とグラフは次Phase 5で実装する。
 
 Phase 4セルフレビューではGeoその他bucketに個別の国名/組織名を流用しないこと、欠損数値のsum quality、極端な年月での時系列ラベル、明示入力数の上限、custom regexの秘密を含むコンパイルエラーをbundleへ保存しないことも確認した。
+
+
+## Phase 5 実装記録
+
+`bundle_presentation.go`の共通summary/assessment/recommendationから11章HTML・JSON・CSVを生成する。既存の成否判定・攻撃別調査案内を再利用し、事実・推定・未確認・条件付き影響・追加調査と予防策を分離する。HTMLの集計はモデルの値のみを表示する。独立エンジンは別集計で、一覧/詳細/ルール/カバレッジのリンクと戻りリンクを備える。外部資源なしのラベル付きmeterグラフと印刷CSSを使用する。
+
+事案・独立検出にunion request数、direct/related別、検出数、観測期間/平均頻度、status/method、URI別件数と上限付きユニークURI数、サイズ統計、時系列を追加する。時刻不明は捏造せず、入力ごとに観測timezone offsetも開示する。sourceのエラー/auth profileでは既存検出器に合わせてwall-timeと必要fieldだけを前提にする。
+
+マスクは検出後の共通モデル/CSVスカラー/構造化JSONに適用する。代表証跡の参照はマスク前のfileID+lineから作成し、マスク後のパス衝突でも失わない。制御文字とBidi制御は可視化、HTMLは標準template escape、CSVは既存formula guardを再利用する。opt-outは明示flagのみ。ja/en章・静的文言・全anchor・CSV共通値・元ログ不変・全artifact機密値・制御文字の回帰テストを追加。

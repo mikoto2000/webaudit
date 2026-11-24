@@ -21,15 +21,16 @@ import (
 
 // BundleOptions contains explicit investigator metadata; missing values stay empty.
 type BundleOptions struct {
-	Warnings       []string `json:"-"`
-	Title          string   `json:"title"`
-	System         string   `json:"system"`
-	Background     string   `json:"background"`
-	Purpose        string   `json:"purpose"`
-	Investigator   string   `json:"investigator"`
-	Language       string   `json:"language"`
-	MaxSpoolBytes  int64    `json:"max_spool_bytes"`
-	MaxOutputBytes int64    `json:"max_output_bytes"`
+	IncludeSensitiveEvidence bool     `json:"include_sensitive_evidence"`
+	Warnings                 []string `json:"-"`
+	Title                    string   `json:"title"`
+	System                   string   `json:"system"`
+	Background               string   `json:"background"`
+	Purpose                  string   `json:"purpose"`
+	Investigator             string   `json:"investigator"`
+	Language                 string   `json:"language"`
+	MaxSpoolBytes            int64    `json:"max_spool_bytes"`
+	MaxOutputBytes           int64    `json:"max_output_bytes"`
 }
 
 func (o BundleOptions) defaults() BundleOptions {
@@ -46,48 +47,56 @@ func (o BundleOptions) defaults() BundleOptions {
 }
 
 type LogInventory struct {
-	CountQuality    string     `json:"count_quality"`
-	ID              string     `json:"id"`
-	Path            string     `json:"path"`
-	Size            *int64     `json:"size_bytes"`
-	SHA256          *string    `json:"sha256"`
-	HashScope       string     `json:"hash_scope"`
-	HashStatus      string     `json:"hash_status"`
-	Compression     string     `json:"compression"`
-	First           *time.Time `json:"first"`
-	Last            *time.Time `json:"last"`
-	TotalLines      int64      `json:"total_lines"`
-	Parsed          int64      `json:"parsed"`
-	Unparsed        int64      `json:"unparsed"`
-	Excluded        int64      `json:"excluded"`
-	Status          string     `json:"status"`
-	Truncated       bool       `json:"truncated"`
-	Changed         bool       `json:"changed_during_analysis"`
-	DuplicateOf     string     `json:"duplicate_of,omitempty"`
-	Formats         []string   `json:"formats"`
-	LogTypes        []string   `json:"log_types"`
-	AvailableFields []string   `json:"available_fields"`
-	Error           string     `json:"error,omitempty"`
+	Timezones          []string   `json:"timezones"`
+	TimezonesTruncated bool       `json:"timezones_truncated"`
+	CountQuality       string     `json:"count_quality"`
+	ID                 string     `json:"id"`
+	Path               string     `json:"path"`
+	Size               *int64     `json:"size_bytes"`
+	SHA256             *string    `json:"sha256"`
+	HashScope          string     `json:"hash_scope"`
+	HashStatus         string     `json:"hash_status"`
+	Compression        string     `json:"compression"`
+	First              *time.Time `json:"first"`
+	Last               *time.Time `json:"last"`
+	TotalLines         int64      `json:"total_lines"`
+	Parsed             int64      `json:"parsed"`
+	Unparsed           int64      `json:"unparsed"`
+	Excluded           int64      `json:"excluded"`
+	Status             string     `json:"status"`
+	Truncated          bool       `json:"truncated"`
+	Changed            bool       `json:"changed_during_analysis"`
+	DuplicateOf        string     `json:"duplicate_of,omitempty"`
+	Formats            []string   `json:"formats"`
+	LogTypes           []string   `json:"log_types"`
+	AvailableFields    []string   `json:"available_fields"`
+	Error              string     `json:"error,omitempty"`
 }
 
 type InvestigationReport struct {
-	Statistics          RequestStatistics    `json:"statistics"`
-	EvidenceComplete    bool                 `json:"evidence_complete"`
-	Evidence            EvidenceSummary      `json:"evidence"`
-	Detections          []BundleDetection    `json:"detections"`
-	FindingObservations []FindingObservation `json:"finding_observations"`
-	AnalysisRules       []AnalysisRule       `json:"analysis_rules"`
-	Coverage            []CoverageRow        `json:"coverage"`
-	Schema              string               `json:"schema"`
-	Metadata            BundleOptions        `json:"metadata"`
-	Started             time.Time            `json:"started_at"`
-	Finished            time.Time            `json:"finished_at"`
-	Status              string               `json:"status"`
-	Complete            bool                 `json:"complete"`
-	CountQuality        string               `json:"count_quality"`
-	Settings            map[string]any       `json:"settings"`
-	Inventory           []LogInventory       `json:"inventory"`
-	Analysis            Report               `json:"analysis"`
+	Summary                  InvestigationSummary `json:"summary"`
+	Assessments              []CaseAssessment     `json:"assessments"`
+	Recommendations          []Recommendation     `json:"recommendations"`
+	RecommendationsTruncated bool                 `json:"recommendations_truncated"`
+	MaskingEnabled           bool                 `json:"masking_enabled"`
+	MaskingNotes             []string             `json:"masking_notes"`
+	Statistics               RequestStatistics    `json:"statistics"`
+	EvidenceComplete         bool                 `json:"evidence_complete"`
+	Evidence                 EvidenceSummary      `json:"evidence"`
+	Detections               []BundleDetection    `json:"detections"`
+	FindingObservations      []FindingObservation `json:"finding_observations"`
+	AnalysisRules            []AnalysisRule       `json:"analysis_rules"`
+	Coverage                 []CoverageRow        `json:"coverage"`
+	Schema                   string               `json:"schema"`
+	Metadata                 BundleOptions        `json:"metadata"`
+	Started                  time.Time            `json:"started_at"`
+	Finished                 time.Time            `json:"finished_at"`
+	Status                   string               `json:"status"`
+	Complete                 bool                 `json:"complete"`
+	CountQuality             string               `json:"count_quality"`
+	Settings                 map[string]any       `json:"settings"`
+	Inventory                []LogInventory       `json:"inventory"`
+	Analysis                 Report               `json:"analysis"`
 }
 type BundleArtifact struct {
 	Path   string `json:"path"`
@@ -180,6 +189,7 @@ func originalFingerprint(p string, limit int64) (*int64, *string, string, string
 }
 
 type bundleWriter struct {
+	maskSecrets bool
 	dir         string
 	limit, used int64
 	files       []string
@@ -226,6 +236,11 @@ func (b *bundleWriter) csv(name string, header []string, rows func(func(...strin
 		write := func(row ...string) error {
 			safe := make([]string, len(row))
 			for i, v := range row {
+				headerName := ""
+				if i < len(header) {
+					headerName = header[i]
+				}
+				v = reportCSVValue(v, headerName, b.maskSecrets)
 				safe[i] = csvSafe(v)
 			}
 			return c.Write(safe)
@@ -333,6 +348,29 @@ func (c *bundleCapture) event(e Event) {
 		format = e.format
 	}
 	uniqueAppend(&in.Formats, format)
+	zone := "unknown"
+	if !e.TimezoneUnknown {
+		_, offset := e.Time.Zone()
+		sign := "+"
+		if offset < 0 {
+			sign = "-"
+			offset = -offset
+		}
+		zone = fmt.Sprintf("UTC%s%02d:%02d", sign, offset/3600, offset%3600/60)
+	}
+	knownZone := false
+	for _, value := range in.Timezones {
+		knownZone = knownZone || value == zone
+	}
+	if !knownZone {
+		if len(in.Timezones) < 64 {
+			in.Timezones = append(in.Timezones, zone)
+		} else {
+			in.TimezonesTruncated = true
+			in.Status = "partial"
+		}
+	}
+
 	if !e.TimezoneUnknown {
 		if in.First == nil || e.Time.Before(*in.First) {
 			in.First = ptr(e.Time)
@@ -376,6 +414,7 @@ func (c *bundleCapture) finish(p string, err error) {
 	if in.Unparsed > 0 {
 		in.Status = "partial"
 	}
+	sort.Strings(in.Timezones)
 	sort.Strings(in.AvailableFields)
 	sort.Strings(in.LogTypes)
 	sort.Strings(in.Formats)
@@ -439,7 +478,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if err = marker.Close(); err != nil {
 		return nil, err
 	}
-	writer := &bundleWriter{dir: target, limit: b.MaxOutputBytes}
+	writer := &bundleWriter{dir: target, limit: b.MaxOutputBytes, maskSecrets: !b.IncludeSensitiveEvidence}
 	c := &bundleCapture{o: o, inputs: map[string]*LogInventory{}, rules: analysisRules()}
 	spool, err := newRequestSpool(target, b.MaxSpoolBytes)
 	if err != nil {
@@ -507,7 +546,14 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if err = writeCoverage(writer, r); err != nil {
 		return nil, err
 	}
-	if err = writer.csv("log-inventory.csv", []string{"file_id", "path", "size_bytes", "sha256", "hash_scope", "compression", "first", "last", "total_lines", "parsed", "unparsed", "excluded", "status", "truncated", "changed", "error"}, func(write func(...string) error) error {
+	prepareInvestigationReport(r, o.MaxFindings)
+	if err = maskCommonReport(r); err != nil {
+		return nil, err
+	}
+	if err = writeRecommendations(writer, r); err != nil {
+		return nil, err
+	}
+	if err = writer.csv("log-inventory.csv", []string{"file_id", "path", "size_bytes", "sha256", "hash_scope", "compression", "first", "last", "total_lines", "parsed", "unparsed", "excluded", "status", "truncated", "changed", "error", "formats", "log_types", "timezones", "timezones_truncated", "available_fields"}, func(write func(...string) error) error {
 		for _, in := range r.Inventory {
 			size, hash := "", ""
 			if in.Size != nil {
@@ -516,7 +562,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 			if in.SHA256 != nil {
 				hash = *in.SHA256
 			}
-			if err := write(in.ID, in.Path, size, hash, in.HashScope, in.Compression, bundleTime(in.First), bundleTime(in.Last), strconv.FormatInt(in.TotalLines, 10), strconv.FormatInt(in.Parsed, 10), strconv.FormatInt(in.Unparsed, 10), strconv.FormatInt(in.Excluded, 10), in.Status, strconv.FormatBool(in.Truncated), strconv.FormatBool(in.Changed), in.Error); err != nil {
+			if err := write(in.ID, in.Path, size, hash, in.HashScope, in.Compression, bundleTime(in.First), bundleTime(in.Last), strconv.FormatInt(in.TotalLines, 10), strconv.FormatInt(in.Parsed, 10), strconv.FormatInt(in.Unparsed, 10), strconv.FormatInt(in.Excluded, 10), in.Status, strconv.FormatBool(in.Truncated), strconv.FormatBool(in.Changed), in.Error, strings.Join(in.Formats, ";"), strings.Join(in.LogTypes, ";"), strings.Join(in.Timezones, ";"), strconv.FormatBool(in.TimezonesTruncated), strings.Join(in.AvailableFields, ";")); err != nil {
 				return err
 			}
 		}
@@ -545,7 +591,13 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 			if err != nil {
 				return err
 			}
-			_, err = fmt.Fprintln(w, TerminalSafe(warning))
+			_, err = fmt.Fprintln(w, func() string {
+				v := TerminalSafe(warning)
+				if !b.IncludeSensitiveEvidence {
+					v = maskReportString(v)
+				}
+				return v
+			}())
 		}
 		return err
 	}); err != nil {
@@ -554,7 +606,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if err = writer.json("report.json", r); err != nil {
 		return nil, err
 	}
-	if err = writer.write("report.html", func(w io.Writer) error { return WriteReportWithLanguage(w, r.Analysis, "html", b.Language) }); err != nil {
+	if err = writer.write("report.html", func(w io.Writer) error { return writeInvestigationHTML(w, r) }); err != nil {
 		return nil, err
 	}
 	artifacts, err := writer.artifacts()
