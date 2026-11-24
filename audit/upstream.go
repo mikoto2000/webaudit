@@ -32,6 +32,8 @@ type EventRef struct {
 	Line int64  `json:"line"`
 }
 type SourceAlert struct {
+	ID                string `json:"id,omitempty"`
+	bundleMatchKey    string
 	Evidence          []SourceEvidence  `json:"evidence,omitempty"`
 	Metadata          map[string]string `json:"metadata,omitempty"`
 	Source            string            `json:"source"`
@@ -57,6 +59,7 @@ type upstreamBucket struct {
 	seen        map[string]bool
 	refs        []EventRef
 	samples     []SourceEvidence
+	bundleID    string
 }
 type Upstream struct {
 	evidence      *upstreamEvidence
@@ -290,6 +293,7 @@ func (u *Upstream) Observe(e Event) {
 				continue
 			}
 			b = &upstreamBucket{capacity: r.Capacity, leak: leak, domain: domain, tokens: float64(r.Capacity), first: e.Time, last: e.Time, seen: map[string]bool{}}
+			b.bundleID = u.o.bundle.bucketID(key, e)
 			u.buckets[key] = b
 		}
 		if r.Distinct != "" {
@@ -315,6 +319,7 @@ func (u *Upstream) Observe(e Event) {
 		}
 		b.last = e.Time
 		b.count++
+		u.o.bundle.candidate(b.bundleID)
 		b.refs = append(b.refs, EventRef{e.File, e.Line})
 		u.evidence.add(&b.samples, e)
 		cache := r.Capacity
@@ -334,6 +339,7 @@ func (u *Upstream) Observe(e Event) {
 				u.warning("Upstream alert limit reached; source alerts are incomplete")
 			} else {
 				alert := sourceAlert(e, r.ID, group, b)
+				alert.ID = b.bundleID
 				u.evidence.attach(&alert, b.samples)
 				if r.ID == "crowdsecurity/http-technology-probing" {
 					alert.Metadata = map[string]string{"target_technology": lookupTag("technology_probing.json", v.full)}
@@ -380,10 +386,12 @@ func (u *Upstream) observeAura(e Event) {
 			}
 			v := sourceAlert(e, id, e.IP, &upstreamBucket{first: e.Time, last: e.Time})
 			v.Source = "AuraDFIR"
+			v.ID = u.o.bundle.sourceID("aura", key)
 			a = &v
 			u.aura[key] = a
 		}
 		a.Count++
+		u.o.bundle.candidate(a.ID)
 		if a.Last != nil {
 			if e.Time.Before(*a.First) {
 				a.First = ptr(e.Time)

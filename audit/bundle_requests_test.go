@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 )
 
 func bundleCSV(t *testing.T, path string) []map[string]string {
@@ -125,5 +126,39 @@ func TestLateStatisticalEvidenceAndSpoolLimit(t *testing.T) {
 	}
 	if leftovers, _ := filepath.Glob(filepath.Join(limited, ".requests-*")); len(leftovers) > 0 {
 		t.Fatal("spool remains")
+	}
+}
+
+func TestHubMembershipDistinguishesSuppressedAndDistinctCandidates(t *testing.T) {
+	// Use an existing matcher with small bucket settings to exercise full membership.
+	original := sourceRules
+	defer func() { sourceRules = original }()
+	sourceRules = []SourceRule{{ID: "crowdsecurity/http-probing", Type: "leaky", Capacity: 2, Distinct: "evt.Meta.http_path", Group: "evt.Meta.source_ip", Supported: true, blackholeDuration: time.Minute, leakDuration: time.Minute}}
+	dir := t.TempDir()
+	input := filepath.Join(dir, "a.log")
+	var text strings.Builder
+	for _, path := range []string{"/a", "/a", "/b", "/c", "/d", "/e", "/f"} {
+		fmt.Fprintf(&text, "192.0.2.1 - - [01/Nov/2026:00:00:00 +0000] \"GET %s HTTP/1.1\" 404 0\n", path)
+	}
+	if err := os.WriteFile(input, []byte(text.String()), 0600); err != nil {
+		t.Fatal(err)
+	}
+	target := filepath.Join(dir, "report")
+	r, err := GenerateBundle([]string{input}, target, Options{}, BundleOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	rows := bundleCSV(t, filepath.Join(target, "suspicious-requests.csv"))
+	var sourceLines []string
+	for _, row := range rows {
+		if strings.Contains(row["detection_engines"], "hub") {
+			sourceLines = append(sourceLines, row["source_line"])
+		}
+	}
+	if strings.Join(sourceLines, ",") != "1,3,4" {
+		t.Fatal("duplicate or suppressed candidate treated as emitted detection", sourceLines)
+	}
+	if len(r.Analysis.UpstreamAlerts) != 1 {
+		t.Fatal(r.Analysis.UpstreamAlerts)
 	}
 }

@@ -19,6 +19,7 @@ type AnalysisRule struct {
 	Enabled     bool     `json:"enabled"`
 }
 type CoverageRow struct {
+	RelatedRequests   *int64   `json:"related_requests"`
 	ID                string   `json:"id"`
 	Name              string   `json:"name"`
 	Description       string   `json:"description"`
@@ -431,9 +432,9 @@ func writeCoverage(b *bundleWriter, r *InvestigationReport) error {
 		}
 		return strconv.FormatInt(*v, 10)
 	}
-	return b.csv("analysis-coverage.csv", []string{"coverage_id", "name", "description", "rule_ids", "engines", "status", "evaluation", "complete", "has_detections", "eligible_requests", "detected_requests", "detections", "matched_candidates", "finding_ids", "conditions", "limitations", "count_quality"}, func(write func(...string) error) error {
+	return b.csv("analysis-coverage.csv", []string{"coverage_id", "name", "description", "rule_ids", "engines", "status", "evaluation", "complete", "has_detections", "eligible_requests", "detected_requests", "related_requests", "detections", "matched_candidates", "finding_ids", "conditions", "limitations", "count_quality"}, func(write func(...string) error) error {
 		for _, row := range r.Coverage {
-			if err := write(row.ID, row.Name, row.Description, strings.Join(row.RuleIDs, ";"), strings.Join(row.Engines, ";"), row.Status, row.Evaluation, strconv.FormatBool(row.Complete), strconv.FormatBool(row.HasDetections), number(row.EligibleRequests), number(row.DetectedRequests), number(row.Detections), number(row.MatchedCandidates), strings.Join(row.FindingIDs, ";"), strings.Join(row.Conditions, ";"), strings.Join(row.Limitations, ";"), row.CountQuality); err != nil {
+			if err := write(row.ID, row.Name, row.Description, strings.Join(row.RuleIDs, ";"), strings.Join(row.Engines, ";"), row.Status, row.Evaluation, strconv.FormatBool(row.Complete), strconv.FormatBool(row.HasDetections), number(row.EligibleRequests), number(row.DetectedRequests), number(row.RelatedRequests), number(row.Detections), number(row.MatchedCandidates), strings.Join(row.FindingIDs, ";"), strings.Join(row.Conditions, ";"), strings.Join(row.Limitations, ";"), row.CountQuality); err != nil {
 				return err
 			}
 		}
