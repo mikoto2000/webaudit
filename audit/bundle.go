@@ -10,6 +10,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"runtime/debug"
 	"sort"
@@ -70,6 +71,7 @@ type LogInventory struct {
 }
 
 type InvestigationReport struct {
+	Statistics          RequestStatistics    `json:"statistics"`
 	EvidenceComplete    bool                 `json:"evidence_complete"`
 	Evidence            EvidenceSummary      `json:"evidence"`
 	Detections          []BundleDetection    `json:"detections"`
@@ -114,7 +116,12 @@ func bundleSettings(o Options, b BundleOptions) map[string]any {
 	if o.LogRegex != "" {
 		mode = "custom-regex"
 	}
-	return map[string]any{"parser": mode, "custom_regex": "[not recorded]", "error_timezone": o.ErrorTimezone, "dedup_files": o.DeduplicateFiles, "max_line_bytes": o.MaxLineBytes, "max_file_bytes": o.MaxFileBytes, "max_keys": o.MaxKeys, "max_findings": o.MaxFindings, "max_evidence_bytes": o.MaxEvidenceBytes, "max_spool_bytes": b.MaxSpoolBytes, "max_output_bytes": b.MaxOutputBytes, "recorded_peer": "forwarded headers are not trusted", "language": b.Language}
+	var regexHash *string
+	if o.LogRegex != "" {
+		hash := sha256.Sum256([]byte(o.LogRegex))
+		regexHash = ptr(hex.EncodeToString(hash[:]))
+	}
+	return map[string]any{"custom_regex_sha256": regexHash, "parser": mode, "custom_regex": "[not recorded]", "error_timezone": o.ErrorTimezone, "dedup_files": o.DeduplicateFiles, "max_line_bytes": o.MaxLineBytes, "max_file_bytes": o.MaxFileBytes, "max_keys": o.MaxKeys, "max_findings": o.MaxFindings, "max_evidence_bytes": o.MaxEvidenceBytes, "max_spool_bytes": b.MaxSpoolBytes, "max_output_bytes": b.MaxOutputBytes, "recorded_peer": "forwarded headers are not trusted", "language": b.Language}
 }
 func bundleID(prefix, value string) string {
 	s := sha256.Sum256([]byte(value))
@@ -262,6 +269,8 @@ type bundleDiagnostic struct {
 	Reason string
 }
 type bundleCapture struct {
+	stats                *statisticsRecorder
+	durationRegex        *regexp.Regexp
 	spool                *requestSpool
 	pendingSources       []string
 	rules                []AnalysisRule
@@ -319,6 +328,9 @@ func (c *bundleCapture) event(e Event) {
 	format := "automatic supported parser"
 	if c.o.LogRegex != "" {
 		format = "custom-regex"
+	}
+	if e.format != "" {
+		format = e.format
 	}
 	uniqueAppend(&in.Formats, format)
 	if !e.TimezoneUnknown {
@@ -390,6 +402,20 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if b.Language != "ja" && b.Language != "en" {
 		return nil, fmt.Errorf("--lang must be ja or en")
 	}
+	if len(paths) > o.MaxKeys {
+		return nil, fmt.Errorf("explicit input path limit exceeded (max-keys)")
+	}
+	if o.LogRegex != "" {
+		rx, compileErr := regexp.Compile(o.LogRegex)
+		if compileErr != nil {
+			return nil, fmt.Errorf("invalid custom regex; pattern not recorded")
+		}
+		for _, name := range []string{"ip", "time", "target"} {
+			if rx.SubexpIndex(name) < 0 {
+				return nil, fmt.Errorf("custom regex requires named group %s", name)
+			}
+		}
+	}
 	target, err = filepath.Abs(target)
 	if err != nil {
 		return nil, err
@@ -421,6 +447,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	}
 	c.spool = spool
 	defer spool.remove()
+	c.initStatistics()
 	o.bundle = c
 	o.RetainUpstreamEvidence = true
 	started := o.Now().UTC()
@@ -457,8 +484,21 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if analysis.Parsed == 0 && analysis.Partial {
 		r.Status = "failed"
 	}
+	c.stats.finalizeTimeline()
 	buildCoverage(r, c)
 	if err = exportRequestEvidence(writer, r, c); err != nil {
+		return nil, err
+	}
+	r.Statistics = c.stats.model(r)
+	if c.stats.truncated {
+		r.Complete = false
+		if r.Status != "failed" {
+			r.Status = "partial"
+		}
+		r.Analysis.Partial = true
+		r.Analysis.warn("Statistics detail limit reached; inspect other buckets, unique-IP quality and truncated labels")
+	}
+	if err = writeStatistics(writer, r); err != nil {
 		return nil, err
 	}
 	if err = os.Remove(spool.path); err != nil {
