@@ -66,3 +66,5 @@ HTMLは事案/独立検出各100件、coverage/rule各1000件、ランキング2
 [日本語](../../examples/investigation-ja/report.html) / [English](../../examples/investigation-en/report.html)。各ディレクトリにJSON/CSV/manifestも含む。入力は`examples/sample.log`で、絶対原本パスとbuild revisionは生成環境の値である。再生成する際は未作成の別出力先を指定する。
 
 テスト対応表と残存事項は[traceability.md](traceability.md)、測定手順・生値は[performance.md](performance.md)を参照。
+
+統計別紙の`count_quality`は全観測件数、`suspicious_count_quality`は不審件数の品質を表す。spool上限等で後者だけが下限になる場合もCSV単体で開示する。数値統計のcount/missing/invalidは排他的に計数し、不正値を欠損数へ二重計上しない。

@@ -6,10 +6,10 @@
     "go_version": "go1.27.4",
     "os": "windows",
     "vcs.modified": "false",
-    "vcs.revision": "a5be39ee76a00c83b553a54ae172001404025028"
+    "vcs.revision": "8649a8dce161e2f39f8157d18231fd34a618f965"
   },
-  "started_at": "2026-11-24T07:04:31.9818008Z",
-  "finished_at": "2026-11-24T07:04:32.1299182Z",
+  "started_at": "2026-11-24T08:14:28.7338682Z",
+  "finished_at": "2026-11-24T08:14:28.9044616Z",
   "settings": {
     "custom_regex": "[not recorded]",
     "custom_regex_sha256": null,
@@ -101,7 +101,7 @@
     },
     {
       "path": "diagnostics/execution-log.txt",
-      "sha256": "0614ead765ab28a81f6de7d7004218a5172617f87004e46dbfc54814bae674b0",
+      "sha256": "0f6fa314af96dc3d53affa1969be574d3b06cfe1969cd91677a962d3bb6cf6cb",
       "bytes": 454
     },
     {
@@ -131,43 +131,43 @@
     },
     {
       "path": "report.html",
-      "sha256": "db0ea4f56c3819f250f2c494c3ac2def4fed5c03d2c4c2fc7a71c66c0a1a0b95",
+      "sha256": "6cfcb3de32c054d1a65a200992bb087aa2a223e1e309a5c61a883f5399640483",
       "bytes": 259634
     },
     {
       "path": "report.json",
-      "sha256": "a5e1376b0e91ef500f331832443252bb5ae223b448a2e95c0c55d4240b8bcf19",
-      "bytes": 382778
+      "sha256": "c62da929f725c78b8c4fa4f9e84251d6a7204552c30b1e9d520eb7830bb00f64",
+      "bytes": 383859
     },
     {
       "path": "statistics/asn-summary.csv",
-      "sha256": "386faf5a0d519f13d32d8d2bc48dbe319bec4fca5b5b4065b86fac74be53b92d",
-      "bytes": 178
+      "sha256": "dbb08a7c9b5297d10a9c3916a5138c1658b92986727de7ff262c1198d4842fca",
+      "bytes": 203
     },
     {
       "path": "statistics/country-summary.csv",
-      "sha256": "386faf5a0d519f13d32d8d2bc48dbe319bec4fca5b5b4065b86fac74be53b92d",
-      "bytes": 178
+      "sha256": "dbb08a7c9b5297d10a9c3916a5138c1658b92986727de7ff262c1198d4842fca",
+      "bytes": 203
     },
     {
       "path": "statistics/host-summary.csv",
-      "sha256": "830c8d1e5b61a00f50ff1016a1fb5d8cfeba5dbbddab3308d9b7115eae7265b2",
-      "bytes": 250
+      "sha256": "ceb6c01892afdbeca80cc13c453bdf1ceadba106ba953784325d31df499cf8fe",
+      "bytes": 281
     },
     {
       "path": "statistics/ip-summary.csv",
-      "sha256": "60a675f747785c2931ab2d9c5ee3aeaa626258ac394908868911586c265f3133",
-      "bytes": 745
+      "sha256": "ac71e17de9e6c7680a13b0b8fda9a2b860e9120582166e1007e50eedceb947f6",
+      "bytes": 800
     },
     {
       "path": "statistics/log-type-summary.csv",
-      "sha256": "b9633fee645a7c96c7ddb6db79d529baed9374ea915e15d25ba6a82858339c95",
-      "bytes": 297
+      "sha256": "eebb0feff396710886a170d5937c33bc527da39bc80ef5f3d4a650c7ae308c85",
+      "bytes": 328
     },
     {
       "path": "statistics/method-summary.csv",
-      "sha256": "1d01c0c6e5b297f6aa177db6866543de95d126206ad3286247659e035dfae25d",
-      "bytes": 285
+      "sha256": "e28ecf6ab4a884c7f593ac6ef9b846aaf0d5e53555659e3832bf9ca8b3d0a486",
+      "bytes": 316
     },
     {
       "path": "statistics/numeric-summary.csv",
@@ -176,18 +176,18 @@
     },
     {
       "path": "statistics/protocol-summary.csv",
-      "sha256": "740f489d6e5f1c2cf46522a24c8f9392cfc443db6f3d040d063a79e18f202a07",
-      "bytes": 290
+      "sha256": "d476e77cc94833e962811cb21b04335b5e3d37d9a7326ddffa53a407fcffe172",
+      "bytes": 321
     },
     {
       "path": "statistics/status-class-summary.csv",
-      "sha256": "04ccbdfbb3df183c80a995c6d78326c7c120706d6c840ee70d823d7234a25bd1",
-      "bytes": 498
+      "sha256": "7498ee799296daca60c8fc49e4361702bbdee180e3b843ef54e78a93686071e4",
+      "bytes": 541
     },
     {
       "path": "statistics/status-summary.csv",
-      "sha256": "acecc3c3b48b04354d3d9a68d4076450ee3f5789583cb64ea7f94b9cf66e9b3c",
-      "bytes": 498
+      "sha256": "87dd6c6979348e0efff3a6b4716212ac30208caadf165e2f3d33d7aedaca5018",
+      "bytes": 541
     },
     {
       "path": "statistics/timeline.csv",
@@ -196,13 +196,13 @@
     },
     {
       "path": "statistics/uri-summary.csv",
-      "sha256": "a5cf68ef598dc6a464ef720bea2a53368fea40f0e8c5abb56fa2b093277fc25f",
-      "bytes": 514
+      "sha256": "1836f8faaa57a5fef8eccbd4ccdae89248f5a10dac739c2feb5a24f6049b72e4",
+      "bytes": 557
     },
     {
       "path": "statistics/user-agent-summary.csv",
-      "sha256": "64bac814e4dab846c0c1c20d10b5139f35e7d87c26f62aefb8d9900f77cac542",
-      "bytes": 766
+      "sha256": "0c30c53078982fb6a5c0a92c0666384f2dbf889c94b32ee90eac8331f02ae95f",
+      "bytes": 821
     },
     {
       "path": "suspicious-requests.csv",
