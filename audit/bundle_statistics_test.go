@@ -80,3 +80,26 @@ func TestBundleStatisticsBoundCardinalityAndAdaptTimeline(t *testing.T) {
 		}
 	}
 }
+
+func TestBundleStatisticsGeoAndInvalidDuration(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "access.log")
+	raw := `{"remote_addr":"8.8.8.8","time_iso8601":"2026-11-01T00:00:00Z","request":"GET /.env HTTP/1.1","status":404,"body_bytes_sent":0,"request_time":"NaN"}`
+	if err := os.WriteFile(input, []byte(raw+"\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	r, err := GenerateBundle([]string{input}, filepath.Join(dir, "report"), Options{GeoIP: testGeo(t, 64)}, BundleOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !r.Statistics.GeoIPEnabled || len(r.Statistics.Dimensions["country"]) != 1 || len(r.Statistics.Dimensions["asn"]) != 1 {
+		t.Fatal(r.Statistics)
+	}
+	if r.Statistics.RequestDuration.Count != 0 || r.Statistics.RequestDuration.Invalid != 1 || r.Statistics.RequestDuration.Min != nil {
+		t.Fatal("invalid duration fabricated", r.Statistics.RequestDuration)
+	}
+	country := r.Statistics.Dimensions["country"][0]
+	if country.Requests != 1 || country.SuspiciousRequests != 1 || country.UniqueIPs == nil || *country.UniqueIPs != 1 {
+		t.Fatal(country)
+	}
+}

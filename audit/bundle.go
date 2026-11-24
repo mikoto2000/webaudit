@@ -10,6 +10,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"runtime/debug"
 	"sort"
@@ -70,6 +71,7 @@ type LogInventory struct {
 }
 
 type InvestigationReport struct {
+	Statistics          RequestStatistics    `json:"statistics"`
 	EvidenceComplete    bool                 `json:"evidence_complete"`
 	Evidence            EvidenceSummary      `json:"evidence"`
 	Detections          []BundleDetection    `json:"detections"`
@@ -262,6 +264,8 @@ type bundleDiagnostic struct {
 	Reason string
 }
 type bundleCapture struct {
+	stats                *statisticsRecorder
+	durationRegex        *regexp.Regexp
 	spool                *requestSpool
 	pendingSources       []string
 	rules                []AnalysisRule
@@ -421,6 +425,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	}
 	c.spool = spool
 	defer spool.remove()
+	c.initStatistics()
 	o.bundle = c
 	o.RetainUpstreamEvidence = true
 	started := o.Now().UTC()
@@ -457,8 +462,21 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if analysis.Parsed == 0 && analysis.Partial {
 		r.Status = "failed"
 	}
+	c.stats.finalizeTimeline()
 	buildCoverage(r, c)
 	if err = exportRequestEvidence(writer, r, c); err != nil {
+		return nil, err
+	}
+	r.Statistics = c.stats.model(r)
+	if c.stats.truncated {
+		r.Complete = false
+		if r.Status != "failed" {
+			r.Status = "partial"
+		}
+		r.Analysis.Partial = true
+		r.Analysis.warn("Statistics detail limit reached; inspect other buckets, unique-IP quality and truncated labels")
+	}
+	if err = writeStatistics(writer, r); err != nil {
 		return nil, err
 	}
 	if err = os.Remove(spool.path); err != nil {

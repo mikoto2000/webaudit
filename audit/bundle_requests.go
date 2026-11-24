@@ -21,6 +21,8 @@ type RequestHit struct {
 	FindingID string `json:"finding_id"`
 }
 type RequestSnapshot struct {
+	Duration         *float64     `json:"request_duration"`
+	InvalidDuration  bool         `json:"invalid_duration"`
 	ID               string       `json:"request_id"`
 	FileID           string       `json:"source_file_id"`
 	Event            Event        `json:"event"`
@@ -173,6 +175,11 @@ func (c *bundleCapture) writeRequest(e Event, hits []Rule, n Normalized, correla
 		g := c.o.GeoIP.Lookup(e.IP)
 		r.GeoIP = &g
 	}
+	r.Duration, r.InvalidDuration = c.duration(e)
+	if r.Duration != nil {
+		uniqueAppend(&c.inputs[e.File].AvailableFields, "request_duration_seconds")
+	}
+	c.stats.observe(r)
 	c.spool.write(r)
 }
 func (c *bundleCapture) bucketID(key string, e Event) string {
@@ -319,6 +326,10 @@ func requestCSV(r RequestSnapshot, direct, related []*BundleDetection, quality s
 	if len(r.Normalization.Variants) > 0 {
 		normalized = r.Normalization.Variants[len(r.Normalization.Variants)-1]
 	}
+	duration := ""
+	if r.Duration != nil {
+		duration = strconv.FormatFloat(*r.Duration, 'g', -1, 64)
+	}
 	relation := "related"
 	if len(direct) > 0 {
 		relation = "direct"
@@ -326,7 +337,7 @@ func requestCSV(r RequestSnapshot, direct, related []*BundleDetection, quality s
 			relation = "direct_and_related"
 		}
 	}
-	return []string{r.ID, strings.Join(findingIDs, ";"), strings.Join(ids, ";"), timestamp, r.Event.IP, country, asn, org, val(r.Event.Host), val(r.Event.Method), val(r.Event.Protocol), r.Event.Target, normalized, status, size, "", val(r.Event.Referer), val(r.Event.UA), strings.Join(categories, ";"), strings.Join(ruleIDs, ";"), strings.Join(engines, ";"), severity, "unknown", strings.Join(reasons, ";"), r.FileID, r.Event.File, strconv.FormatInt(r.Event.Line, 10), relation, strings.Join(directIDs, ";"), strings.Join(relatedIDs, ";"), strings.Join(r.Normalization.Steps, ";"), r.Event.Raw, quality}
+	return []string{r.ID, strings.Join(findingIDs, ";"), strings.Join(ids, ";"), timestamp, r.Event.IP, country, asn, org, val(r.Event.Host), val(r.Event.Method), val(r.Event.Protocol), r.Event.Target, normalized, status, size, duration, val(r.Event.Referer), val(r.Event.UA), strings.Join(categories, ";"), strings.Join(ruleIDs, ";"), strings.Join(engines, ";"), severity, "unknown", strings.Join(reasons, ";"), r.FileID, r.Event.File, strconv.FormatInt(r.Event.Line, 10), relation, strings.Join(directIDs, ";"), strings.Join(relatedIDs, ";"), strings.Join(r.Normalization.Steps, ";"), r.Event.Raw, quality}
 }
 func directRequestDetections(r RequestSnapshot) []BundleDetection {
 	out := make([]BundleDetection, 0, len(r.Hits))
@@ -522,6 +533,7 @@ func exportRequestEvidence(b *bundleWriter, r *InvestigationReport, c *bundleCap
 			_, direct, related := matchingDetections(snapshot, groups, index)
 			if len(direct) > 0 {
 				r.Evidence.SuspiciousRequests++
+				c.stats.suspicious(snapshot)
 				if err := write(requestCSV(snapshot, direct, related, r.CountQuality)...); err != nil {
 					return err
 				}
