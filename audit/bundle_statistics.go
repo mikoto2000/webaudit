@@ -11,14 +11,15 @@ import (
 )
 
 type NumericSummary struct {
-	Count   int64    `json:"count"`
-	Missing int64    `json:"missing"`
-	Invalid int64    `json:"invalid"`
-	Sum     float64  `json:"sum"`
-	Min     *float64 `json:"min"`
-	Max     *float64 `json:"max"`
-	Mean    *float64 `json:"mean"`
-	Unit    string   `json:"unit"`
+	Count      int64    `json:"count"`
+	Missing    int64    `json:"missing"`
+	Invalid    int64    `json:"invalid"`
+	Sum        *float64 `json:"sum"`
+	SumQuality string   `json:"sum_quality"`
+	Min        *float64 `json:"min"`
+	Max        *float64 `json:"max"`
+	Mean       *float64 `json:"mean"`
+	Unit       string   `json:"unit"`
 }
 
 func (n *NumericSummary) add(v *float64) {
@@ -27,14 +28,28 @@ func (n *NumericSummary) add(v *float64) {
 		return
 	}
 	n.Count++
-	n.Sum += *v
+	if n.Count == 1 {
+		n.Sum = ptr(*v)
+		n.SumQuality = "finite"
+	} else if n.Sum != nil {
+		sum := *n.Sum + *v
+		if math.IsInf(sum, 0) || math.IsNaN(sum) {
+			n.Sum = nil
+			n.SumQuality = "overflow"
+		} else {
+			n.Sum = &sum
+		}
+	}
 	if n.Min == nil || *v < *n.Min {
 		n.Min = ptr(*v)
 	}
 	if n.Max == nil || *v > *n.Max {
 		n.Max = ptr(*v)
 	}
-	n.Mean = ptr(n.Sum / float64(n.Count))
+	n.Mean = nil
+	if n.Sum != nil {
+		n.Mean = ptr(*n.Sum / float64(n.Count))
+	}
 }
 
 type StatisticsRow struct {

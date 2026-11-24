@@ -116,7 +116,12 @@ func bundleSettings(o Options, b BundleOptions) map[string]any {
 	if o.LogRegex != "" {
 		mode = "custom-regex"
 	}
-	return map[string]any{"parser": mode, "custom_regex": "[not recorded]", "error_timezone": o.ErrorTimezone, "dedup_files": o.DeduplicateFiles, "max_line_bytes": o.MaxLineBytes, "max_file_bytes": o.MaxFileBytes, "max_keys": o.MaxKeys, "max_findings": o.MaxFindings, "max_evidence_bytes": o.MaxEvidenceBytes, "max_spool_bytes": b.MaxSpoolBytes, "max_output_bytes": b.MaxOutputBytes, "recorded_peer": "forwarded headers are not trusted", "language": b.Language}
+	var regexHash *string
+	if o.LogRegex != "" {
+		hash := sha256.Sum256([]byte(o.LogRegex))
+		regexHash = ptr(hex.EncodeToString(hash[:]))
+	}
+	return map[string]any{"custom_regex_sha256": regexHash, "parser": mode, "custom_regex": "[not recorded]", "error_timezone": o.ErrorTimezone, "dedup_files": o.DeduplicateFiles, "max_line_bytes": o.MaxLineBytes, "max_file_bytes": o.MaxFileBytes, "max_keys": o.MaxKeys, "max_findings": o.MaxFindings, "max_evidence_bytes": o.MaxEvidenceBytes, "max_spool_bytes": b.MaxSpoolBytes, "max_output_bytes": b.MaxOutputBytes, "recorded_peer": "forwarded headers are not trusted", "language": b.Language}
 }
 func bundleID(prefix, value string) string {
 	s := sha256.Sum256([]byte(value))
@@ -323,6 +328,9 @@ func (c *bundleCapture) event(e Event) {
 	format := "automatic supported parser"
 	if c.o.LogRegex != "" {
 		format = "custom-regex"
+	}
+	if e.format != "" {
+		format = e.format
 	}
 	uniqueAppend(&in.Formats, format)
 	if !e.TimezoneUnknown {

@@ -20,6 +20,7 @@ func Parse(line, file string, n int64, custom string) (Event, error) {
 	if !utf8.ValidString(line) || strings.ContainsAny(line, "\x00\r\n") {
 		return Event{}, fmt.Errorf("invalid UTF-8 or control line")
 	}
+	formatName := "custom-regex"
 	original := line
 	envelope := ""
 	if custom == "" {
@@ -29,8 +30,10 @@ func Parse(line, file string, n int64, custom string) (Event, error) {
 			return Event{}, err
 		}
 		if e, ok, err := parseError(line, original, file, n); ok {
+			e.format = "http-error"
 			if envelope != "" {
 				e.Envelope = ptr(envelope)
+				e.format = "syslog/" + e.format
 			}
 			return e, err
 		}
@@ -51,6 +54,7 @@ func Parse(line, file string, n int64, custom string) (Event, error) {
 			}
 		}
 	} else if strings.HasPrefix(strings.TrimSpace(line), "{") {
+		formatName = "nginx-json"
 		obj, err := uniqueObject(line)
 		if err != nil {
 			return Event{}, fmt.Errorf("invalid JSON: %w", err)
@@ -68,14 +72,18 @@ func Parse(line, file string, n int64, custom string) (Event, error) {
 			}
 		}
 	} else {
+		formatName = "apache-nginx-common/combined"
 		fields = fieldsFrom(standard, line)
 		if fields == nil {
+			formatName = "extended-combined"
 			fields = fieldsFrom(extendedStandard, line)
 		}
 		if fields == nil {
+			formatName = "npm-plus"
 			fields = fieldsFrom(npmPlus, line)
 		}
 		if fields == nil {
+			formatName = "npm-legacy"
 			fields = fieldsFrom(npmLegacy, line)
 		}
 		if fields == nil {
@@ -84,7 +92,9 @@ func Parse(line, file string, n int64, custom string) (Event, error) {
 
 	}
 	e, err := eventFrom(fields, original, file, n)
+	e.format = formatName
 	if envelope != "" {
+		e.format = "syslog/" + e.format
 		e.Envelope = ptr(envelope)
 	}
 	return e, err
