@@ -111,3 +111,31 @@ func TestBundleDedupEmptyUnreadableAndPrivateSettings(t *testing.T) {
 		t.Fatal("secret regex exposed")
 	}
 }
+
+func TestBundleChangedInputAndOutputLimit(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "a.log")
+	if err := os.WriteFile(input, []byte("before\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	c := &bundleCapture{o: Options{}.defaults(), inputs: map[string]*LogInventory{}}
+	c.begin(input)
+	if err := os.WriteFile(input, []byte("after\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	c.finish(input, nil)
+	if !c.inputs[input].Changed || c.inputs[input].Status != "partial" {
+		t.Fatal(c.inputs[input])
+	}
+	target := filepath.Join(dir, "limited")
+	if _, err := GenerateBundle([]string{input}, target, Options{}, BundleOptions{MaxOutputBytes: 1}); err == nil {
+		t.Fatal("output limit not enforced")
+	}
+	if _, err := os.Stat(filepath.Join(target, "INCOMPLETE")); err != nil {
+		t.Fatal("failure not marked", err)
+	}
+	original, _ := os.ReadFile(input)
+	if string(original) != "after\n" {
+		t.Fatal("input changed")
+	}
+}

@@ -20,14 +20,15 @@ import (
 
 // BundleOptions contains explicit investigator metadata; missing values stay empty.
 type BundleOptions struct {
-	Title          string `json:"title"`
-	System         string `json:"system"`
-	Background     string `json:"background"`
-	Purpose        string `json:"purpose"`
-	Investigator   string `json:"investigator"`
-	Language       string `json:"language"`
-	MaxSpoolBytes  int64  `json:"max_spool_bytes"`
-	MaxOutputBytes int64  `json:"max_output_bytes"`
+	Warnings       []string `json:"-"`
+	Title          string   `json:"title"`
+	System         string   `json:"system"`
+	Background     string   `json:"background"`
+	Purpose        string   `json:"purpose"`
+	Investigator   string   `json:"investigator"`
+	Language       string   `json:"language"`
+	MaxSpoolBytes  int64    `json:"max_spool_bytes"`
+	MaxOutputBytes int64    `json:"max_output_bytes"`
 }
 
 func (o BundleOptions) defaults() BundleOptions {
@@ -44,6 +45,7 @@ func (o BundleOptions) defaults() BundleOptions {
 }
 
 type LogInventory struct {
+	CountQuality    string     `json:"count_quality"`
 	ID              string     `json:"id"`
 	Path            string     `json:"path"`
 	Size            *int64     `json:"size_bytes"`
@@ -266,7 +268,7 @@ func (c *bundleCapture) begin(p string) {
 		return
 	}
 	size, hash, status, compression := originalFingerprint(p, c.o.MaxFileBytes)
-	c.inputs[p] = &LogInventory{ID: bundleID("FILE-", p), Path: p, Size: size, SHA256: hash, HashScope: "original_file_bytes", HashStatus: status, Compression: compression, Status: "complete"}
+	c.inputs[p] = &LogInventory{ID: bundleID("FILE-", p), Path: p, Size: size, SHA256: hash, HashScope: "original_file_bytes", HashStatus: status, Compression: compression, Status: "complete", CountQuality: "exact"}
 }
 func (c *bundleCapture) line(p string, n int64, kind, reason string) {
 	if c == nil {
@@ -327,10 +329,17 @@ func (c *bundleCapture) finish(p string, err error) {
 	if in.SHA256 == nil || after == nil || *in.SHA256 != *after || status != "complete" {
 		in.Changed = in.SHA256 != nil && after != nil && *in.SHA256 != *after
 		in.Status = "partial"
-		in.HashStatus = "unverified"
+		if in.SHA256 != nil {
+			in.HashStatus = "verification_" + status
+		}
+		if in.Changed {
+			in.HashStatus = "changed"
+		}
+		in.CountQuality = "lower_bound"
 	}
 	if err != nil {
 		in.Error = err.Error()
+		in.CountQuality = "lower_bound"
 		in.Status = "partial"
 		in.Truncated = strings.Contains(err.Error(), "limit reached")
 		if in.Parsed == 0 {
@@ -395,6 +404,9 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	o.RetainUpstreamEvidence = true
 	started := o.Now().UTC()
 	analysis := Analyze(paths, o)
+	for _, warning := range b.Warnings {
+		analysis.AddWarning(warning)
+	}
 	r := &InvestigationReport{Schema: "webaudit/investigation-1", Metadata: b, Started: started, Finished: o.Now().UTC(), Settings: bundleSettings(o, b), Analysis: analysis, Complete: !analysis.Partial, CountQuality: "exact", Status: "completed"}
 	for _, in := range analysis.Files {
 		row := c.inputs[in.Path]
@@ -402,6 +414,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 			c.begin(in.Path)
 			row = c.inputs[in.Path]
 			row.Status = "failed"
+			row.CountQuality = "unavailable"
 			row.Error = in.Error
 			r.Complete = false
 		}

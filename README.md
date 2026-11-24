@@ -312,3 +312,19 @@ JSONは `webaudit/2` スキーマで、欠損した任意項目は `null` です
 ## 出典とライセンス
 
 WebAuditは[MIT License](LICENSE)です。AuraDFIR、CrowdSec、CrowdSec Hubを参照して独立実装しました。依存ライブラリや参照元の表示は[出典・ライセンス表示](THIRD_PARTY_NOTICES.md)を参照してください。
+
+## 提出用報告書一式（段階的実装）
+
+既存の単一ファイル出力とは別に、新しいディレクトリを排他的に作成するバッチ出力を利用できます。現在はPhase 1の原本来歴・解析メタデータに対応し、11章構成・全件証跡等は後続フェーズで追加します。[設計と要求対応表](docs/reporting/design.md)を参照してください。
+
+```sh
+webaudit access.log --report-dir report --system-name "対象システム" --investigator "調査担当者" --report-title "アクセスログ調査"
+```
+
+`--investigation-background`、`--investigation-purpose` も任意指定できます。未指定値は空のまま保持します。`--lang ja|en` に対応します。`--report-dir` は `-o` / `--format` と併用できません。`--max-report-bytes` と `--max-spool-bytes` の既定値はそれぞれ1GiBです。
+
+`report.json`、`report.html`、`manifest.json`、`log-inventory.csv`、`diagnostics/parse-errors.csv`、`diagnostics/excluded-requests.csv`、`diagnostics/execution-log.txt` を生成します。manifestは自身を除く成果物のSHA-256とバイト数を記録します。原本のSHA-256はgzip展開前のファイルbytesが対象で、前後のハッシュを照合します。原本hashの読込み上限にも `--max-file-bytes` を用い、完全なハッシュを取得できない場合や途中で変更された場合は不完全として明示します。
+
+診断の別紙は `--max-keys` 件までの例です。空行を除外として記録し、同一ファイルの除外は明示的な `--dedup-files` 指定時だけ行います。欠損値はJSONのnull・CSVの空セルで示します。カスタム正規表現の本文はmanifestに保存しません。元ログのパス・証跡には機密情報が含まれ得るため、原本と同様に取り扱ってください。
+
+出力失敗時は `INCOMPLETE` が残ります。そのディレクトリを完成した報告書として扱わないでください。既存ディレクトリは空でも再利用しません。
