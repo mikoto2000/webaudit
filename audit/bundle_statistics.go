@@ -250,7 +250,7 @@ func (s *statisticsRecorder) observe(r RequestSnapshot) {
 					s.truncated = true
 				}
 			}
-			if dim == "country" {
+			if dim == "country" && !row.Other {
 				if r.GeoIP.CountryName != nil {
 					name, cut := clipped(*r.GeoIP.CountryName, 255)
 					row.Name = &name
@@ -258,7 +258,7 @@ func (s *statisticsRecorder) observe(r RequestSnapshot) {
 					s.truncated = s.truncated || cut
 				}
 			}
-			if dim == "asn" {
+			if dim == "asn" && !row.Other {
 				if r.GeoIP.ASNOrganization != nil {
 					org, cut := clipped(*r.GeoIP.ASNOrganization, 255)
 					row.Organization = &org
@@ -467,6 +467,26 @@ func writeStatistics(b *bundleWriter, r *InvestigationReport) error {
 		}); err != nil {
 			return err
 		}
+	}
+	number := func(v *float64) string {
+		if v == nil {
+			return ""
+		}
+		return strconv.FormatFloat(*v, 'g', -1, 64)
+	}
+	if err := b.csv("statistics/numeric-summary.csv", []string{"metric", "unit", "count", "missing", "invalid", "sum", "sum_quality", "minimum", "maximum", "mean"}, func(write func(...string) error) error {
+		for _, metric := range []struct {
+			name string
+			data NumericSummary
+		}{{"response_bytes", r.Statistics.ResponseBytes}, {"request_duration", r.Statistics.RequestDuration}} {
+			n := metric.data
+			if err := write(metric.name, n.Unit, strconv.FormatInt(n.Count, 10), strconv.FormatInt(n.Missing, 10), strconv.FormatInt(n.Invalid, 10), number(n.Sum), n.SumQuality, number(n.Min), number(n.Max), number(n.Mean)); err != nil {
+				return err
+			}
+		}
+		return nil
+	}); err != nil {
+		return err
 	}
 	return b.csv("statistics/timeline.csv", []string{"time_utc", "resolution_seconds", "requests", "suspicious_requests", "4xx", "5xx", "suspicious_count_quality"}, func(write func(...string) error) error {
 		for _, row := range r.Statistics.Timeline {

@@ -55,3 +55,12 @@ Phase 1セルフレビューで、入力hash/診断の完全性低下を暫定HT
 - findingsのURI例は最大8件/各1024bytes、methodキーは最大64種類/各128bytes。全件URIと元ログはメモリに保持しない。
 - source/aggregate検出のinterval indexを構築し、各requestで無関係な全検出を走査しない。メモリは保持検出数に、spoolは明示上限に制限。
 - 途中の検出元fieldがcompactされた場合は完全な照合を保証せず明示する。SIGKILL等の異常停止はINCOMPLETE markerで識別する。
+
+
+## Phase 4 実装記録
+
+`bundle_statistics.go` は解析中の全観測で全アクセス統計を計数し、spool replayの一意なdirectフラグで不審アクセスを計数する。spool上限に達しても全アクセス総数は失わず、不審件数の品質だけ別に記録する。各次元はmaxKeys・表示長で制限し、その他bucketの件数と下限ユニークIPを明示する。Geo情報は既存Lookupを再利用し、DB未利用をゼロ件の地理結果にしない。
+
+時間粒度はadaptiveに統合し、負のUnix時刻を含めUTC区分とする。空白の期間をログ欠損とは扱わない。処理時間は単位が定義されたJSON/request_timeまたはcustom duration_secondsのみ採用する。欠損・0・不正値・数値overflowを区別する。parserが実際に通ったfamilyを非公開Event属性としてinventoryへ記録し、legacy JSONには追加しない。custom regexは本文を保存せずSHA-256を記録する。
+
+テストは全アクセス/不審の分母、ゼロ/欠損、spool切詰時の全体件数、cardinality上限、期間に応じた時間粒度、Geo、NaNと数値overflow、parser familyを検証する。11章表示とグラフは次Phase 5で実装する。
