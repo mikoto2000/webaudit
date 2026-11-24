@@ -208,7 +208,10 @@ func (c *bundleCapture) observeDetection(e Event, hits []Rule, n Normalized) {
 			}
 		}
 	}
-	for _, aspect := range bundleAspects() {
+	if c.aspects == nil {
+		c.aspects = bundleAspects()
+	}
+	for _, aspect := range c.aspects {
 		key := aspect.ID
 		if c.aspectObservations[key] == nil {
 			c.aspectObservations[key] = &ruleObservation{}

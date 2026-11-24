@@ -259,6 +259,7 @@ type bundleDiagnostic struct {
 }
 type bundleCapture struct {
 	rules                []AnalysisRule
+	aspects              []aspectDefinition
 	observations         map[string]*ruleObservation
 	aspectObservations   map[string]*ruleObservation
 	signals              []Signal

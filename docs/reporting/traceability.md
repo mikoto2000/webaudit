@@ -37,3 +37,10 @@
 - 原本hashのbefore/after比較は、並行変更を完全にロックするものではない。変更が観測された場合は完全性を下げる。
 
 Phase 1セルフレビューで、入力hash/診断の完全性低下を暫定HTMLの部分解析表示にも反映するよう修正。出力先はrenameで既存空ディレクトリを置き換え得る方式を避け、mkdirによる排他予約＋未完了marker方式を採用。
+
+
+## Phase 2 実装記録
+
+`audit/bundle_coverage.go` の共通ルール一覧・41調査観点・全ソースルールをJSONとCSVへ出力する。`incidents.go` と `upstream.go` の任意observerで既存検出結果を利用し、新しい検出器を追加しない。coverageはstatus/evaluation/complete/has_detectionsを独立させる。必要項目の欠損・入力部分解析・統計母数不足・未対応・GeoIP未実施を区別する。共有・部分支援の観点はlimitationsを明示する。
+
+完全な不審/関連リクエストの関連付けとその件数はPhase 3で完成させる。現段階で復元できない独立エンジンの件数はnull/空欄としている。検出確度の既存数値からの変換はしない。既存coverage回帰テストを保持し、別ファイルにbundle契約テストを追加した。
