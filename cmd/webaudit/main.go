@@ -181,6 +181,10 @@ func run(args []string, out, errout io.Writer) int {
 		}
 	}
 	if *output != "" {
+		if er := os.MkdirAll(filepath.Dir(*output), 0700); er != nil {
+			fmt.Fprintln(errout, er)
+			return 2
+		}
 		f, er := os.OpenFile(*output, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
 		if er != nil {
 			fmt.Fprintln(errout, er)
