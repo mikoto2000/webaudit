@@ -53,19 +53,20 @@ func (n *NumericSummary) add(v *float64) {
 }
 
 type StatisticsRow struct {
-	Key                string  `json:"key"`
-	Value              *string `json:"value"`
-	Name               *string `json:"name"`
-	Organization       *string `json:"organization"`
-	Requests           int64   `json:"requests"`
-	SuspiciousRequests int64   `json:"suspicious_requests"`
-	RequestPercent     float64 `json:"request_percent"`
-	SuspiciousPercent  float64 `json:"suspicious_within_group_percent"`
-	UniqueIPs          *int64  `json:"unique_ips"`
-	UniqueIPQuality    string  `json:"unique_ip_quality"`
-	Other              bool    `json:"other"`
-	LabelTruncated     bool    `json:"label_truncated"`
-	CountQuality       string  `json:"count_quality"`
+	SuspiciousCountQuality string  `json:"suspicious_count_quality,omitempty"`
+	Key                    string  `json:"key"`
+	Value                  *string `json:"value"`
+	Name                   *string `json:"name"`
+	Organization           *string `json:"organization"`
+	Requests               int64   `json:"requests"`
+	SuspiciousRequests     int64   `json:"suspicious_requests"`
+	RequestPercent         float64 `json:"request_percent"`
+	SuspiciousPercent      float64 `json:"suspicious_within_group_percent"`
+	UniqueIPs              *int64  `json:"unique_ips"`
+	UniqueIPQuality        string  `json:"unique_ip_quality"`
+	Other                  bool    `json:"other"`
+	LabelTruncated         bool    `json:"label_truncated"`
+	CountQuality           string  `json:"count_quality"`
 }
 type TimelineRow struct {
 	Time               time.Time `json:"time"`
@@ -277,9 +278,10 @@ func (s *statisticsRecorder) observe(r RequestSnapshot) {
 	} else {
 		s.bytes.add(ptr(float64(*e.Bytes)))
 	}
-	s.duration.add(r.Duration)
 	if r.InvalidDuration {
 		s.duration.Invalid++
+	} else {
+		s.duration.add(r.Duration)
 	}
 	s.observeTimeline(e)
 }
@@ -359,6 +361,7 @@ func (s *statisticsRecorder) model(r *InvestigationReport) RequestStatistics {
 	for dim, table := range s.tables {
 		for _, row := range table {
 			copyRow := *row
+			copyRow.SuspiciousCountQuality = out.SuspiciousCountQuality
 			if s.total > 0 {
 				copyRow.RequestPercent = float64(row.Requests) * 100 / float64(s.total)
 			}
@@ -369,6 +372,7 @@ func (s *statisticsRecorder) model(r *InvestigationReport) RequestStatistics {
 		}
 		if row := s.other[dim]; row != nil {
 			copyRow := *row
+			copyRow.SuspiciousCountQuality = out.SuspiciousCountQuality
 			if s.total > 0 {
 				copyRow.RequestPercent = float64(row.Requests) * 100 / float64(s.total)
 			}
@@ -458,13 +462,13 @@ func (c *bundleCapture) initStatistics() {
 }
 func writeStatistics(b *bundleWriter, r *InvestigationReport) error {
 	for _, table := range []struct{ dim, name string }{{"status", "status"}, {"status_class", "status-class"}, {"method", "method"}, {"ip", "ip"}, {"host", "host"}, {"uri", "uri"}, {"user_agent", "user-agent"}, {"country", "country"}, {"asn", "asn"}, {"log_type", "log-type"}, {"protocol", "protocol"}} {
-		if err := b.csv("statistics/"+table.name+"-summary.csv", []string{"key", "value", "name", "organization", "missing", "other", "requests", "suspicious_requests", "request_percent", "suspicious_within_group_percent", "unique_ips", "unique_ip_quality", "label_truncated", "count_quality"}, func(write func(...string) error) error {
+		if err := b.csv("statistics/"+table.name+"-summary.csv", []string{"key", "value", "name", "organization", "missing", "other", "requests", "suspicious_requests", "suspicious_count_quality", "request_percent", "suspicious_within_group_percent", "unique_ips", "unique_ip_quality", "label_truncated", "count_quality"}, func(write func(...string) error) error {
 			for _, row := range r.Statistics.Dimensions[table.dim] {
 				ips := ""
 				if row.UniqueIPs != nil {
 					ips = strconv.FormatInt(*row.UniqueIPs, 10)
 				}
-				if err := write(row.Key, val(row.Value), val(row.Name), val(row.Organization), strconv.FormatBool(row.Value == nil && !row.Other), strconv.FormatBool(row.Other), strconv.FormatInt(row.Requests, 10), strconv.FormatInt(row.SuspiciousRequests, 10), strconv.FormatFloat(row.RequestPercent, 'f', 6, 64), strconv.FormatFloat(row.SuspiciousPercent, 'f', 6, 64), ips, row.UniqueIPQuality, strconv.FormatBool(row.LabelTruncated), row.CountQuality); err != nil {
+				if err := write(row.Key, val(row.Value), val(row.Name), val(row.Organization), strconv.FormatBool(row.Value == nil && !row.Other), strconv.FormatBool(row.Other), strconv.FormatInt(row.Requests, 10), strconv.FormatInt(row.SuspiciousRequests, 10), row.SuspiciousCountQuality, strconv.FormatFloat(row.RequestPercent, 'f', 6, 64), strconv.FormatFloat(row.SuspiciousPercent, 'f', 6, 64), ips, row.UniqueIPQuality, strconv.FormatBool(row.LabelTruncated), row.CountQuality); err != nil {
 					return err
 				}
 			}

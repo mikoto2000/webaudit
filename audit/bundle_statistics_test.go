@@ -8,11 +8,20 @@ import (
 )
 
 func TestStatisticsCSVSeparatesSuspiciousCountQuality(t *testing.T) {
- dir:=t.TempDir();input:=filepath.Join(dir,"access.log")
- if err:=os.WriteFile(input,[]byte(`192.0.2.1 - - [01/Nov/2026:00:00:00 +0000] "GET /healthy HTTP/1.1" 200 0`+"\n"),0600);err!=nil{t.Fatal(err)}
- target:=filepath.Join(dir,"report")
- if _,err:=GenerateBundle([]string{input},target,Options{},BundleOptions{MaxSpoolBytes:1});err!=nil{t.Fatal(err)}
- for _,row:=range bundleCSV(t,filepath.Join(target,"statistics","method-summary.csv")){if row["suspicious_count_quality"]!="lower_bound"{t.Fatal("incomplete suspicious count presented without its quality",row)}}
+	dir := t.TempDir()
+	input := filepath.Join(dir, "access.log")
+	if err := os.WriteFile(input, []byte(`192.0.2.1 - - [01/Nov/2026:00:00:00 +0000] "GET /healthy HTTP/1.1" 200 0`+"\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	target := filepath.Join(dir, "report")
+	if _, err := GenerateBundle([]string{input}, target, Options{}, BundleOptions{MaxSpoolBytes: 1}); err != nil {
+		t.Fatal(err)
+	}
+	for _, row := range bundleCSV(t, filepath.Join(target, "statistics", "method-summary.csv")) {
+		if row["suspicious_count_quality"] != "lower_bound" {
+			t.Fatal("incomplete suspicious count presented without its quality", row)
+		}
+	}
 }
 
 func TestBundleStatisticsUseAllRequestsAndPreserveZeroAndMissing(t *testing.T) {
