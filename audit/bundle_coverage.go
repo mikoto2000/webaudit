@@ -405,7 +405,6 @@ func buildCoverage(r *InvestigationReport, c *bundleCapture) {
 				row.DetectedRequests = nil
 				row.Detections = nil
 				partial = true
-				row.EligibleRequests = rr.EligibleRequests
 				if rr.Evaluation == "unable" {
 					ready = false
 				}
@@ -429,9 +428,9 @@ func buildCoverage(r *InvestigationReport, c *bundleCapture) {
 	sort.Slice(r.Coverage, func(i, j int) bool { return r.Coverage[i].ID < r.Coverage[j].ID })
 }
 func writeCoverage(b *bundleWriter, r *InvestigationReport) error {
-	if err := b.csv("analysis-rules.csv", []string{"rule_id", "engine", "kind", "category", "description", "supported", "enabled", "required_fields", "conditions"}, func(write func(...string) error) error {
+	if err := b.csv("analysis-rules.csv", []string{"rule_id", "engine", "kind", "category", "severity", "description", "supported", "enabled", "required_fields", "conditions"}, func(write func(...string) error) error {
 		for _, rule := range r.AnalysisRules {
-			if err := write(rule.ID, rule.Engine, rule.Kind, rule.Category, rule.Description, strconv.FormatBool(rule.Supported), strconv.FormatBool(rule.Enabled), strings.Join(rule.Required, ";"), rule.Condition); err != nil {
+			if err := write(rule.ID, rule.Engine, rule.Kind, rule.Category, rule.Severity, rule.Description, strconv.FormatBool(rule.Supported), strconv.FormatBool(rule.Enabled), strings.Join(rule.Required, ";"), rule.Condition); err != nil {
 				return err
 			}
 		}

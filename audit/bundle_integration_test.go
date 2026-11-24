@@ -118,3 +118,40 @@ func TestBundleNoHitEmptyAndFormulaSafeMetadata(t *testing.T) {
 		t.Fatal("formula not guarded", got)
 	}
 }
+
+func TestBundleHostileEvidenceIsSafeAcrossArtifacts(t *testing.T) {
+	dir := t.TempDir()
+	input := filepath.Join(dir, "access.log")
+	raw := `192.0.2.1 - - [01/Nov/2026:00:00:00 +0000] "GET /.env?x=</pre><script>alert(1)</script> HTTP/1.1" 404 0 "-" "=1+2"` + "\n"
+	if err := os.WriteFile(input, []byte(raw), 0600); err != nil {
+		t.Fatal(err)
+	}
+	target := filepath.Join(dir, "report")
+	r, err := GenerateBundle([]string{input}, target, Options{}, BundleOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if r.Evidence.SuspiciousRequests != 1 {
+		t.Fatal("hostile test input did not reach evidence")
+	}
+	rows := bundleCSV(t, filepath.Join(target, "suspicious-requests.csv"))
+	if len(rows) != 1 || rows[0]["user_agent"] != "'=1+2" {
+		t.Fatal("formula payload escaped incorrectly", rows)
+	}
+	for _, row := range bundleCSV(t, filepath.Join(target, "findings.csv")) {
+		if !json.Valid([]byte(row["details_json"])) {
+			t.Fatal("CSV structural JSON damaged")
+		}
+	}
+	data, err := os.ReadFile(filepath.Join(target, "report.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(data), "<script>") || !strings.Contains(string(data), "&lt;script&gt;") {
+		t.Fatal("HTML evidence injection")
+	}
+	original, err := os.ReadFile(input)
+	if err != nil || string(original) != raw {
+		t.Fatal("original evidence changed")
+	}
+}
