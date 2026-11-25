@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -245,6 +246,15 @@ func TestBundleAudienceExecutiveBoundsDoNotDropInvestigationTargets(t *testing.T
 	content := string(audienceRead(t, target, "executive-summary.html"))
 	if strings.Count(content, `id="RISK-`) > 10 {
 		t.Fatal("executive report should summarize bounded top candidates")
+	}
+	anchors := map[string]bool{}
+	for _, m := range regexp.MustCompile(`id="([^"]+)"`).FindAllStringSubmatch(content, -1) {
+		anchors[m[1]] = true
+	}
+	for _, m := range regexp.MustCompile(`href="executive-summary.html#([^"]+)"`).FindAllStringSubmatch(string(audienceRead(t, target, "technical-report.html")), -1) {
+		if !anchors[m[1]] {
+			t.Fatal("technical link points to an executive risk omitted by the display limit", m[1])
+		}
 	}
 	for _, c := range r.SecondaryInvestigation.Cases {
 		audienceRead(t, target, "prompts/cases/"+c.ID+".md")

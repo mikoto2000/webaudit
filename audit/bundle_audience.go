@@ -459,8 +459,7 @@ func writeAudienceReports(b *bundleWriter, r *InvestigationReport) error {
 	return text("index.html", `<!doctype html><html lang="`+p.Language+`"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>WebAudit</title><h1>WebAudit</h1><ul><li><a href="executive-summary.html">`+audienceText(p.Language, "幹部向け報告", "Executive report")+`</a></li><li><a href="technical-report.html">`+audienceText(p.Language, "技術者向け報告", "Technical report")+`</a></li><li><a href="technical-report.html#secondary-investigation">`+audienceText(p.Language, "二次調査プロンプト生成", "Secondary prompt generator")+`</a></li><li><a href="report-spec.md">Report specification</a></li><li><a href="report.json">JSON</a></li><li><a href="README.md">README</a></li><li><a href="manifest.json">Manifest</a></li></ul></html>`)
 }
 
-func renderExecutiveReport(w io.Writer, r *InvestigationReport) error {
-	view := *r
+func executiveRisks(r *InvestigationReport) []DecisionRisk {
 	risks := append([]DecisionRisk(nil), r.DecisionSupport.Risks...)
 	rank := func(risk DecisionRisk) int {
 		if risk.Outcome == "possible_success" {
@@ -481,6 +480,12 @@ func renderExecutiveReport(w io.Writer, r *InvestigationReport) error {
 	if len(risks) > 10 {
 		risks = risks[:10]
 	}
+	return risks
+}
+
+func renderExecutiveReport(w io.Writer, r *InvestigationReport) error {
+	view := *r
+	risks := executiveRisks(r)
 	view.DecisionSupport.Risks = risks
 	view.DecisionSupport.Actions = nil
 	actions := map[string]DecisionAction{}
@@ -498,7 +503,16 @@ func renderExecutiveReport(w io.Writer, r *InvestigationReport) error {
 // HTML is always rendered through html/template. No log-derived template.HTML.
 func renderAudienceTemplate(w io.Writer, source string, r *InvestigationReport) error {
 	lang := r.Metadata.Language
-	funcs := template.FuncMap{"l": func(ja, en string) string { return audienceText(lang, ja, en) }, "label": func(code string) string {
+	visible := map[string]bool{}
+	for _, risk := range executiveRisks(r) {
+		visible[risk.ID] = true
+	}
+	funcs := template.FuncMap{"riskAnchor": func(id string) string {
+		if visible[id] {
+			return id
+		}
+		return "risk-overview"
+	}, "l": func(ja, en string) string { return audienceText(lang, ja, en) }, "label": func(code string) string {
 		labels := map[string][2]string{"high": {"高", "High"}, "medium": {"中", "Medium"}, "low": {"低", "Low"}, "unassessed": {"未評価", "Unassessed"}, "finding": {"WebAudit事案", "WebAudit incident"}, "independent_detection": {"独立エンジン検出", "Independent engine detection"}, "not_started": {"未着手", "Not started"}}
 		if pair, ok := labels[code]; ok {
 			return audienceText(lang, pair[0], pair[1])
