@@ -74,6 +74,8 @@ type LogInventory struct {
 }
 
 type InvestigationReport struct {
+	DecisionSupport          DecisionSupport      `json:"decision_support"`
+	SecondaryInvestigation   SecondaryPlan        `json:"secondary_investigation"`
 	Summary                  InvestigationSummary `json:"summary"`
 	Assessments              []CaseAssessment     `json:"assessments"`
 	Recommendations          []Recommendation     `json:"recommendations"`
@@ -104,20 +106,23 @@ type BundleArtifact struct {
 	Bytes  int64  `json:"bytes"`
 }
 type BundleManifest struct {
-	Schema            string            `json:"schema"`
-	Version           string            `json:"version"`
-	Build             map[string]string `json:"build"`
-	Started           time.Time         `json:"started_at"`
-	Finished          time.Time         `json:"finished_at"`
-	Settings          map[string]any    `json:"settings"`
-	RulesVersion      string            `json:"rules_version"`
-	RulesSHA256       string            `json:"rules_sha256"`
-	GeoIP             *GeoIPReport      `json:"geoip"`
-	Inputs            []LogInventory    `json:"inputs"`
-	Complete          bool              `json:"complete"`
-	Warnings          []string          `json:"warnings"`
-	Artifacts         []BundleArtifact  `json:"artifacts"`
-	ArtifactHashScope string            `json:"artifact_hash_scope"`
+	DecisionRulesVersion     string            `json:"decision_rules_version"`
+	ReportSpecVersion        string            `json:"report_spec_version"`
+	SecondaryTemplateVersion string            `json:"secondary_template_version"`
+	Schema                   string            `json:"schema"`
+	Version                  string            `json:"version"`
+	Build                    map[string]string `json:"build"`
+	Started                  time.Time         `json:"started_at"`
+	Finished                 time.Time         `json:"finished_at"`
+	Settings                 map[string]any    `json:"settings"`
+	RulesVersion             string            `json:"rules_version"`
+	RulesSHA256              string            `json:"rules_sha256"`
+	GeoIP                    *GeoIPReport      `json:"geoip"`
+	Inputs                   []LogInventory    `json:"inputs"`
+	Complete                 bool              `json:"complete"`
+	Warnings                 []string          `json:"warnings"`
+	Artifacts                []BundleArtifact  `json:"artifacts"`
+	ArtifactHashScope        string            `json:"artifact_hash_scope"`
 }
 
 func bundleSettings(o Options, b BundleOptions) map[string]any {
@@ -550,6 +555,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if err = maskCommonReport(r); err != nil {
 		return nil, err
 	}
+	prepareAudienceReports(r)
 	if err = writeRecommendations(writer, r); err != nil {
 		return nil, err
 	}
@@ -606,7 +612,7 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 	if err = writer.json("report.json", r); err != nil {
 		return nil, err
 	}
-	if err = writer.write("report.html", func(w io.Writer) error { return writeInvestigationHTML(w, r) }); err != nil {
+	if err = writeAudienceReports(writer, r); err != nil {
 		return nil, err
 	}
 	artifacts, err := writer.artifacts()
@@ -626,6 +632,9 @@ func GenerateBundle(paths []string, target string, o Options, b BundleOptions) (
 		}
 	}
 	manifest := BundleManifest{Schema: "webaudit/manifest-1", Version: Version, Build: build, Started: r.Started, Finished: r.Finished, Settings: r.Settings, RulesVersion: RulesVersion, RulesSHA256: rulesHash, GeoIP: r.Analysis.GeoIP, Inputs: r.Inventory, Complete: r.Complete, Warnings: r.Analysis.Warnings, Artifacts: artifacts, ArtifactHashScope: "all listed artifacts; manifest excludes its own hash"}
+	manifest.DecisionRulesVersion = audienceRulesVersion
+	manifest.ReportSpecVersion = "webaudit/report-spec-1"
+	manifest.SecondaryTemplateVersion = secondaryTemplateVersion
 	if err = writer.json("manifest.json", manifest); err != nil {
 		return nil, err
 	}

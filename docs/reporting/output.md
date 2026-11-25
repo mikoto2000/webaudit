@@ -12,6 +12,10 @@ webaudit access.log --report-dir report-en --lang en
 
 | 成果物 | 内容 |
 |---|---|
+| index.html / executive-summary.html / technical-report.html | 成果物一覧、幹部向け意思決定資料、技術詳細と二次調査プロンプト生成 |
+| report-spec.md / templates/* | 二次・三次調査へ引き継ぐレポート構成・品質・完了条件とHTML/CSS |
+| data/* / risk-rules.json / risk-register.csv / action-plan.csv | 共通モデルから生成する判断・条件付きリスク・対応・調査計画 |
+| prompts/*.md / prompts/cases/*.md | 全体・高優先度・個別事案/独立検出の二次調査依頼。LLM呼出しは行わない |
 | report.html | 11章、目次、概要、全アクセス統計、カバレッジ、一覧/詳細/戻りリンク、生ログ代表例、事実と推定、推奨対応、印刷CSS |
 | report.json | `webaudit/investigation-1`共通モデル。既存解析結果は`analysis`に保持 |
 | manifest.json | `webaudit/manifest-1`、build/実効条件/制限/ルールhash/DB来歴/入力hash/完全性/成果物hash |
@@ -68,3 +72,5 @@ HTMLは事案/独立検出各100件、coverage/rule各1000件、ランキング2
 テスト対応表と残存事項は[traceability.md](traceability.md)、測定手順・生値は[performance.md](performance.md)を参照。
 
 統計別紙の`count_quality`は全観測件数、`suspicious_count_quality`は不審件数の品質を表す。spool上限等で後者だけが下限になる場合もCSV単体で開示する。数値統計のcount/missing/invalidは排他的に計数し、不正値を欠損数へ二重計上しない。
+
+幹部・技術者別の構成、対応レベルの条件、フォルダー入力、信頼境界、仕様書/テンプレートの利用は[audience-reports.md](audience-reports.md)を参照。既存report.htmlはスクリプトなしの互換入口で、技術者向けの生成UIはtechnical-report.htmlにあります。
