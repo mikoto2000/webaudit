@@ -7,7 +7,65 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 )
+
+func TestHTMLCoverageOverview(t *testing.T) {
+	for _, partial := range []bool{false, true} {
+		for _, lang := range []string{"ja", "en"} {
+			r := Report{Partial: partial, UpstreamAlerts: make([]SourceAlert, 2), AuraMatches: make([]SourceAlert, 3), AuraAnalysis: make([]SourceAlert, 4)}
+			var b bytes.Buffer
+			if err := WriteReportWithLanguage(&b, r, "html", lang); err != nil {
+				t.Fatal(err)
+			}
+			s := b.String()
+			tr := reportTranslator{language: lang}
+			state := "Completed"
+			if partial {
+				state = "Partial"
+			}
+			for _, want := range []string{tr.text(state), tr.text("WebAudit incidents:") + " 0", tr.text("Hub alerts:") + " 2", tr.text("Aura signature groups:") + " 3", tr.text("Aura analysis findings:") + " 4", tr.text("Zero WebAudit incidents does not mean zero Hub or Aura detections. Counts use different aggregation units and must not be added."), `href="#coverage"`} {
+				if at := strings.Index(s, want); at < 0 || at > strings.Index(s, `id="incident-list"`) {
+					t.Errorf("partial=%t lang=%s: overview missing %q", partial, lang, want)
+				}
+			}
+			for _, id := range []string{"coverage", "input-files"} {
+				if !strings.Contains(s, `id="`+id+`"`) {
+					t.Errorf("missing link target %s", id)
+				}
+			}
+		}
+	}
+}
+
+func TestHTMLUnknownTimezonePeriod(t *testing.T) {
+	for _, retained := range []bool{false, true} {
+		f := Incident{ID: "WA-wall", TimezoneUnknown: true}
+		if retained {
+			f.First = time.Date(2026, 11, 1, 12, 3, 4, 0, time.UTC)
+			f.Last = f.First.Add(time.Minute)
+		}
+		for _, lang := range []string{"ja", "en"} {
+			var b bytes.Buffer
+			if err := WriteReportWithLanguage(&b, Report{Findings: []Incident{f}}, "html", lang); err != nil {
+				t.Fatal(err)
+			}
+			s := b.String()
+			s = s[strings.Index(s, `<article id="WA-wall"`):]
+			if retained {
+				if !strings.Contains(s, "2026-11-01T12:03:04 — 2026-11-01T12:04:04") || strings.Contains(s, "+0000") || strings.Contains(s, "12:03:04Z") {
+					t.Fatal("wall-clock range missing or given an unverified timezone", s)
+				}
+			} else if !strings.Contains(s, `href="#evidence-WA-wall"`) || !strings.Contains(s, `id="evidence-WA-wall"`) || strings.Contains(s, "0001-01-01") {
+				t.Fatal("missing-time fallback is broken", s)
+			}
+			tr := reportTranslator{language: lang}
+			if !strings.Contains(s, tr.text("Wall clock; timezone unknown; cannot convert to UTC")) || !strings.Contains(s, tr.text("Evidence-strength indicator. This is not the probability of success.")) {
+				t.Fatal("missing interpretation guidance", s)
+			}
+		}
+	}
+}
 
 func TestReports(t *testing.T) {
 	c := NewCorrelator(Options{})

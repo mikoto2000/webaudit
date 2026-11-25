@@ -6,28 +6,9 @@ Apache HTTP Server / Nginx のログから、不審なアクセスと関連す�
 
 **アクセスログだけで侵害の成功を確定できるとは限りません。** HTTP 200・302・500だけでは成功と判定せず、証拠が不足する場合は「成否不明」とします。
 
-v2.1.0では幹部向け・技術者向けHTMLレポート、二次調査の計画・依頼プロンプト、共通仕様書とHTML/CSSテンプレートの同時出力を追加しました。変更点は[v2.1.0リリースノート](docs/releases/v2.1.0.md)を参照してください。既存のバッチ解析・リアルタイム監視・状態復元・外部コマンドHookも引き続き利用できます。GeoIP / ASNデータベースの初回導入と更新は[GeoIPデータベース管理](docs/geoip-database-management.md)を参照してください。
+v2.1.1では幹部向け・技術者向けHTMLレポート、二次調査の計画・依頼プロンプト、共通仕様書とHTML/CSSテンプレートの同時出力を追加しました。変更点は[v2.1.1リリースノート](docs/releases/v2.1.1.md)を参照してください。既存のバッチ解析・リアルタイム監視・状態復元・外部コマンドHookも引き続き利用できます。GeoIP / ASNデータベースの初回導入と更新は[GeoIPデータベース管理](docs/geoip-database-management.md)を参照してください。
 
 ## はじめに：ログを解析してHTMLレポートを開く
-
-継続監視には明示的に `watch` を指定します。従来の一括解析はそのまま利用できます。
-
-```sh
-webaudit watch /var/log/nginx/access.log
-webaudit watch /var/log/nginx/ --from beginning --format jsonl
-webaudit watch access.log --on-detect ./examples/notify.sh
-webaudit watch access.log --on-detect ./examples/notify.sh --on-detect-event all
-webaudit watch access.log --no-state
-```
-
-初回は末尾から開始し、`--from beginning` で既存内容も読み取ります。保存済み状態があれば
-`--from` より優先します。`--reset-state --from beginning` で明示的に読み直せます。
-`Ctrl+C` で状態を保存して終了します。通常監視に設定ファイル、外部DB、デーモン、ネットワークは不要です。
-Hookは指定時だけ、同じOSユーザーで実行します。
-
-対応ログ、ファイル選択、ローテーション、JSONLスキーマ、状態管理、Hook設定と制限事項は
-[監視・Hookガイド](docs/watch.md)、実行例は[watch examples](examples/watch-examples.md)、
-試験と実測値は[検証記録](docs/watch-validation.md)を参照してください。
 
 ### 1. 実行ファイルをダウンロードする
 
@@ -82,7 +63,7 @@ Windows / LinuxのARM64環境では、例のファイル名の `amd64` を `arm6
 
 ### 3. 結果を確認する
 
-端末には解析件数・上位5事案・警告が表示されます。生成された `report.html` をブラウザーで開くと、保持された事案の証拠や判定理由を確認できます。HTMLは単一ファイルで、外部画像・CDN・スクリプトを使いません。
+端末には解析件数・上位5事案・警告が表示されます。端末の調査案内は日本語です。`--lang en` は単一HTMLの表示を英語に切り替える指定で、端末要約には適用されません。生成された `report.html` をブラウザーで開くと、保持された事案の証拠や判定理由を確認できます。HTMLは単一ファイルで、外部画像・CDN・スクリプトを使いません。
 
 まず次の順に確認してください。
 
@@ -106,6 +87,27 @@ HTMLの事案詳細には、攻撃・検出の種類ごとに「不明な理由�
 案内は追加調査の目安であり、証拠を検出したという意味ではありません。時刻・タイムゾーン・対象ホスト・URL、可能ならリクエストIDで当時の記録を照合してください。ログに痕跡がないだけでは失敗と判断できず、記録が残っていない場合は成否不明が続きます。失敗の証拠は確認できた要求の範囲に限られます。現在の環境での再現結果だけでは当時の成否を確定できません。追加証拠を取り込んで自動的に判定を更新する機能はありません。
 
 独自の事案が0件でも、Hub / Aura由来の検出は別に表示されます。警告と解析範囲も併せて確認してください。
+
+## 継続監視したい場合
+
+継続監視には明示的に `watch` を指定します。従来の一括解析はそのまま利用できます。
+
+```sh
+webaudit watch /var/log/nginx/access.log
+webaudit watch /var/log/nginx/ --from beginning --format jsonl
+webaudit watch access.log --on-detect ./examples/notify.sh
+webaudit watch access.log --on-detect ./examples/notify.sh --on-detect-event all
+webaudit watch access.log --no-state
+```
+
+初回は末尾から開始し、`--from beginning` で既存内容も読み取ります。保存済み状態があれば
+`--from` より優先します。`--reset-state --from beginning` で明示的に読み直せます。
+`Ctrl+C` で状態を保存して終了します。通常監視に設定ファイル、外部DB、デーモン、ネットワークは不要です。
+Hookは指定時だけ、同じOSユーザーで実行します。
+
+対応ログ、ファイル選択、ローテーション、JSONLスキーマ、状態管理、Hook設定と制限事項は
+[監視・Hookガイド](docs/watch.md)、実行例は[watch examples](examples/watch-examples.md)、
+試験と実測値は[検証記録](docs/watch-validation.md)を参照してください。
 
 ## よく使う操作
 
