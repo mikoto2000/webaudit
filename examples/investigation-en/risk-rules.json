@@ -1,0 +1,124 @@
+{
+  "common_escalation_condition": "If additional records establish unauthorized activity or continuing or expanding harm, the responsible owner reviews the current situation and operational impact and decides whether to strengthen the response. Access-log detections alone do not automatically authorize restrictions or shutdowns.",
+  "common_if_deferred": "Deferring investigation leaves harm unresolved and logs may be overwritten, preventing later verification.",
+  "escalation_fallback": "Use common_escalation_condition when the profile escalation_condition is empty",
+  "impact": "conditional; never organization-specific probability or verified harm",
+  "priority_rule": "possible_success or severity high/critical =\u003e high; medium =\u003e medium; otherwise low; independent detections unassessed",
+  "profile_precedence": "resource, authentication, processing, data, availability; otherwise review",
+  "profiles": [
+    {
+      "categories": [
+        "sensitive_file",
+        "lfi_traversal",
+        "rfi",
+        "null_byte"
+      ],
+      "condition": "If sensitive resources were actually returned",
+      "conditional_impact": "Disclosure or subsequent unauthorized access may follow; content and sensitivity remain unverified.",
+      "escalation_condition": "If historical response content or file-access records establish that non-public file content was returned or read, investigate the exposed information and affected scope and consider restricting the affected route.",
+      "id": "resource",
+      "next_action": "Review historical responses and route exposure settings",
+      "title": "Sensitive resource exposure"
+    },
+    {
+      "categories": [
+        "auth",
+        "login",
+        "access_bypass"
+      ],
+      "condition": "If unauthorized authentication or operations succeeded",
+      "conditional_impact": "Accounts or privileged functions may have been misused; authentication and entitlements are unverified.",
+      "escalation_condition": "If authentication or operation audits establish a login by an unauthorized user or an unauthorized operation, investigate the account and operation scope and consider account or session restrictions.",
+      "id": "authentication",
+      "next_action": "Correlate authentication outcomes, accounts and operation audits",
+      "title": "Unauthorized authentication or authorization"
+    },
+    {
+      "categories": [
+        "sqli",
+        "nosqli",
+        "ldap_injection",
+        "xpath_injection",
+        "command_injection",
+        "shellshock",
+        "ssti",
+        "deserialization",
+        "log4shell",
+        "spring4shell",
+        "struts_ognl",
+        "ssrf",
+        "xss"
+      ],
+      "condition": "If an applicable vulnerable operation interpreted or executed the input",
+      "conditional_impact": "Unintended execution or data access may occur; execution, changes and harm are unverified.",
+      "escalation_condition": "If application, database, host or browser evidence establishes unintended processing, data access or modification, or script execution caused by the input, investigate affected operations and data and consider function restrictions or detailed investigation.",
+      "id": "processing",
+      "next_action": "Correlate application, database, host records and historical responses",
+      "title": "Unintended processing or information access"
+    },
+    {
+      "categories": [
+        "WS-size",
+        "WS-url-size",
+        "size_anomaly",
+        "large_response"
+      ],
+      "condition": "If confidential data was returned without authorization",
+      "conditional_impact": "Confidentiality may be affected; volume alone cannot establish content or authorization.",
+      "escalation_condition": "If returned content and historical authorization establish unauthorized retrieval of confidential data, investigate the data and scope and consider restricting the affected export or access. Response volume alone is insufficient.",
+      "id": "data",
+      "next_action": "Review returned data, authorization and legitimate export jobs",
+      "title": "Possible unauthorized data retrieval"
+    },
+    {
+      "categories": [
+        "rate",
+        "burst",
+        "WS-hour",
+        "WS-ip",
+        "WS-errors",
+        "traffic_spike"
+      ],
+      "condition": "If abnormal processing or load affected legitimate use",
+      "conditional_impact": "Functions may be impaired; business impact and current state are unverified.",
+      "escalation_condition": "If service, performance or error records establish an outage or disruption to legitimate use associated with the traffic, investigate affected scope and whether disruption continues and consider targeted traffic restrictions or recovery. Traffic volume alone is insufficient.",
+      "id": "availability",
+      "next_action": "Review historical errors, performance and supplied service-status records",
+      "title": "Service quality or availability"
+    },
+    {
+      "categories": [
+        "unknown"
+      ],
+      "condition": "If the detected activity led to unauthorized operations or resource access",
+      "conditional_impact": "Subsequent attacks or misuse may follow; applicability, identity and harm are unverified.",
+      "escalation_condition": "",
+      "id": "review",
+      "next_action": "Validate rule applicability, target routes, authorized use and subsequent records",
+      "title": "Further review of probing or suspicious activity"
+    }
+  ],
+  "response_rules": [
+    {
+      "code": "urgent",
+      "condition": "A responsible owner considers urgent response after corroborating disclosure, unauthorized critical operations or current severe impairment; not selected automatically from access logs."
+    },
+    {
+      "code": "priority",
+      "condition": "A possible-success case or a case with high investigation priority exists."
+    },
+    {
+      "code": "hold",
+      "condition": "No priority evidence and either zero parsed observations or incomplete analysis."
+    },
+    {
+      "code": "planned",
+      "condition": "Review candidates exist without high priority, including unassessed independent detections."
+    },
+    {
+      "code": "monitor",
+      "condition": "No candidates in the completed evaluated scope; not a guarantee of security."
+    }
+  ],
+  "version": "webaudit/response-rules-2"
+}

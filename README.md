@@ -1,5 +1,7 @@
 # WebAudit
 
+**[出力レポート例を見る（GitHub Pages）](https://mikoto2000.github.io/webaudit/)** · [日本語の資料一覧](https://mikoto2000.github.io/webaudit/investigation-ja/) · [English examples](https://mikoto2000.github.io/webaudit/investigation-en/)
+
 Apache HTTP Server / Nginx のログから、不審なアクセスと関連する事案を見つけ、攻撃の成否の推定や追加調査事項を確認するためのオフラインCLIです。
 
 実行ファイルとログがあれば使えます。Go・DB・CrowdSec・Docker・APIキー・設定ファイル・管理者権限は不要で、解析中にネットワーク通信は行いません。
@@ -375,6 +377,6 @@ WebAudit署名では元観測ごとの一致ルール数を検出数、複数ル
 重要度は既存ルールの優先度を継承し、影響の確定評価とは区別します。攻撃らしさのスコア、検出確度、成否、成否の証拠強度を分離し、校正された確率に変換しません。観測事実・推定・未確認事項を分け、HTTP 200/403/404のみで侵入や失敗を断定しません。追加調査と予防策の検討を区別し、該当事案の時間帯・IP・ホスト・URIと既存の攻撃別確認案内を出力します。
 
 
-報告書一式の[利用方法・出力契約・件数定義・制約](docs/reporting/output.md)、[要求対応表とテスト](docs/reporting/traceability.md)、[性能と資源使用量](docs/reporting/performance.md)。[日本語サンプル](examples/investigation-ja/report.html) / [英語サンプル](examples/investigation-en/report.html)。
+報告書一式の[利用方法・出力契約・件数定義・制約](docs/reporting/output.md)、[要求対応表とテスト](docs/reporting/traceability.md)、[性能と資源使用量](docs/reporting/performance.md)。[日本語サンプルの資料一覧](examples/investigation-ja/index.html) / [英語サンプルの資料一覧](examples/investigation-en/index.html)。資料一覧から幹部向け・技術者向けレポートや不審アクセスのログ一覧を開けます。
 
 `--verbose` は stderr に入力ファイルのプログレスバーと読み取り行数を表示します。単一の大きなファイルでも行数は約100ms間隔で更新します。バーは列挙したファイルの処理済み数（重複除外・読み取り失敗を含む）で、解析やレポート生成全体の成功率ではありません。gzip、ディレクトリ、`--report-dir` にも対応します。完了時は改行し、通常レポートのファイル別診断は従来どおり表示します。stdout のレポート形式は変わりません。

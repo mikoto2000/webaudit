@@ -67,7 +67,9 @@ HTMLは事案/独立検出各100件、coverage/rule各1000件、ランキング2
 
 ## サンプルと検証
 
-[日本語](../../examples/investigation-ja/report.html) / [English](../../examples/investigation-en/report.html)。各ディレクトリにJSON/CSV/manifestも含む。入力は`examples/sample.log`で、絶対原本パスとbuild revisionは生成環境の値である。再生成する際は未作成の別出力先を指定する。
+[日本語の資料一覧](../../examples/investigation-ja/index.html) / [English artifact index](../../examples/investigation-en/index.html)。各ディレクトリに幹部向け・技術者向けレポート、依頼文、JSON/CSV/manifestも含む。入力は`examples/sample.log`で、絶対原本パスとbuild revisionは生成環境の値である。再生成する際は未作成の別出力先を指定する。
+
+ブラウザーでは[GitHub Pagesの出力レポート例](https://mikoto2000.github.io/webaudit/)から開ける。`examples/investigation-ja`・`examples/investigation-en`と単一ファイルの出力例を公開し、main上の関連ファイルの更新時にGitHub Actionsで再配信する。配信前にmanifestのハッシュ・サイズとHTML内のローカルリンク・アンカーを検証する。手元で同じ配信内容を作成する場合は、未作成の出力先を指定して`python3 tools/build-report-pages.py _site`を実行する。
 
 テスト対応表と残存事項は[traceability.md](traceability.md)、測定手順・生値は[performance.md](performance.md)を参照。
 

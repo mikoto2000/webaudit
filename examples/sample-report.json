@@ -10,7 +10,7 @@
       "source": "AuraDFIR/analysis",
       "rule_id": "rare_user_agent",
       "ip": "",
-      "group": "<script>alert('untrusted')</script>",
+      "group": "\u003cscript\u003ealert('untrusted')\u003c/script\u003e",
       "first": null,
       "last": null,
       "count": 1,
@@ -69,15 +69,15 @@
       "count": 3,
       "events": [
         {
-          "file": "examples\\sample.log",
+          "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
           "line": 6
         },
         {
-          "file": "examples\\sample.log",
+          "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
           "line": 7
         },
         {
-          "file": "examples\\sample.log",
+          "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
           "line": 8
         }
       ]
@@ -92,15 +92,15 @@
       "count": 3,
       "events": [
         {
-          "file": "examples\\sample.log",
+          "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
           "line": 2
         },
         {
-          "file": "examples\\sample.log",
+          "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
           "line": 3
         },
         {
-          "file": "examples\\sample.log",
+          "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
           "line": 4
         }
       ]
@@ -115,7 +115,7 @@
       "count": 1,
       "events": [
         {
-          "file": "examples\\sample.log",
+          "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
           "line": 9
         }
       ]
@@ -132,7 +132,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2017-9841 exploits",
       "file": "scenarios/crowdsecurity/CVE-2017-9841.yaml",
-      "filter": "|\n    evt.Meta.log_type == 'http_access-log' &&\n    Lower(evt.Meta.http_path) endsWith 'util/php/eval-stdin.php'",
+      "filter": "|\n    evt.Meta.log_type == 'http_access-log' \u0026\u0026\n    Lower(evt.Meta.http_path) endsWith 'util/php/eval-stdin.php'",
       "supported": true
     },
     {
@@ -145,7 +145,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect Telerik CVE-2019-18935 exploitation attempts",
       "file": "scenarios/crowdsecurity/CVE-2019-18935.yaml",
-      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Upper(QueryUnescape(evt.Meta.http_path)) startsWith Upper('/Telerik.Web.UI.WebResource.axd?type=rau')",
+      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 Upper(QueryUnescape(evt.Meta.http_path)) startsWith Upper('/Telerik.Web.UI.WebResource.axd?type=rau')",
       "supported": true
     },
     {
@@ -184,7 +184,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2022-37042 exploits",
       "file": "scenarios/crowdsecurity/CVE-2022-37042.yaml",
-      "filter": "|\n  (\n  Upper(evt.Meta.http_path) contains Upper('/service/extension/backup/mboximport?account-name=admin&ow=2&no-switch=1&append=1') ||\n  Upper(evt.Meta.http_path) contains Upper('/service/extension/backup/mboximport?account-name=admin&account-status=1&ow=cmd') \n  )\n  and evt.Meta.http_status startsWith ('40') and\n  Upper(evt.Meta.http_verb) == 'POST'",
+      "filter": "|\n  (\n  Upper(evt.Meta.http_path) contains Upper('/service/extension/backup/mboximport?account-name=admin\u0026ow=2\u0026no-switch=1\u0026append=1') ||\n  Upper(evt.Meta.http_path) contains Upper('/service/extension/backup/mboximport?account-name=admin\u0026account-status=1\u0026ow=cmd') \n  )\n  and evt.Meta.http_status startsWith ('40') and\n  Upper(evt.Meta.http_verb) == 'POST'",
       "supported": true
     },
     {
@@ -210,7 +210,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2022-41082 exploits",
       "file": "scenarios/crowdsecurity/CVE-2022-41082.yaml",
-      "filter": "|\n  Upper(evt.Meta.http_path) contains Upper('/autodiscover/autodiscover.json') &&\n  Upper(evt.Parsed.http_args) contains Upper('powershell')",
+      "filter": "|\n  Upper(evt.Meta.http_path) contains Upper('/autodiscover/autodiscover.json') \u0026\u0026\n  Upper(evt.Parsed.http_args) contains Upper('powershell')",
       "supported": true
     },
     {
@@ -223,7 +223,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2022-41697 enumeration",
       "file": "scenarios/crowdsecurity/CVE-2022-41697.yaml",
-      "filter": "|\n  Upper(evt.Meta.http_path) contains Upper('/ghost/api/admin/session') &&\n  Upper(evt.Parsed.verb) == 'POST' &&\n  evt.Meta.http_status == '404'",
+      "filter": "|\n  Upper(evt.Meta.http_path) contains Upper('/ghost/api/admin/session') \u0026\u0026\n  Upper(evt.Parsed.verb) == 'POST' \u0026\u0026\n  evt.Meta.http_status == '404'",
       "supported": true
     },
     {
@@ -249,7 +249,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2022-44877 exploits",
       "file": "scenarios/crowdsecurity/CVE-2022-44877.yaml",
-      "filter": "|\n  Lower(evt.Meta.http_path) contains '/index.php' &&\n  Upper(evt.Parsed.verb) == 'POST' &&\n  evt.Meta.http_status == '302' &&\n  Lower(evt.Parsed.http_args) matches 'login=.*(\\\\$|%24)(\\\\(|%28).*(\\\\)|%29)'",
+      "filter": "|\n  Lower(evt.Meta.http_path) contains '/index.php' \u0026\u0026\n  Upper(evt.Parsed.verb) == 'POST' \u0026\u0026\n  evt.Meta.http_status == '302' \u0026\u0026\n  Lower(evt.Parsed.http_args) matches 'login=.*(\\\\$|%24)(\\\\(|%28).*(\\\\)|%29)'",
       "supported": true
     },
     {
@@ -262,7 +262,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2022-46169 brute forcing",
       "file": "scenarios/crowdsecurity/CVE-2022-46169.yaml",
-      "filter": "|\n  Upper(evt.Meta.http_path) contains Upper('/remote_agent.php') &&\n  Upper(evt.Parsed.verb) == 'GET' &&\n  Lower(evt.Parsed.http_args) contains 'host_id' &&\n  Lower(evt.Parsed.http_args) contains 'local_data_ids'",
+      "filter": "|\n  Upper(evt.Meta.http_path) contains Upper('/remote_agent.php') \u0026\u0026\n  Upper(evt.Parsed.verb) == 'GET' \u0026\u0026\n  Lower(evt.Parsed.http_args) contains 'host_id' \u0026\u0026\n  Lower(evt.Parsed.http_args) contains 'local_data_ids'",
       "supported": true
     },
     {
@@ -275,7 +275,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2022-46169 cmd injection",
       "file": "scenarios/crowdsecurity/CVE-2022-46169.yaml",
-      "filter": "|\n  Upper(evt.Meta.http_path) contains Upper('/remote_agent.php') &&\n  Upper(evt.Parsed.verb) == 'GET' &&\n  Lower(evt.Parsed.http_args) contains 'action=polldata' &&\n  Lower(evt.Parsed.http_args) matches 'poller_id=.*(;|%3b)'",
+      "filter": "|\n  Upper(evt.Meta.http_path) contains Upper('/remote_agent.php') \u0026\u0026\n  Upper(evt.Parsed.verb) == 'GET' \u0026\u0026\n  Lower(evt.Parsed.http_args) contains 'action=polldata' \u0026\u0026\n  Lower(evt.Parsed.http_args) matches 'poller_id=.*(;|%3b)'",
       "supported": true
     },
     {
@@ -288,7 +288,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2023-22515 exploitation",
       "file": "scenarios/crowdsecurity/CVE-2023-22515.yaml",
-      "filter": "|\n  Lower(evt.Parsed.file_ext) == '.action' &&\n  (Lower(evt.Parsed.file_dir) contains '/setup' || Lower(evt.Parsed.file_frag) == 'server-info') &&\n  evt.Parsed.file_frag != nil",
+      "filter": "|\n  Lower(evt.Parsed.file_ext) == '.action' \u0026\u0026\n  (Lower(evt.Parsed.file_dir) contains '/setup' || Lower(evt.Parsed.file_frag) == 'server-info') \u0026\u0026\n  evt.Parsed.file_frag != nil",
       "supported": true
     },
     {
@@ -301,7 +301,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2023-22518 exploits",
       "file": "scenarios/crowdsecurity/CVE-2023-22518.yaml",
-      "filter": "|\n  Upper(evt.Meta.http_path) contains Upper('/json/setup-restore.action') &&\n  Upper(evt.Parsed.verb) == 'POST'",
+      "filter": "|\n  Upper(evt.Meta.http_path) contains Upper('/json/setup-restore.action') \u0026\u0026\n  Upper(evt.Parsed.verb) == 'POST'",
       "supported": true
     },
     {
@@ -314,7 +314,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect owncloud CVE-2023-49103 exploitation attempts",
       "file": "scenarios/crowdsecurity/CVE-2023-49103.yaml",
-      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Lower(evt.Meta.http_path) contains '/owncloud/apps/graphapi/vendor/microsoft/microsoft-graph/tests/getphpinfo.php'",
+      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 Lower(evt.Meta.http_path) contains '/owncloud/apps/graphapi/vendor/microsoft/microsoft-graph/tests/getphpinfo.php'",
       "supported": true
     },
     {
@@ -327,7 +327,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2024-0012 exploitation attempts",
       "file": "scenarios/crowdsecurity/CVE-2024-0012.yaml",
-      "filter": "|\n  let request = Lower(evt.Parsed.request);\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && \n  evt.Meta.http_status in ['404', '403'] &&\n  (request matches '/php/.*/\\\\.js\\\\.map' || request matches '/index.php/.*\\\\.js\\\\.map')",
+      "filter": "|\n  let request = Lower(evt.Parsed.request);\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 \n  evt.Meta.http_status in ['404', '403'] \u0026\u0026\n  (request matches '/php/.*/\\\\.js\\\\.map' || request matches '/index.php/.*\\\\.js\\\\.map')",
       "supported": true
     },
     {
@@ -340,7 +340,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2024-38475 exploitation attempts",
       "file": "scenarios/crowdsecurity/CVE-2024-38475.yaml",
-      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && \n  evt.Meta.http_status in ['404', '403'] &&\n  Lower(evt.Parsed.request) endsWith '%3f'",
+      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 \n  evt.Meta.http_status in ['404', '403'] \u0026\u0026\n  Lower(evt.Parsed.request) endsWith '%3f'",
       "supported": true
     },
     {
@@ -353,7 +353,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect CVE-2024-9474 exploitation attempts",
       "file": "scenarios/crowdsecurity/CVE-2024-9474.yaml",
-      "filter": "|\n  let request = Lower(evt.Parsed.request);\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && \n  evt.Meta.http_status in ['404', '403'] &&\n  evt.Meta.http_verb == 'POST' &&\n  request contains '/php/utils/createremoteappwebsession.php/watchtowr.js.map'",
+      "filter": "|\n  let request = Lower(evt.Parsed.request);\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 \n  evt.Meta.http_status in ['404', '403'] \u0026\u0026\n  evt.Meta.http_verb == 'POST' \u0026\u0026\n  request contains '/php/utils/createremoteappwebsession.php/watchtowr.js.map'",
       "supported": true
     },
     {
@@ -431,7 +431,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "detect apisCP dashboard bruteforce",
       "file": "scenarios/crowdsecurity/http-apiscp-bf.yaml",
-      "filter": "\"evt.Meta.log_type == 'http_access-log' && evt.Meta.http_path startsWith '/apps/login' && evt.Parsed.verb == 'POST' && evt.Meta.http_status == '200'\"",
+      "filter": "\"evt.Meta.log_type == 'http_access-log' \u0026\u0026 evt.Meta.http_path startsWith '/apps/login' \u0026\u0026 evt.Parsed.verb == 'POST' \u0026\u0026 evt.Meta.http_status == '200'\"",
       "supported": true
     },
     {
@@ -457,7 +457,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect usage of bad User Agent",
       "file": "scenarios/crowdsecurity/http-bad-user-agent.yaml",
-      "filter": "'evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] && RegexpInFile(evt.Parsed.http_user_agent, \"bad_user_agents.regex.txt\")'",
+      "filter": "'evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] \u0026\u0026 RegexpInFile(evt.Parsed.http_user_agent, \"bad_user_agents.regex.txt\")'",
       "supported": true
     },
     {
@@ -470,7 +470,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect WordPress bruteforce on admin interface",
       "file": "scenarios/crowdsecurity/http-bf-wordpress_bf.yaml",
-      "filter": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.file_name == 'wp-login.php' && evt.Parsed.verb == 'POST' && evt.Meta.http_status == '200'\"",
+      "filter": "\"evt.Meta.log_type == 'http_access-log' \u0026\u0026 evt.Parsed.file_name == 'wp-login.php' \u0026\u0026 evt.Parsed.verb == 'POST' \u0026\u0026 evt.Meta.http_status == '200'\"",
       "supported": true
     },
     {
@@ -483,7 +483,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect WordPress bruteforce on XML-RPC endpoint",
       "file": "scenarios/crowdsecurity/http-bf-wordpress_bf_xmlrpc.yaml",
-      "filter": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.file_name == 'xmlrpc.php' && evt.Parsed.verb == 'POST'\"",
+      "filter": "\"evt.Meta.log_type == 'http_access-log' \u0026\u0026 evt.Parsed.file_name == 'xmlrpc.php' \u0026\u0026 evt.Parsed.verb == 'POST'\"",
       "supported": true
     },
     {
@@ -497,7 +497,7 @@
       "groupby": "evt.Meta.source_ip + '/' + evt.Meta.target_fqdn",
       "description": "Detect aggressive crawl on non static resources",
       "file": "scenarios/crowdsecurity/http-crawl-non_statics.yaml",
-      "filter": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] && evt.Parsed.static_ressource == 'false' && evt.Parsed.verb in ['GET', 'HEAD']\"",
+      "filter": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 evt.Parsed.static_ressource == 'false' \u0026\u0026 evt.Parsed.verb in ['GET', 'HEAD']\"",
       "supported": true
     },
     {
@@ -550,7 +550,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect DoS tools bypassing cache every request",
       "file": "scenarios/crowdsecurity/http-dos-bypass-cache.yaml",
-      "filter": "\"evt.Meta.log_type == 'http_access-log' && evt.Meta.http_args_len != '' && int(evt.Meta.http_args_len) >= 7 && int(evt.Meta.http_args_len) <= 12 && evt.Parsed.http_args matches '^[0-9]+$' && evt.Parsed.static_ressource == 'false'\"",
+      "filter": "\"evt.Meta.log_type == 'http_access-log' \u0026\u0026 evt.Meta.http_args_len != '' \u0026\u0026 int(evt.Meta.http_args_len) \u003e= 7 \u0026\u0026 int(evt.Meta.http_args_len) \u003c= 12 \u0026\u0026 evt.Parsed.http_args matches '^[0-9]+$' \u0026\u0026 evt.Parsed.static_ressource == 'false'\"",
       "supported": true
     },
     {
@@ -563,7 +563,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect DoS tools using invalid HTTP versions",
       "file": "scenarios/crowdsecurity/http-dos-invalid-http-versions.yaml",
-      "filter": "'evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] && evt.Parsed.http_version != \"\" && evt.Parsed.http_version not in [\"0.9\", \"1.0\", \"1.1\", \"2.0\", \"3.0\"]'",
+      "filter": "'evt.Meta.log_type in [\"http_access-log\", \"http_error-log\"] \u0026\u0026 evt.Parsed.http_version != \"\" \u0026\u0026 evt.Parsed.http_version not in [\"0.9\", \"1.0\", \"1.1\", \"2.0\", \"3.0\"]'",
       "supported": true
     },
     {
@@ -576,7 +576,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect DoS tools using random uri",
       "file": "scenarios/crowdsecurity/http-dos-random-uri.yaml",
-      "filter": "|\n  evt.Meta.log_type == \"http_access-log\" &&\n  evt.Meta.http_verb == 'GET' &&\n  evt.Parsed.static_ressource == 'false' &&\n  Upper(evt.Parsed.file_frag) == evt.Parsed.file_frag &&\n  len(evt.Parsed.file_frag) == 6 &&\n  int(evt.Meta.http_args_len) == 0",
+      "filter": "|\n  evt.Meta.log_type == \"http_access-log\" \u0026\u0026\n  evt.Meta.http_verb == 'GET' \u0026\u0026\n  evt.Parsed.static_ressource == 'false' \u0026\u0026\n  Upper(evt.Parsed.file_frag) == evt.Parsed.file_frag \u0026\u0026\n  len(evt.Parsed.file_frag) == 6 \u0026\u0026\n  int(evt.Meta.http_args_len) == 0",
       "supported": true
     },
     {
@@ -602,7 +602,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect generic http brute force",
       "file": "scenarios/crowdsecurity/http-generic-bf.yaml",
-      "filter": "\"evt.Meta.service == 'http' && evt.Meta.sub_type == 'auth_fail'\"",
+      "filter": "\"evt.Meta.service == 'http' \u0026\u0026 evt.Meta.sub_type == 'auth_fail'\"",
       "supported": true
     },
     {
@@ -615,7 +615,7 @@
       "groupby": "evt.Meta.source_ip + ' ' + evt.Meta.http_path",
       "description": "Detect generic 401 Authorization error brute force",
       "file": "scenarios/crowdsecurity/http-generic-bf.yaml",
-      "filter": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.verb == 'POST' && evt.Meta.http_status == '401'\"\n# group by path too: a credential brute force repeats the same endpoint, while\n# 401s spread over different paths (client probing an endpoint being configured,\n# path enumeration) are not a credential attack",
+      "filter": "\"evt.Meta.log_type == 'http_access-log' \u0026\u0026 evt.Parsed.verb == 'POST' \u0026\u0026 evt.Meta.http_status == '401'\"\n# group by path too: a credential brute force repeats the same endpoint, while\n# 401s spread over different paths (client probing an endpoint being configured,\n# path enumeration) are not a credential attack",
       "supported": true
     },
     {
@@ -628,7 +628,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect generic 403 Forbidden (Authorization) error brute force",
       "file": "scenarios/crowdsecurity/http-generic-bf.yaml",
-      "filter": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.verb == 'POST' && evt.Meta.http_status == '403'\"",
+      "filter": "\"evt.Meta.log_type == 'http_access-log' \u0026\u0026 evt.Parsed.verb == 'POST' \u0026\u0026 evt.Meta.http_status == '403'\"",
       "supported": true
     },
     {
@@ -706,7 +706,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect scan for open proxy",
       "file": "scenarios/crowdsecurity/http-open-proxy.yaml",
-      "filter": "\"evt.Meta.log_type == 'http_access-log' && evt.Meta.http_status in ['400','405'] && (evt.Parsed.verb == 'CONNECT' || evt.Parsed.request matches '^http[s]?://')\"",
+      "filter": "\"evt.Meta.log_type == 'http_access-log' \u0026\u0026 evt.Meta.http_status in ['400','405'] \u0026\u0026 (evt.Parsed.verb == 'CONNECT' || evt.Parsed.request matches '^http[s]?://')\"",
       "supported": true
     },
     {
@@ -719,7 +719,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect path traversal attempt",
       "file": "scenarios/crowdsecurity/http-path-traversal-probing.yaml",
-      "filter": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] && any(File('http_path_traversal.txt'),{evt.Meta.http_path contains #})\"",
+      "filter": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 any(File('http_path_traversal.txt'),{evt.Meta.http_path contains #})\"",
       "supported": true
     },
     {
@@ -732,7 +732,7 @@
       "groupby": "evt.Meta.source_ip + '/' + evt.Meta.target_fqdn",
       "description": "Detect site scanning/probing from a single ip",
       "file": "scenarios/crowdsecurity/http-probing.yaml",
-      "filter": "\"evt.Meta.service == 'http' && evt.Meta.http_status in ['404', '403', '400'] && evt.Parsed.static_ressource == 'false'\"",
+      "filter": "\"evt.Meta.service == 'http' \u0026\u0026 evt.Meta.http_status in ['404', '403', '400'] \u0026\u0026 evt.Parsed.static_ressource == 'false'\"",
       "supported": true
     },
     {
@@ -771,7 +771,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "A scenario that detects SQL injection probing with minimal false positives",
       "file": "scenarios/crowdsecurity/http-sqli-probing.yaml",
-      "filter": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] && any(File('sqli_probe_patterns.txt'), {Upper(evt.Parsed.http_args) contains Upper(#)})\"",
+      "filter": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 any(File('sqli_probe_patterns.txt'), {Upper(evt.Parsed.http_args) contains Upper(#)})\"",
       "supported": true
     },
     {
@@ -810,7 +810,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect WordPress probing: authors enumeration",
       "file": "scenarios/crowdsecurity/http-wordpress_user-enum.yaml",
-      "filter": "\"evt.Meta.log_type == 'http_access-log' && Upper(evt.Parsed.http_args) contains 'AUTHOR='\"",
+      "filter": "\"evt.Meta.log_type == 'http_access-log' \u0026\u0026 Upper(evt.Parsed.http_args) contains 'AUTHOR='\"",
       "supported": true
     },
     {
@@ -823,7 +823,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect WordPress probing: variations around wp-config.php by wpscan",
       "file": "scenarios/crowdsecurity/http-wordpress_wpconfig.yaml",
-      "filter": "\"evt.Meta.log_type == 'http_access-log' && evt.Parsed.file_name contains 'wp-config.php'\"",
+      "filter": "\"evt.Meta.log_type == 'http_access-log' \u0026\u0026 evt.Parsed.file_name contains 'wp-config.php'\"",
       "supported": true
     },
     {
@@ -836,7 +836,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "A scenario that detects XSS probing with minimal false positives",
       "file": "scenarios/crowdsecurity/http-xss-probing.yaml",
-      "filter": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] && any(File('xss_probe_patterns.txt'), {Upper(evt.Parsed.http_args) contains Upper(#)})\"",
+      "filter": "\"evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 any(File('xss_probe_patterns.txt'), {Upper(evt.Parsed.http_args) contains Upper(#)})\"",
       "supported": true
     },
     {
@@ -862,7 +862,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect Netgear RCE DGN1000/DGN220 exploitation attempts",
       "file": "scenarios/crowdsecurity/netgear_rce.yaml",
-      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Lower(QueryUnescape(evt.Meta.http_path)) startsWith Lower('/setup.cgi?next_file=netgear.cfg&todo=syscmd&cmd=')",
+      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 Lower(QueryUnescape(evt.Meta.http_path)) startsWith Lower('/setup.cgi?next_file=netgear.cfg\u0026todo=syscmd\u0026cmd=')",
       "supported": true
     },
     {
@@ -914,7 +914,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect Vmware CVE-2022-22954 exploitation attempts",
       "file": "scenarios/crowdsecurity/vmware-cve-2022-22954.yaml",
-      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && Upper(QueryUnescape(evt.Meta.http_path)) startsWith Upper('/catalog-portal/ui/oauth/verify?error=&deviceUdid=${\"freemarker.template.utility.Execute\"?new()(')",
+      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 Upper(QueryUnescape(evt.Meta.http_path)) startsWith Upper('/catalog-portal/ui/oauth/verify?error=\u0026deviceUdid=${\"freemarker.template.utility.Execute\"?new()(')",
       "supported": true
     },
     {
@@ -927,7 +927,7 @@
       "groupby": "evt.Meta.source_ip",
       "description": "Detect VMSA-2021-0027 exploitation attempts",
       "file": "scenarios/crowdsecurity/vmware-vcenter-vmsa-2021-0027.yaml",
-      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] && evt.Meta.http_path matches '/ui/vcav-bootstrap/rest/vcav-providers/provider-logo\\\\?url=(file|http)'",
+      "filter": "|\n  evt.Meta.log_type in ['http_access-log', 'http_error-log'] \u0026\u0026 evt.Meta.http_path matches '/ui/vcav-bootstrap/rest/vcav-providers/provider-logo\\\\?url=(file|http)'",
       "supported": true
     },
     {
@@ -995,7 +995,7 @@
             "bytes": 0,
             "user_agent": "BrowserA",
             "referer": null,
-            "file": "examples\\sample.log",
+            "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
             "line": 2,
             "raw": "192.0.2.10 - - [01/Nov/2026:00:00:01 +0000] \"GET /.env HTTP/1.1\" 404 0 \"-\" \"BrowserA\"",
             "time": "2026-11-01T00:00:01Z"
@@ -1026,7 +1026,7 @@
             "bytes": 128,
             "user_agent": "BrowserA",
             "referer": null,
-            "file": "examples\\sample.log",
+            "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
             "line": 3,
             "raw": "192.0.2.10 - - [01/Nov/2026:00:00:02 +0000] \"GET /.env HTTP/1.1\" 200 128 \"-\" \"BrowserA\"",
             "time": "2026-11-01T00:00:02Z"
@@ -1057,7 +1057,7 @@
             "bytes": 128,
             "user_agent": "BrowserA",
             "referer": null,
-            "file": "examples\\sample.log",
+            "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
             "line": 4,
             "raw": "192.0.2.10 - - [01/Nov/2026:00:00:03 +0000] \"GET /.env HTTP/1.1\" 200 128 \"-\" \"BrowserA\"",
             "time": "2026-11-01T00:00:03Z"
@@ -1089,6 +1089,18 @@
           "Correlate application/authentication and error logs for the same time and resource",
           "For payload probes inspect server files, processes and outbound connections",
           "Verify actual returned sensitive bytes against a nonexistent-path response; preserve response/application evidence"
+        ],
+        "investigation": [
+          {
+            "category": "sensitive_file",
+            "why_unknown": "HTTPステータスや応答サイズだけでは、対象ファイルの内容が返されたか、読み込み・実行されたか判断できません。",
+            "where_to_check": [
+              "当時の応答本文、アプリのファイル読み込み記録、ホストのファイルアクセス監査",
+              "Webサーバー・プロキシのルーティング設定と、共通エラーページの当時の記録"
+            ],
+            "success_evidence": "対象要求への応答に本来公開しないファイル内容が含まれた記録、または不正なファイル読み込み・実行の記録。",
+            "failure_evidence": "対象要求がファイルアクセス前に拒否された記録、または対象ファイルを読み込まず情報を含まない応答を返した処理記録。"
+          }
         ]
       },
       "first": "2026-11-01T00:00:01Z",
@@ -1144,7 +1156,7 @@
             "bytes": 100,
             "user_agent": "BrowserB",
             "referer": null,
-            "file": "examples\\sample.log",
+            "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
             "line": 5,
             "raw": "192.0.2.20 - - [01/Nov/2026:00:00:10 +0000] \"GET /?id=UNION%20SELECT%20password HTTP/1.1\" 500 100 \"-\" \"BrowserB\"",
             "time": "2026-11-01T00:00:10Z"
@@ -1181,6 +1193,18 @@
           "Inspect the referenced original logs and confirm request routing and proxy configuration",
           "Correlate application/authentication and error logs for the same time and resource",
           "For payload probes inspect server files, processes and outbound connections"
+        ],
+        "investigation": [
+          {
+            "category": "sqli",
+            "why_unknown": "アクセスログには、バックエンドで実行された問い合わせと取得・変更されたデータが記録されていません。",
+            "where_to_check": [
+              "アプリケーションの処理・エラーログと当時の応答記録",
+              "対象のDB・ディレクトリサービス・XML検索処理の監査ログ"
+            ],
+            "success_evidence": "対象要求の入力によって意図しない問い合わせが実行され、データ取得・変更や認証回避が起きた記録。",
+            "failure_evidence": "対象要求が問い合わせ実行前に拒否された記録、または入力が値として扱われ、意図しない問い合わせや結果が生じなかった処理記録。"
+          }
         ]
       },
       "first": "2026-11-01T00:00:10Z",
@@ -1236,7 +1260,7 @@
             "bytes": 0,
             "user_agent": "BrowserC",
             "referer": null,
-            "file": "examples\\sample.log",
+            "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
             "line": 6,
             "raw": "192.0.2.30 - - [01/Nov/2026:00:00:11 +0000] \"GET /a/../../etc/passwd HTTP/1.1\" 404 0 \"-\" \"BrowserC\"",
             "time": "2026-11-01T00:00:11Z"
@@ -1267,7 +1291,7 @@
             "bytes": 0,
             "user_agent": "BrowserC",
             "referer": null,
-            "file": "examples\\sample.log",
+            "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
             "line": 7,
             "raw": "192.0.2.30 - - [01/Nov/2026:00:00:12 +0000] \"GET /a/../../etc/passwd HTTP/1.1\" 404 0 \"-\" \"BrowserC\"",
             "time": "2026-11-01T00:00:12Z"
@@ -1298,7 +1322,7 @@
             "bytes": 0,
             "user_agent": "BrowserC",
             "referer": null,
-            "file": "examples\\sample.log",
+            "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
             "line": 8,
             "raw": "192.0.2.30 - - [01/Nov/2026:00:00:13 +0000] \"GET /a/../../etc/passwd HTTP/1.1\" 404 0 \"-\" \"BrowserC\"",
             "time": "2026-11-01T00:00:13Z"
@@ -1329,6 +1353,18 @@
           "Inspect the referenced original logs and confirm request routing and proxy configuration",
           "Correlate application/authentication and error logs for the same time and resource",
           "For payload probes inspect server files, processes and outbound connections"
+        ],
+        "investigation": [
+          {
+            "category": "lfi_traversal",
+            "why_unknown": "HTTPステータスや応答サイズだけでは、対象ファイルの内容が返されたか、読み込み・実行されたか判断できません。",
+            "where_to_check": [
+              "当時の応答本文、アプリのファイル読み込み記録、ホストのファイルアクセス監査",
+              "Webサーバー・プロキシのルーティング設定と、共通エラーページの当時の記録"
+            ],
+            "success_evidence": "対象要求への応答に本来公開しないファイル内容が含まれた記録、または不正なファイル読み込み・実行の記録。",
+            "failure_evidence": "対象要求がファイルアクセス前に拒否された記録、または対象ファイルを読み込まず情報を含まない応答を返した処理記録。"
+          }
         ]
       },
       "first": "2026-11-01T00:00:11Z",
@@ -1338,7 +1374,7 @@
       "id": "WA-e3ae05f55589ce85",
       "ip": "192.0.2.40",
       "host": null,
-      "user_agent": "<script>alert('untrusted')</script>",
+      "user_agent": "\u003cscript\u003ealert('untrusted')\u003c/script\u003e",
       "count": 1,
       "severity": "medium",
       "attack_score": 15,
@@ -1352,7 +1388,7 @@
           "required": [
             "target"
           ],
-          "pattern": "<(?:script|svg|img|iframe)\\b|javascript\\s*:|\\bon(?:error|load|mouseover)\\s*=",
+          "pattern": "\u003c(?:script|svg|img|iframe)\\b|javascript\\s*:|\\bon(?:error|load|mouseover)\\s*=",
           "field": "url",
           "source": "docs/rule-inventory.md"
         }
@@ -1369,7 +1405,7 @@
       "evidence": [
         {
           "event": {
-            "recorded_user_agent": "<script>alert('untrusted')</script>",
+            "recorded_user_agent": "\u003cscript\u003ealert('untrusted')\u003c/script\u003e",
             "recorded_referer": "-",
             "raw_request": "GET /?q=%3Cscript%3E HTTP/1.1",
             "log_type": "http_access-log",
@@ -1382,18 +1418,18 @@
             "protocol": "HTTP/1.1",
             "status": 200,
             "bytes": 100,
-            "user_agent": "<script>alert('untrusted')</script>",
+            "user_agent": "\u003cscript\u003ealert('untrusted')\u003c/script\u003e",
             "referer": null,
-            "file": "examples\\sample.log",
+            "file": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
             "line": 9,
-            "raw": "192.0.2.40 - - [01/Nov/2026:00:00:20 +0000] \"GET /?q=%3Cscript%3E HTTP/1.1\" 200 100 \"-\" \"<script>alert('untrusted')</script>\"",
+            "raw": "192.0.2.40 - - [01/Nov/2026:00:00:20 +0000] \"GET /?q=%3Cscript%3E HTTP/1.1\" 200 100 \"-\" \"\u003cscript\u003ealert('untrusted')\u003c/script\u003e\"",
             "time": "2026-11-01T00:00:20Z"
           },
           "normalization": {
             "original": "/?q=%3Cscript%3E",
             "variants": [
               "/?q=%3Cscript%3E",
-              "/?q=<script>",
+              "/?q=\u003cscript\u003e",
               "/?q=%3cscript%3e"
             ],
             "steps": [
@@ -1419,6 +1455,18 @@
           "Inspect the referenced original logs and confirm request routing and proxy configuration",
           "Correlate application/authentication and error logs for the same time and resource",
           "For payload probes inspect server files, processes and outbound connections"
+        ],
+        "investigation": [
+          {
+            "category": "xss",
+            "why_unknown": "アクセスログだけでは、入力が応答や保存データにどう埋め込まれ、ブラウザーで実行されたか確認できません。",
+            "where_to_check": [
+              "当時の応答HTML・保存データと、その表示先の記録",
+              "対象ブラウザーの実行・通信記録、CSPレポート"
+            ],
+            "success_evidence": "対象入力に由来するスクリプトが対象画面で実行された記録。反射・保存されただけでは実行の確定にはなりません。",
+            "failure_evidence": "対象入力が拒否された記録、または該当表示箇所で実行されない形にエスケープされた記録。CSPの遮断記録はその実行試行について確認してください。"
+          }
         ]
       },
       "first": "2026-11-01T00:00:20Z",
@@ -1443,12 +1491,12 @@
     "medium": 1
   },
   "schema": "webaudit/2",
-  "version": "0.2.0",
+  "version": "2.1.1",
   "rules_version": "2026.11.20.2",
-  "analyzed_at": "2026-11-20T08:37:53.8635858Z",
+  "analyzed_at": "2026-11-20T00:00:00Z",
   "files": [
     {
-      "path": "examples\\sample.log",
+      "path": "F:\\project\\webaudit\\.webaudit-worktrees\\report-examples-20261127\\examples\\sample.log",
       "parsed": 9,
       "unparsed": 0
     }
