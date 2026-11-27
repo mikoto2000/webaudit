@@ -32,6 +32,18 @@ func TestBundleAudienceArtifactsShareActualFindings(t *testing.T) {
 			for _, name := range []string{"executive.html", "technical.html", "index.html", "data/decision-support.json", "data/investigation-plan.json", "risk-rules.json", "risk-register.csv", "action-plan.csv", "prompts/secondary-investigation-all.md", "prompts/secondary-investigation-priority.md", "secondary-investigation.js", "secondary-plan.js"} {
 				audienceRead(t, dir, name)
 			}
+			for _, name := range []string{"index.html", "executive-summary.html", "technical-report.html", "report.html"} {
+				page := string(audienceRead(t, dir, name))
+				link := strings.Index(page, `href="suspicious-requests.csv"`)
+				if link < 0 {
+					t.Fatalf("%s: missing prominent request CSV link", name)
+				}
+				for _, marker := range []string{`id="contents"`, `id="risk-overview"`} {
+					if section := strings.Index(page, marker); section >= 0 && link > section {
+						t.Fatalf("%s: request CSV link must precede detailed report sections", name)
+					}
+				}
+			}
 			var plan struct {
 				Version string `json:"version"`
 				Cases   []struct {
@@ -91,6 +103,34 @@ func TestBundleAudienceArtifactsShareActualFindings(t *testing.T) {
 			}
 			tech := string(audienceRead(t, dir, "technical.html"))
 			exec := string(audienceRead(t, dir, "executive.html"))
+			appendix := strings.Index(tech, `<section id="appendix-assessment">`)
+			handoff := strings.Index(tech, `id="secondary-investigation"`)
+			if appendix < 0 || handoff < 0 || appendix < handoff {
+				t.Fatal("assessment appendix must follow investigation and handoff sections")
+			}
+			if !strings.Contains(tech, `id="investigation-workflow"`) || !strings.Contains(tech, `href="#investigation-workflow"`) || !strings.Contains(tech, `id="result-reporting"`) {
+				t.Fatal("request and reporting workflow must be a navigable chapter")
+			}
+			if !strings.Contains(tech, `href="executive-summary.html#decision-conditions"`) || !strings.Contains(exec, `id="decision-conditions"`) {
+				t.Fatal("reporting must lead to the owner's escalation and closure criteria")
+			}
+			for _, c := range r.SecondaryInvestigation.Cases {
+				if !strings.Contains(tech, `id="request-`+c.ID+`"`) || !strings.Contains(tech, `value="`+c.ID+`"`) {
+					t.Fatal("all retained targets must be available to contextual request links", c.ID)
+				}
+			}
+			allowedTargets := map[string]bool{}
+			for _, c := range r.SecondaryInvestigation.Cases {
+				allowedTargets[c.ID] = true
+			}
+			for _, m := range regexp.MustCompile(`data-secondary-case="([^"]+)"`).FindAllStringSubmatch(tech, -1) {
+				if !allowedTargets[m[1]] {
+					t.Fatal("request shortcut refers to an unavailable target", m[1])
+				}
+			}
+			if !strings.Contains(tech, `href="technical-report.html#all-investigation-targets"`) {
+				t.Fatal("priority summary must link to all retained targets")
+			}
 			if !strings.Contains(tech, `id="secondary-investigation"`) || !strings.Contains(tech, "secondary-investigation.js") {
 				t.Fatal("missing secondary UI")
 			}
