@@ -16,21 +16,27 @@ import (
 var investigationHTML string
 
 type reportCaseView struct {
-	Finding    Incident
-	Metrics    FindingObservation
-	Assessment CaseAssessment
-	Rules      []AnalysisRule
-	Samples    []caseSampleView
+	Recommendations []Recommendation
+	Risk            DecisionRisk
+	BriefSamples    []caseSampleView
+	Finding         Incident
+	Metrics         FindingObservation
+	Assessment      CaseAssessment
+	Rules           []AnalysisRule
+	Samples         []caseSampleView
 }
 type caseSampleView struct {
 	Evidence  Evidence
 	Reference EvidenceReference
 }
 type sourceReportView struct {
-	Detection BundleDetection
-	Source    SourceAlert
-	Rule      AnalysisRule
-	Samples   []sourceSampleView
+	Recommendations []Recommendation
+	Risk            DecisionRisk
+	BriefURIs       []string
+	Detection       BundleDetection
+	Source          SourceAlert
+	Rule            AnalysisRule
+	Samples         []sourceSampleView
 }
 type sourceSampleView struct {
 	Sample    SourceEvidence
@@ -40,6 +46,67 @@ type chartBar struct {
 	Label string
 	Count int64
 }
+type riskCoverageView struct {
+	Risk         DecisionRisk
+	Perspectives []CoverageRow
+	Engine       string
+	Missing      []string
+	Materials    []string
+}
+
+// Match by recorded case references or exact engine/rule identity, never titles.
+// An independent detection does not establish a WebAudit perspective match.
+func riskCoverageRows(r *InvestigationReport, coverage []CoverageRow) []riskCoverageView {
+	aspectsByCase := map[string][]CoverageRow{}
+	rulesByCase := map[string][]CoverageRow{}
+	rulesByKey := map[string][]CoverageRow{}
+	for _, row := range coverage {
+		if strings.HasPrefix(row.ID, "ASPECT-") && row.HasDetections {
+			for _, id := range row.FindingIDs {
+				aspectsByCase[id] = append(aspectsByCase[id], row)
+			}
+		} else if strings.HasPrefix(row.ID, "RULE-") {
+			for _, id := range row.FindingIDs {
+				rulesByCase[id] = append(rulesByCase[id], row)
+			}
+			for _, engine := range row.Engines {
+				for _, rule := range row.RuleIDs {
+					key := ruleKey(engine, rule)
+					rulesByKey[key] = append(rulesByKey[key], row)
+				}
+			}
+		}
+	}
+	detections := map[string]*BundleDetection{}
+	for i := range r.Detections {
+		detections[r.Detections[i].ID] = &r.Detections[i]
+	}
+	missingByCase := map[string][]string{}
+	for _, finding := range r.Analysis.Findings {
+		missingByCase[finding.ID] = finding.Outcome.Missing
+	}
+	materialsByCase := map[string][]string{}
+	for _, action := range r.DecisionSupport.Actions {
+		materialsByCase[action.CaseID] = action.Materials
+	}
+	var rows []riskCoverageView
+	for _, risk := range executiveRisks(r) {
+		row := riskCoverageView{Risk: risk, Missing: missingByCase[risk.CaseID], Materials: materialsByCase[risk.CaseID]}
+		if risk.Kind == "finding" {
+			row.Engine = "webaudit"
+			row.Perspectives = aspectsByCase[risk.CaseID]
+			if len(row.Perspectives) == 0 {
+				row.Perspectives = rulesByCase[risk.CaseID]
+			}
+		} else if d := detections[risk.CaseID]; d != nil {
+			row.Engine = d.Engine
+			row.Perspectives = rulesByKey[ruleKey(d.Engine, d.RuleID)]
+		}
+		rows = append(rows, row)
+	}
+	return rows
+}
+
 type reportChart struct {
 	Title     string
 	Rows      []chartBar
@@ -48,10 +115,12 @@ type reportChart struct {
 	Annex     string
 }
 type reportHTMLView struct {
+	RiskCoverage                                                        []riskCoverageView
 	R                                                                   *InvestigationReport
 	Cases                                                               []reportCaseView
 	Sources                                                             []sourceReportView
 	Coverage                                                            []CoverageRow
+	DetectedAspects, IncompleteAspects                                  []CoverageRow
 	Rules                                                               []AnalysisRule
 	Charts                                                              []reportChart
 	Timeline                                                            []TimelineRow
@@ -63,6 +132,22 @@ type reportHTMLView struct {
 func reportRuleAnchor(engine, id string) string { return "rule-" + bundleID("", engine+"|"+id) }
 func buildReportHTMLView(r *InvestigationReport, tr reportTranslator) reportHTMLView {
 	v := reportHTMLView{R: r, CaseIDs: map[string]bool{}, SourceIDs: map[string]bool{}, CoverageIDs: map[string]bool{}, RuleIDs: map[string]bool{}, TimelineMax: 1}
+	risksByCase := map[string]DecisionRisk{}
+	for _, risk := range r.DecisionSupport.Risks {
+		risksByCase[risk.CaseID] = risk
+	}
+	recommendationsByTarget := map[string][]Recommendation{}
+	for _, rec := range r.Recommendations {
+		if rec.Type != "investigation" {
+			continue
+		}
+		for _, id := range rec.FindingIDs {
+			recommendationsByTarget[id] = append(recommendationsByTarget[id], rec)
+		}
+		for _, id := range rec.DetectionIDs {
+			recommendationsByTarget[id] = append(recommendationsByTarget[id], rec)
+		}
+	}
 	metrics := map[string]FindingObservation{}
 	for _, m := range r.FindingObservations {
 		metrics[m.ID] = m
@@ -76,7 +161,7 @@ func buildReportHTMLView(r *InvestigationReport, tr reportTranslator) reportHTML
 			v.TruncatedCases = true
 			break
 		}
-		item := reportCaseView{Finding: f, Metrics: metrics[f.ID], Assessment: assessments[f.ID]}
+		item := reportCaseView{Finding: f, Metrics: metrics[f.ID], Assessment: assessments[f.ID], Risk: risksByCase[f.ID], Recommendations: recommendationsByTarget[f.ID]}
 		for _, rule := range r.AnalysisRules {
 			if rule.Engine != "webaudit" {
 				continue
@@ -94,6 +179,7 @@ func buildReportHTMLView(r *InvestigationReport, tr reportTranslator) reportHTML
 			}
 			item.Samples = append(item.Samples, caseSampleView{e, ref})
 		}
+		item.BriefSamples = item.Samples[:min(3, len(item.Samples))]
 		v.Cases = append(v.Cases, item)
 		v.CaseIDs[f.ID] = true
 	}
@@ -105,7 +191,7 @@ func buildReportHTMLView(r *InvestigationReport, tr reportTranslator) reportHTML
 			v.TruncatedSources = true
 			break
 		}
-		item := sourceReportView{Detection: d}
+		item := sourceReportView{Detection: d, Risk: risksByCase[d.ID], BriefURIs: d.URIExamples[:min(3, len(d.URIExamples))], Recommendations: recommendationsByTarget[d.ID]}
 		if source := sourceAlertFor(r, d); source != nil {
 			item.Source = *source
 		}
@@ -141,7 +227,16 @@ func buildReportHTMLView(r *InvestigationReport, tr reportTranslator) reportHTML
 		}
 		v.Coverage = append(v.Coverage, row)
 		v.CoverageIDs[row.ID] = true
+		if strings.HasPrefix(row.ID, "ASPECT-") {
+			if row.HasDetections {
+				v.DetectedAspects = append(v.DetectedAspects, row)
+			}
+			if !row.Complete {
+				v.IncompleteAspects = append(v.IncompleteAspects, row)
+			}
+		}
 	}
+	v.RiskCoverage = riskCoverageRows(r, v.Coverage)
 	for _, rule := range r.AnalysisRules {
 		if len(v.Rules) >= 1000 {
 			v.TruncatedRules = true
@@ -236,7 +331,30 @@ func writeInvestigationHTML(w io.Writer, r *InvestigationReport) error {
 		}
 		return fmt.Sprint(rv.Interface())
 	}
-	functions := template.FuncMap{"t": tr.text, "outcome": tr.outcome, "diagnostic": tr.diagnostic, "lang": func() string { return r.Metadata.Language }, "n": numeric, "analysisStatus": func(status string) string {
+	requestIDs := map[string]bool{}
+	for _, c := range r.SecondaryInvestigation.Cases {
+		requestIDs[c.ID] = true
+	}
+	functions := template.FuncMap{"requestable": func(id string) bool { return requestIDs[id] }, "requestTargets": func(rec Recommendation) []string {
+		var ids []string
+		for _, id := range rec.FindingIDs {
+			if requestIDs[id] {
+				uniqueAppend(&ids, id)
+			}
+		}
+		for _, id := range rec.DetectionIDs {
+			if requestIDs[id] {
+				uniqueAppend(&ids, id)
+			}
+		}
+		return ids
+	}, "brief": func(value any) string {
+		runes := []rune(numeric(value))
+		if len(runes) > 160 {
+			return string(runes[:160]) + "…"
+		}
+		return string(runes)
+	}, "t": tr.text, "outcome": tr.outcome, "diagnostic": tr.diagnostic, "lang": func() string { return r.Metadata.Language }, "n": numeric, "analysisStatus": func(status string) string {
 		switch status {
 		case "completed":
 			return tr.text("Completed analysis")

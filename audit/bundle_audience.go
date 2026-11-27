@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const audienceRulesVersion = "webaudit/response-rules-1"
+const audienceRulesVersion = "webaudit/response-rules-2"
 const secondaryTemplateVersion = "webaudit/secondary-prompt-1"
 
 //go:embed report_spec.md
@@ -34,17 +34,19 @@ type ResponseRule struct {
 	Condition string `json:"condition"`
 }
 type DecisionSupport struct {
-	Version         string           `json:"version"`
-	ResponseLevel   string           `json:"response_level"`
-	ResponseLabel   string           `json:"response_label"`
-	Reason          string           `json:"reason"`
-	Complete        bool             `json:"analysis_complete"`
-	ConfirmedImpact string           `json:"confirmed_impact"`
-	Rules           []ResponseRule   `json:"response_rules"`
-	Risks           []DecisionRisk   `json:"risks"`
-	Actions         []DecisionAction `json:"actions"`
-	Limitations     []string         `json:"limitations"`
-	Closure         []string         `json:"closure_conditions"`
+	Version          string           `json:"version"`
+	ResponseLevel    string           `json:"response_level"`
+	ResponseLabel    string           `json:"response_label"`
+	Reason           string           `json:"reason"`
+	Complete         bool             `json:"analysis_complete"`
+	ConfirmedImpact  string           `json:"confirmed_impact"`
+	CommonEscalation string           `json:"common_escalation_condition"`
+	CommonDefer      string           `json:"common_if_deferred"`
+	Rules            []ResponseRule   `json:"response_rules"`
+	Risks            []DecisionRisk   `json:"risks"`
+	Actions          []DecisionAction `json:"actions"`
+	Limitations      []string         `json:"limitations"`
+	Closure          []string         `json:"closure_conditions"`
 }
 type DecisionRisk struct {
 	ID             string `json:"id"`
@@ -148,12 +150,34 @@ func profileFor(categories []string, lang string) riskProfile {
 	}
 }
 
+// These are conditional review criteria, not observations or new verdicts.
+// Unclassified probing uses the common criteria without inventing specifics.
+func profileEscalation(profile, lang string) string {
+	t := func(ja, en string) string { return audienceText(lang, ja, en) }
+	switch profile {
+	case "resource":
+		return t("当時の応答本文やファイルアクセス記録で、公開すべきでないファイルの内容が返された、または読み込まれたと確認できた場合、露出した情報と影響範囲を調べ、対象経路の制限を検討してください。", "If historical response content or file-access records establish that non-public file content was returned or read, investigate the exposed information and affected scope and consider restricting the affected route.")
+	case "authentication":
+		return t("認証・操作記録で、正当な利用者によるものではないログイン成功や権限外の操作が確認された場合、対象アカウントと操作範囲を調べ、アカウントやセッションの制限を検討してください。", "If authentication or operation audits establish a login by an unauthorized user or an unauthorized operation, investigate the account and operation scope and consider account or session restrictions.")
+	case "processing":
+		return t("アプリ・DB・ホスト・ブラウザーの記録などで、対象の入力による意図しない処理、データ取得・変更、またはスクリプト実行が確認された場合、影響した処理とデータを調べ、対象機能の制限や詳細調査を検討してください。", "If application, database, host or browser evidence establishes unintended processing, data access or modification, or script execution caused by the input, investigate affected operations and data and consider function restrictions or detailed investigation.")
+	case "data":
+		return t("返却データの内容と当時の権限を照合し、権限外の機密データ取得が確認された場合、取得されたデータと範囲を調べ、対象の出力処理やアクセスの制限を検討してください。応答量の多さだけでは判断しません。", "If returned content and historical authorization establish unauthorized retrieval of confidential data, investigate the data and scope and consider restricting the affected export or access. Response volume alone is insufficient.")
+	case "availability":
+		return t("稼働・性能・エラー記録で、対象の通信に伴うサービス停止や正規利用への支障が確認された場合、影響範囲と継続状況を調べ、対象を絞った通信制限や復旧対応を検討してください。通信量の多さだけでは判断しません。", "If service, performance or error records establish an outage or disruption to legitimate use associated with the traffic, investigate affected scope and whether disruption continues and consider targeted traffic restrictions or recovery. Traffic volume alone is insufficient.")
+	default:
+		return ""
+	}
+}
+
 // prepareAudienceReports consumes the already masked common report. It does not
 // change detection/outcome semantics or assign organization-specific risk scores.
 func prepareAudienceReports(r *InvestigationReport) {
 	lang := r.Metadata.Language
 	t := func(ja, en string) string { return audienceText(lang, ja, en) }
 	d := DecisionSupport{Version: audienceRulesVersion, Complete: r.Complete, ResponseLevel: "monitor", ConfirmedImpact: t("未確認。侵害の有無を確定する調査は未実施。", "Unverified. An investigation establishing compromise or its absence has not been performed."), Risks: []DecisionRisk{}, Actions: []DecisionAction{}}
+	d.CommonEscalation = t("追加の記録で不正な活動や被害の拡大・継続が確認されたら、責任者が現在の状況と業務への影響を確認し、対応の強化を判断してください。アクセスログの検出だけで制限や停止を自動決定しません。", "If additional records establish unauthorized activity or continuing or expanding harm, the responsible owner reviews the current situation and operational impact and decides whether to strengthen the response. Access-log detections alone do not automatically authorize restrictions or shutdowns.")
+	d.CommonDefer = t("調査を見送ると、被害の有無が分からない状態が続き、ログの上書きで後から確認できなくなる可能性があります。", "Deferring investigation leaves harm unresolved and logs may be overwritten, preventing later verification.")
 	d.Rules = []ResponseRule{
 		{"urgent", t("露出・不正な重要操作・現在の重大障害を追加証拠で確認した場合、責任者が緊急対応を検討。アクセスログだけで自動選択しない。", "A responsible owner considers urgent response after corroborating disclosure, unauthorized critical operations or current severe impairment; not selected automatically from access logs.")},
 		{"priority", t("成功の疑い、または既存の調査基準で高優先度の事案がある。", "A possible-success case or a case with high investigation priority exists.")},
@@ -200,7 +224,10 @@ func prepareAudienceReports(r *InvestigationReport) {
 		if outcome == "possible_success" {
 			reason = t("成功の疑いを裏付ける既存の要求間変化があり、追加証拠の確認を優先する。", "Existing outcome evidence indicates possible success; prioritize corroboration.")
 		}
-		risk := DecisionRisk{ID: bundleID("RISK-", id+"|"+profile.key), CaseID: id, Kind: kind, Profile: profile.key, Title: profile.title, Priority: priority, PriorityReason: reason, Outcome: outcome, Condition: profile.condition, Impact: profile.impact, Next: profile.action, Escalation: t("当時の情報露出・権限外操作・意図しない処理、または現在の継続する悪性活動を追加証拠で確認したら、責任者が詳細調査・対象を絞った制限を検討する。", "If corroborating records establish disclosure, unauthorized operations, unintended processing or ongoing malicious activity, the owner considers detailed investigation and targeted restrictions."), Defer: t("不正利用や影響を未確認のまま残し、記録の上書きで検証不能になる可能性。", "Misuse or impact may remain unresolved and overwritten records may prevent verification.")}
+		risk := DecisionRisk{ID: bundleID("RISK-", id+"|"+profile.key), CaseID: id, Kind: kind, Profile: profile.key, Title: profile.title, Priority: priority, PriorityReason: reason, Outcome: outcome, Condition: profile.condition, Impact: profile.impact, Next: profile.action, Escalation: profileEscalation(profile.key, lang), Defer: d.CommonDefer}
+		if risk.Escalation == "" {
+			risk.Escalation = d.CommonEscalation
+		}
 		d.Risks = append(d.Risks, risk)
 		action := DecisionAction{ID: bundleID("ACT-", id), CaseID: id, RiskID: risk.ID, Action: profile.action, Timing: t("優先度に応じて実施（提案。実期限は責任者が設定）", "Schedule by priority (suggestion; the owner sets the deadline)"), Owner: t("システム管理・開発・セキュリティ部門（担当候補）", "System, development and security owners (suggested roles)"), Materials: materials, Completion: t("支持・反証、成否または確認不能の理由、残存リスクと次の判断を記録。", "Record support/refutation, outcomes or inability to verify, residual risk and the next decision."), Status: "not_started"}
 		d.Actions = append(d.Actions, action)
@@ -233,7 +260,7 @@ func prepareAudienceReports(r *InvestigationReport) {
 	if d.ResponseLevel != "priority" && (!r.Complete || r.Summary.ParsedLines == 0) {
 		d.ResponseLevel = "hold"
 	}
-	labels := map[string][2]string{"priority": {"優先的な追加調査", "Priority investigation"}, "planned": {"計画的な追加調査", "Planned investigation"}, "hold": {"判断保留", "Judgment deferred"}, "monitor": {"監視継続", "Continue monitoring"}}
+	labels := map[string][2]string{"priority": {"優先的な追加調査が必要", "Priority investigation needed"}, "planned": {"計画的な追加調査", "Planned investigation"}, "hold": {"判断保留", "Judgment deferred"}, "monitor": {"監視継続", "Continue monitoring"}}
 	pair := labels[d.ResponseLevel]
 	d.ResponseLabel = t(pair[0], pair[1])
 	reasons := map[string][2]string{"priority": {"高優先度または成功の疑いの事案がある。解析が不完全な場合も、確認できた優先根拠は維持する。", "High-priority or possible-success findings exist; retain observed priority evidence even when analysis is partial."}, "planned": {"確認すべき候補がある。独立検出の優先度は未評価。", "Candidates require review; independent detection priorities remain unassessed."}, "hold": {"解析不能または部分解析で、優先調査の根拠も十分に評価できない。", "Zero parsed observations or partial analysis without sufficient priority evidence."}, "monitor": {"評価した範囲で候補なし。安全や侵害不存在の証明ではない。", "No candidates in the evaluated scope; not proof of security or absence of compromise."}}
@@ -355,12 +382,12 @@ func writeAudienceReports(b *bundleWriter, r *InvestigationReport) error {
 	profiles := []map[string]any{}
 	for _, categories := range [][]string{{"sensitive_file", "lfi_traversal", "rfi", "null_byte"}, {"auth", "login", "access_bypass"}, {"sqli", "nosqli", "ldap_injection", "xpath_injection", "command_injection", "shellshock", "ssti", "deserialization", "log4shell", "spring4shell", "struts_ognl", "ssrf", "xss"}, {"WS-size", "WS-url-size", "size_anomaly", "large_response"}, {"rate", "burst", "WS-hour", "WS-ip", "WS-errors", "traffic_spike"}, {"unknown"}} {
 		profile := profileFor(categories, p.Language)
-		profiles = append(profiles, map[string]any{"id": profile.key, "categories": categories, "title": profile.title, "condition": profile.condition, "conditional_impact": profile.impact, "next_action": profile.action})
+		profiles = append(profiles, map[string]any{"id": profile.key, "categories": categories, "title": profile.title, "condition": profile.condition, "conditional_impact": profile.impact, "next_action": profile.action, "escalation_condition": profileEscalation(profile.key, p.Language)})
 	}
 	for _, item := range []struct {
 		name  string
 		value any
-	}{{"data/decision-support.json", r.DecisionSupport}, {"data/investigation-plan.json", p}, {"data/analysis.json", map[string]any{"schema": "webaudit/analysis-summary-1", "status": r.Status, "complete": r.Complete, "count_quality": r.CountQuality, "summary": r.Summary, "statistics": r.Statistics, "full_report": "../report.json"}}, {"data/findings.json", p.Cases}, {"data/risks.json", r.DecisionSupport.Risks}, {"data/recommendations.json", map[string]any{"recommendations": r.Recommendations, "actions": r.DecisionSupport.Actions}}, {"evidence/source-references.json", evidence}, {"risk-rules.json", map[string]any{"version": audienceRulesVersion, "response_rules": r.DecisionSupport.Rules, "priority_rule": "possible_success or severity high/critical => high; medium => medium; otherwise low; independent detections unassessed", "profiles": profiles, "profile_precedence": "resource, authentication, processing, data, availability; otherwise review", "impact": "conditional; never organization-specific probability or verified harm"}}} {
+	}{{"data/decision-support.json", r.DecisionSupport}, {"data/investigation-plan.json", p}, {"data/analysis.json", map[string]any{"schema": "webaudit/analysis-summary-1", "status": r.Status, "complete": r.Complete, "count_quality": r.CountQuality, "summary": r.Summary, "statistics": r.Statistics, "full_report": "../report.json"}}, {"data/findings.json", p.Cases}, {"data/risks.json", r.DecisionSupport.Risks}, {"data/recommendations.json", map[string]any{"recommendations": r.Recommendations, "actions": r.DecisionSupport.Actions}}, {"evidence/source-references.json", evidence}, {"risk-rules.json", map[string]any{"version": audienceRulesVersion, "response_rules": r.DecisionSupport.Rules, "common_escalation_condition": r.DecisionSupport.CommonEscalation, "common_if_deferred": r.DecisionSupport.CommonDefer, "priority_rule": "possible_success or severity high/critical => high; medium => medium; otherwise low; independent detections unassessed", "profiles": profiles, "profile_precedence": "resource, authentication, processing, data, availability; otherwise review", "escalation_fallback": "Use common_escalation_condition when the profile escalation_condition is empty", "impact": "conditional; never organization-specific probability or verified harm"}}} {
 		if err := b.json(item.name, item.value); err != nil {
 			return err
 		}
@@ -442,21 +469,23 @@ func writeAudienceReports(b *bundleWriter, r *InvestigationReport) error {
 	if err = renderAudienceTemplate(&extra, secondaryDocument, r); err != nil {
 		return err
 	}
-	value := strings.Replace(technical.String(), "</main>", extra.String()+"</main>", 1)
+	value := strings.Replace(technical.String(), `<section id="appendix-assessment">`, extra.String()+`<section id="appendix-assessment">`, 1)
 	value = strings.Replace(value, "default-src 'none'; style-src", "default-src 'none'; script-src 'self'; style-src", 1)
 	value = strings.Replace(value, "</body>", `<script src="secondary-plan.js"></script><script src="secondary-investigation.js"></script></body>`, 1)
-	value = strings.Replace(value, `<nav id="contents">`, `<p><a href="executive-summary.html">`+audienceText(p.Language, "幹部向け報告", "Executive report")+`</a> · <a href="#secondary-investigation">`+audienceText(p.Language, "二次調査プロンプト生成", "Secondary prompt generator")+`</a></p><nav id="contents">`, 1)
+	value = strings.Replace(value, "</ol>", `<li><a href="#investigation-workflow">`+audienceText(p.Language, "第6章 追加調査の依頼と結果報告", "6. Investigation requests and result reporting")+`</a></li></ol>`, 1)
+	value = strings.Replace(value, `<nav id="contents">`, `<p><a href="executive-summary.html">`+audienceText(p.Language, "まず結果と次の対応を見る（やさしい要約）", "Start with results and next steps (plain-language summary)")+`</a> · <a href="#secondary-investigation">`+audienceText(p.Language, "二次調査プロンプト生成", "Secondary prompt generator")+`</a></p><nav id="contents">`, 1)
 	for _, name := range []string{"technical-report.html", "technical.html"} {
 		if err = text(name, value); err != nil {
 			return err
 		}
 	}
 	// Keep the established bundle entry script-free for existing offline consumers.
-	legacy := strings.Replace(technical.String(), `<nav id="contents">`, `<p><a href="executive-summary.html">`+audienceText(p.Language, "幹部向け報告", "Executive report")+`</a> · <a href="technical-report.html#secondary-investigation">`+audienceText(p.Language, "二次調査プロンプト生成", "Secondary prompt generator")+`</a></p><nav id="contents">`, 1)
+	legacy := strings.Replace(technical.String(), `<nav id="contents">`, `<p><a href="executive-summary.html">`+audienceText(p.Language, "まず結果と次の対応を見る（やさしい要約）", "Start with results and next steps (plain-language summary)")+`</a> · <a href="technical-report.html#secondary-investigation">`+audienceText(p.Language, "二次調査プロンプト生成", "Secondary prompt generator")+`</a></p><nav id="contents">`, 1)
+	legacy = strings.Replace(legacy, "</ol>", `<li><a href="technical-report.html#investigation-workflow">`+audienceText(p.Language, "追加調査の依頼と結果報告（技術者向け）", "Investigation requests and result reporting (technical report)")+`</a></li></ol>`, 1)
 	if err = text("report.html", legacy); err != nil {
 		return err
 	}
-	return text("index.html", `<!doctype html><html lang="`+p.Language+`"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>WebAudit</title><h1>WebAudit</h1><ul><li><a href="executive-summary.html">`+audienceText(p.Language, "幹部向け報告", "Executive report")+`</a></li><li><a href="technical-report.html">`+audienceText(p.Language, "技術者向け報告", "Technical report")+`</a></li><li><a href="technical-report.html#secondary-investigation">`+audienceText(p.Language, "二次調査プロンプト生成", "Secondary prompt generator")+`</a></li><li><a href="report-spec.md">Report specification</a></li><li><a href="report.json">JSON</a></li><li><a href="README.md">README</a></li><li><a href="manifest.json">Manifest</a></li></ul></html>`)
+	return text("index.html", `<!doctype html><html lang="`+p.Language+`"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>WebAudit</title><h1>WebAudit</h1><h2>`+audienceText(p.Language, "初めて読む方へ", "Reading this for the first time?")+`</h2><p><a href="executive-summary.html#quick-read">`+audienceText(p.Language, "まず、結果と次の対応を見る", "Start with the results and next steps")+`</a></p><p>`+audienceText(p.Language, "最初の3項目で、見つかったこと・被害の確認状況・次にすることが分かります。詳しい証拠を確認する場合は技術者向け報告へ進んでください。", "The first three points explain what was found, whether damage is established, and what to do next. Use the technical report for detailed evidence.")+`</p><p><strong><a href="suspicious-requests.csv">`+audienceText(p.Language, "不審アクセスのログ一覧を開く（CSV）", "Open suspicious access logs (CSV)")+`</a></strong></p><h2>`+audienceText(p.Language, "詳しく調べる・資料を使う", "Details and supporting files")+`</h2><ul><li><a href="executive-summary.html">`+audienceText(p.Language, "まず結果と次の対応を見る（やさしい要約）", "Start with results and next steps (plain-language summary)")+`</a></li><li><a href="technical-report.html">`+audienceText(p.Language, "技術者向け報告", "Technical report")+`</a></li><li><a href="technical-report.html#secondary-investigation">`+audienceText(p.Language, "二次調査プロンプト生成", "Secondary prompt generator")+`</a></li><li><a href="report-spec.md">Report specification</a></li><li><a href="report.json">JSON</a></li><li><a href="README.md">README</a></li><li><a href="manifest.json">Manifest</a></li></ul></html>`)
 }
 
 func executiveRisks(r *InvestigationReport) []DecisionRisk {
@@ -500,6 +529,66 @@ func renderExecutiveReport(w io.Writer, r *InvestigationReport) error {
 	return renderAudienceTemplate(w, executiveDocument, &view)
 }
 
+// Summarize only the risks visible in section 02, retaining its priority order
+// and linking each distinct title to its first supporting row.
+func executiveRiskSummary(risks []DecisionRisk) []DecisionRisk {
+	var summary []DecisionRisk
+	seen := map[string]bool{}
+	for _, risk := range risks {
+		if !seen[risk.Title] {
+			seen[risk.Title] = true
+			summary = append(summary, risk)
+		}
+	}
+	return summary
+}
+
+type riskEscalationGroup struct {
+	Title, Condition string
+	Targets          []DecisionRisk
+}
+
+func executiveEscalationGroups(d DecisionSupport) []riskEscalationGroup {
+	var groups []riskEscalationGroup
+	positions := map[string]int{}
+	for _, risk := range d.Risks {
+		if risk.Escalation == "" || risk.Escalation == d.CommonEscalation {
+			continue
+		}
+		position, exists := positions[risk.Escalation]
+		if !exists {
+			position = len(groups)
+			positions[risk.Escalation] = position
+			groups = append(groups, riskEscalationGroup{Title: risk.Title, Condition: risk.Escalation})
+		}
+		groups[position].Targets = append(groups[position].Targets, risk)
+	}
+	return groups
+}
+
+func executiveOutcomeCounts(counts map[string]int) []chartBar {
+	order := []string{"confirmed_success", "possible_success", "unknown", "likely_failed", "confirmed_failure"}
+	seen := map[string]bool{}
+	var rows []chartBar
+	for _, key := range order {
+		if count, ok := counts[key]; ok {
+			rows = append(rows, chartBar{Label: key, Count: int64(count)})
+		}
+		seen[key] = true
+	}
+	var other []string
+	for key := range counts {
+		if !seen[key] {
+			other = append(other, key)
+		}
+	}
+	sort.Strings(other)
+	for _, key := range other {
+		rows = append(rows, chartBar{Label: key, Count: int64(counts[key])})
+	}
+	return rows
+}
+
 // HTML is always rendered through html/template. No log-derived template.HTML.
 func renderAudienceTemplate(w io.Writer, source string, r *InvestigationReport) error {
 	lang := r.Metadata.Language
@@ -507,7 +596,27 @@ func renderAudienceTemplate(w io.Writer, source string, r *InvestigationReport) 
 	for _, risk := range executiveRisks(r) {
 		visible[risk.ID] = true
 	}
-	funcs := template.FuncMap{"riskAnchor": func(id string) string {
+	detailIDs := map[string]bool{}
+	for _, finding := range r.Analysis.Findings[:min(100, len(r.Analysis.Findings))] {
+		detailIDs[finding.ID] = true
+	}
+	sourceCount := 0
+	for _, detection := range r.Detections {
+		if detection.Engine == "webaudit" || detection.Engine == "geoip" {
+			continue
+		}
+		if sourceCount >= 100 {
+			break
+		}
+		detailIDs[detection.ID] = true
+		sourceCount++
+	}
+	funcs := template.FuncMap{"executiveVisible": func(id string) bool { return visible[id] }, "caseDetailsAnchor": func(id string) string {
+		if detailIDs[id] {
+			return id
+		}
+		return ""
+	}, "escalationGroups": executiveEscalationGroups, "outcomeCounts": executiveOutcomeCounts, "riskSummary": executiveRiskSummary, "riskAnchor": func(id string) string {
 		if visible[id] {
 			return id
 		}

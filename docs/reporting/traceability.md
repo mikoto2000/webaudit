@@ -1,6 +1,6 @@
 # 要求と実装の対応表
 
-要求の原文は[requirements.md](requirements.md)。各章の列挙項目は該当する行の範囲に含む。完了時には根拠となるモデル・テスト・成果物を更新し、未対応を完了と表現しない。
+要求の原文は[requirements.md](requirements.md)。表の章番号は原要求に対応します。現在の表示は旧第4章を付録Aへ移し、旧第7章の重複する一覧表と旧第9章の総合評価を削除して、旧第10章の制約を第2章・事案詳細・付録Cへ分け、調査方法と全体統計を付録D・Eへ移して、本文を第1〜5章とし、追加調査の依頼と結果報告を第6章として統合しています。必要な結論・注意は第1章と事案詳細へ移しています。一覧は現在の第3章、詳細は第4章、全保持対象はCSVで確認できます。各章の列挙項目は該当する行の範囲に含む。完了時には根拠となるモデル・テスト・成果物を更新し、未対応を完了と表現しない。
 
 | 要求 | Go版の最終実装/検証 | 制約・未評価事項 |
 |---|---|---|
@@ -8,7 +8,7 @@
 | §3 第1章 概要 | 共通summary/metadata、入力・request・検出・事案・優先度別。presentation/integration tests | 入力任意metadataは未指定表示、下限と評価不能を区別 |
 | 第2章 対象 | LogInventory、保存状態SHA-256、format/field/timezone/診断。bundle_test | 前後hash照合で観測できない瞬間的変更は保証外 |
 | 第3章 方法 | 実効settings、全rule metadata/条件/必要field、limits、parser/normalization/windowの説明 | 既存source互換範囲・順序依存を明示 |
-| 第4章 評価軸 | severity、検出confidence、outcome、outcome evidence strengthを独立表示。TestOutcome | 検出confidenceは独立した校正根拠未整備でunknown。severityは既存優先度の意味 |
+| 旧第4章 評価軸（現在は末尾の付録A） | severity、検出confidence、outcome、outcome evidence strengthを独立表示。TestOutcome | 検出confidenceは独立した校正根拠未整備でunknown。severityは既存優先度の意味 |
 | 第5章 統計/グラフ | 全観測次元・数値・adaptive UTC timeline/Geo、offline meter。statistics/presentation tests | Geoなしは未実施、durationは明示単位のみ。上位/other/下限を開示 |
 | 第6章 coverage | 全41観点＋全既存rule。状態/完全性/hit独立、direct/related union counts。coverage/integration tests | 本文専用・reputationは未対応、Geo request membershipはnull、共有rule観点は部分支援 |
 | 第7章 一覧 | native事案と独立source検出を別表、優先度順、詳細リンク/戻りリンク。presentation tests | engine間の自動事案統合なし、同観測の一致は全件CSVのIDで追跡 |
@@ -19,7 +19,7 @@
 | §4 全件 | bounded spoolで全観測固定、遅延検出との照合、直接/関連別紙。requests/integration tests | spool/事案/キー/証跡上限は部分解析、全件性を保証しない |
 | §5 共通model | InvestigationReport、RequestSnapshot、BundleDetection、FindingObservation、CoverageRow、Recommendation | 公開JSONとHTML/CSVは同じ値。native singlefile schemaを維持 |
 | §6 成果物 | output.mdの全成果物、排他的新規ディレクトリ、manifest全hash。bundle_test | manifest自身は自己hash除外、失敗出力はINCOMPLETE |
-| §7 日英/UI | 11章、全anchor検査、printCSS、外部資源なし、表示量制限、ja/en sample | ブラウザーがfile URLを禁止したため画面目視は未実施。静的検査は成功 |
+| §7 日英/UI | 本文6章（静的な旧入口は5章と第6章へのリンク）と末尾の付録A（旧第4章）・付録B（評価状況）・付録C（共通制約と共有）・付録D（方法）・付録E（全体統計）、全anchor検査、printCSS、外部資源なし、表示量制限、ja/en sample | ブラウザーがfile URLを禁止したため画面目視は未実施。静的検査は成功 |
 | §8 安全性 | HTML/CSV/JSON注入防止、controls/Bidi可視化、secret masking、排他/temp/limits。presentation/integration tests | パターン外の秘密・個人情報の完全匿名化は非対応、共有前確認が必要 |
 | §9 正確性 | 元file/line別一意request、各engine重複、0/null/quality、共通分母、部分解析。output.md参照 | 観測≠検証済みネットワーク取引。観点/engineの単純加算禁止 |
 | §10–11 開発工程 | Phase0–6各専用worktree、RED/GREEN、PR/CI/merge/cleanup。下記PR表・作業記録 | Java移植はGo完了後に開始 |

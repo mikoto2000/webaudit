@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -53,6 +54,28 @@ func TestFullRequestExportPreservesDistinctObservationsAndSeparatesRelated(t *te
 		t.Fatal(err)
 	}
 	suspicious := bundleCSV(t, filepath.Join(target, "suspicious-requests.csv"))
+	// Check the actual file, including column alignment, rather than only the
+	// shared in-memory header used by both exporters.
+	for _, name := range []string{"suspicious-requests.csv", "related-requests.csv"} {
+		data, err := os.ReadFile(filepath.Join(target, name))
+		if err != nil {
+			t.Fatal(err)
+		}
+		rows, err := csv.NewReader(strings.NewReader(string(data))).ReadAll()
+		if err != nil {
+			t.Fatal(err)
+		}
+		header := rows[0]
+		if !reflect.DeepEqual(header[:3], []string{"attack_categories", "timestamp", "source_ip"}) {
+			t.Fatalf("%s: classification and access details must come first: %v", name, header)
+		}
+		if !reflect.DeepEqual(header[len(header)-7:], []string{"request_id", "finding_ids", "detection_ids", "rule_ids", "source_file_id", "direct_detection_ids", "related_detection_ids"}) {
+			t.Fatalf("%s: traceability IDs must come last: %v", name, header)
+		}
+		if len(rows) < 2 || rows[1][1] != "2026-11-01T00:00:00Z" || rows[1][2] != "192.0.2.1" || !strings.HasPrefix(rows[1][len(header)-7], "REQ-") {
+			t.Fatalf("%s: reordered columns do not match their values", name)
+		}
+	}
 	related := bundleCSV(t, filepath.Join(target, "related-requests.csv"))
 	detections := bundleCSV(t, filepath.Join(target, "detections.csv"))
 	if len(suspicious) != 25 {

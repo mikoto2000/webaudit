@@ -303,7 +303,8 @@ func detectionRelated(d *BundleDetection, r RequestSnapshot) bool {
 	return false
 }
 
-var requestHeaders = []string{"request_id", "finding_ids", "detection_ids", "timestamp", "source_ip", "country_code", "asn", "as_organization", "host", "method", "protocol", "request_uri", "normalized_uri", "status_code", "response_bytes", "request_duration", "referer", "user_agent", "attack_categories", "rule_ids", "detection_engines", "severity", "detection_confidence", "detection_reason", "source_file_id", "source_file", "source_line", "relation", "direct_detection_ids", "related_detection_ids", "normalization_steps", "raw_log", "count_quality"}
+// Request exports put classification and observed access details first; traceability IDs come last.
+var requestHeaders = []string{"attack_categories", "timestamp", "source_ip", "country_code", "asn", "as_organization", "host", "method", "protocol", "request_uri", "normalized_uri", "status_code", "response_bytes", "request_duration", "referer", "user_agent", "detection_engines", "severity", "detection_confidence", "detection_reason", "source_file", "source_line", "relation", "normalization_steps", "raw_log", "count_quality", "request_id", "finding_ids", "detection_ids", "rule_ids", "source_file_id", "direct_detection_ids", "related_detection_ids"}
 
 func requestCSV(r RequestSnapshot, direct, related []*BundleDetection, quality string) []string {
 	var findingIDs, ids, ruleIDs, categories, engines, reasons, directIDs, relatedIDs []string
@@ -364,7 +365,7 @@ func requestCSV(r RequestSnapshot, direct, related []*BundleDetection, quality s
 			relation = "direct_and_related"
 		}
 	}
-	return []string{r.ID, strings.Join(findingIDs, ";"), strings.Join(ids, ";"), timestamp, r.Event.IP, country, asn, org, val(r.Event.Host), val(r.Event.Method), val(r.Event.Protocol), r.Event.Target, normalized, status, size, duration, val(r.Event.Referer), val(r.Event.UA), strings.Join(categories, ";"), strings.Join(ruleIDs, ";"), strings.Join(engines, ";"), severity, "unknown", strings.Join(reasons, ";"), r.FileID, r.Event.File, strconv.FormatInt(r.Event.Line, 10), relation, strings.Join(directIDs, ";"), strings.Join(relatedIDs, ";"), strings.Join(r.Normalization.Steps, ";"), r.Event.Raw, quality}
+	return []string{strings.Join(categories, ";"), timestamp, r.Event.IP, country, asn, org, val(r.Event.Host), val(r.Event.Method), val(r.Event.Protocol), r.Event.Target, normalized, status, size, duration, val(r.Event.Referer), val(r.Event.UA), strings.Join(engines, ";"), severity, "unknown", strings.Join(reasons, ";"), r.Event.File, strconv.FormatInt(r.Event.Line, 10), relation, strings.Join(r.Normalization.Steps, ";"), r.Event.Raw, quality, r.ID, strings.Join(findingIDs, ";"), strings.Join(ids, ";"), strings.Join(ruleIDs, ";"), r.FileID, strings.Join(directIDs, ";"), strings.Join(relatedIDs, ";")}
 }
 func directRequestDetections(r RequestSnapshot) []BundleDetection {
 	out := make([]BundleDetection, 0, len(r.Hits))
